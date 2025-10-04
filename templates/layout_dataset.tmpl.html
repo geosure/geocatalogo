@@ -1,0 +1,294 @@
+{{define "layout_dataset"}}{{template "layout" .}}{{end}}
+
+{{define "page_title"}}{{.Record.Properties.Title}} • GRO Catalog{{end}}
+
+{{define "page_content"}}
+  <!-- Breadcrumbs -->
+  <div class="muted" style="margin-bottom:16px;font-size:13px">
+    <a href="/" style="color:var(--link)">Catalog</a>
+    <span class="sep">→</span>
+    <span>{{.Record.Properties.Title}}</span>
+  </div>
+
+  <!-- Main header card -->
+  <section class="card card-compact">
+    <h1 style="margin:0 0 12px">{{.Record.Properties.Title}}</h1>
+
+    <!-- Metadata chips -->
+    <div class="chips" style="gap:6px;flex-wrap:wrap;margin-bottom:16px">
+      <!-- Collection -->
+      <span class="chip" style="background:#eff6ff;color:#1e40af;border-color:#bfdbfe">
+        {{.Record.Properties.Collection}}
+      </span>
+
+      <!-- Format -->
+      {{if .Record.Properties.GROMetadata.DataFormat}}
+        <span class="chip" style="font-family:monospace;background:#f5f5f5;color:#404040">
+          {{.Record.Properties.GROMetadata.DataFormat}}
+        </span>
+      {{end}}
+
+      <!-- Status -->
+      {{if eq .Record.Properties.GROMetadata.ImplementationStatus "implemented"}}
+        <span class="chip" style="background:#dcfce7;color:#15803d;border-color:#bbf7d0">
+          ✓ Implemented
+        </span>
+      {{else if eq .Record.Properties.GROMetadata.ImplementationStatus "draft"}}
+        <span class="chip" style="background:#fef3c7;color:#92400e;border-color:#fde68a">
+          Draft
+        </span>
+      {{else}}
+        <span class="chip" style="background:#f3f4f6;color:#6b7280;border-color:#e5e7eb">
+          Potential
+        </span>
+      {{end}}
+
+      <!-- Geography -->
+      {{if .Record.Properties.GROMetadata.Continent}}
+        <span class="chip" style="background:#fef2f2;color:#991b1b;border-color:#fecaca">
+          {{.Record.Properties.GROMetadata.Continent}}
+        </span>
+      {{end}}
+      {{if .Record.Properties.GROMetadata.Country}}
+        <span class="chip" style="background:#e0f2fe;border-color:#bae6fd;color:#075985">
+          {{upper .Record.Properties.GROMetadata.Country}}
+        </span>
+      {{end}}
+    </div>
+
+    <!-- Description -->
+    {{if .Record.Properties.Abstract}}
+      <p style="margin:0;color:#374151;line-height:1.6">
+        {{.Record.Properties.Abstract}}
+      </p>
+    {{end}}
+  </section>
+
+  <!-- Database Table Details -->
+  {{if .DatabaseTable}}
+    <section class="card card-compact">
+      <h2 style="margin:0 0 16px;font-size:18px;font-weight:700">Database Table</h2>
+
+      <div class="grid-2col" style="gap:16px;margin-bottom:20px">
+        <div>
+          <div class="muted" style="font-size:12px;margin-bottom:4px">Table Name</div>
+          <div class="mono" style="font-size:14px;font-weight:600">{{.DatabaseTable.Name}}</div>
+        </div>
+        <div>
+          <div class="muted" style="font-size:12px;margin-bottom:4px">Schema</div>
+          <div class="mono" style="font-size:14px">{{.DatabaseTable.Schema}}</div>
+        </div>
+        <div>
+          <div class="muted" style="font-size:12px;margin-bottom:4px">Row Count</div>
+          <div style="font-size:14px;font-weight:600">{{formatNumber .DatabaseTable.RowCount}}</div>
+        </div>
+        <div>
+          <div class="muted" style="font-size:12px;margin-bottom:4px">Size</div>
+          <div style="font-size:14px;font-weight:600">{{.DatabaseTable.Size}}</div>
+        </div>
+      </div>
+
+      <!-- Columns -->
+      <h3 style="margin:0 0 10px;font-size:15px;font-weight:600">Columns ({{len .DatabaseTable.Columns}})</h3>
+      <div style="overflow-x:auto">
+        <table class="data-table" style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead>
+            <tr style="background:#f9fafb;border-bottom:2px solid #e5e7eb">
+              <th style="text-align:left;padding:8px;font-weight:600">#</th>
+              <th style="text-align:left;padding:8px;font-weight:600">Column Name</th>
+              <th style="text-align:left;padding:8px;font-weight:600">Data Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{range $i, $col := .DatabaseTable.Columns}}
+              <tr style="border-bottom:1px solid #f3f4f6">
+                <td style="padding:8px;color:var(--muted)">{{add $i 1}}</td>
+                <td style="padding:8px;font-family:monospace;font-weight:500">{{$col.Name}}</td>
+                <td style="padding:8px;font-family:monospace;font-size:12px;color:#6b7280">{{$col.Type}}</td>
+              </tr>
+            {{end}}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Indexes -->
+      {{if .DatabaseTable.Indexes}}
+        <h3 style="margin:20px 0 10px;font-size:15px;font-weight:600">Indexes ({{len .DatabaseTable.Indexes}})</h3>
+        <ul style="margin:0;padding-left:20px;line-height:1.8">
+          {{range .DatabaseTable.Indexes}}
+            <li style="font-family:monospace;font-size:13px">{{.}}</li>
+          {{end}}
+        </ul>
+      {{end}}
+    </section>
+  {{end}}
+
+  <!-- CSV/TSV File Details -->
+  {{if .CSVFile}}
+    <section class="card card-compact">
+      <h2 style="margin:0 0 16px;font-size:18px;font-weight:700">CSV/TSV File</h2>
+
+      <div class="grid-2col" style="gap:16px;margin-bottom:20px">
+        <div>
+          <div class="muted" style="font-size:12px;margin-bottom:4px">Row Count</div>
+          <div style="font-size:14px;font-weight:600">{{formatNumber .CSVFile.RowCount}}</div>
+        </div>
+        <div>
+          <div class="muted" style="font-size:12px;margin-bottom:4px">File Size</div>
+          <div style="font-size:14px;font-weight:600">{{.CSVFile.FileSizeMB}} MB</div>
+        </div>
+        <div>
+          <div class="muted" style="font-size:12px;margin-bottom:4px">Columns</div>
+          <div style="font-size:14px;font-weight:600">{{.CSVFile.ColumnCount}}</div>
+        </div>
+        <div>
+          <div class="muted" style="font-size:12px;margin-bottom:4px">S3 Path</div>
+          <div class="mono" style="font-size:11px;color:#6b7280;word-break:break-all">{{.CSVFile.S3Key}}</div>
+        </div>
+      </div>
+
+      <!-- Schema -->
+      <h3 style="margin:0 0 10px;font-size:15px;font-weight:600">Schema</h3>
+      <div style="overflow-x:auto">
+        <table class="data-table" style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead>
+            <tr style="background:#f9fafb;border-bottom:2px solid #e5e7eb">
+              <th style="text-align:left;padding:8px;font-weight:600">#</th>
+              <th style="text-align:left;padding:8px;font-weight:600">Column Name</th>
+              <th style="text-align:left;padding:8px;font-weight:600">Data Type</th>
+              <th style="text-align:left;padding:8px;font-weight:600">Nullable</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{range $i, $col := .CSVFile.Schema}}
+              <tr style="border-bottom:1px solid #f3f4f6">
+                <td style="padding:8px;color:var(--muted)">{{add $i 1}}</td>
+                <td style="padding:8px;font-family:monospace;font-weight:500">{{$col.ColumnName}}</td>
+                <td style="padding:8px;font-family:monospace;font-size:12px;color:#6b7280">{{$col.DataType}}</td>
+                <td style="padding:8px">{{if $col.Nullable}}✓{{else}}-{{end}}</td>
+              </tr>
+            {{end}}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  {{end}}
+
+  <!-- Parquet File Details -->
+  {{if .ParquetFile}}
+    <section class="card card-compact">
+      <h2 style="margin:0 0 16px;font-size:18px;font-weight:700">Parquet File</h2>
+
+      <div class="grid-2col" style="gap:16px;margin-bottom:20px">
+        <div>
+          <div class="muted" style="font-size:12px;margin-bottom:4px">Row Count</div>
+          <div style="font-size:14px;font-weight:600">{{formatNumber .ParquetFile.RowCount}}</div>
+        </div>
+        <div>
+          <div class="muted" style="font-size:12px;margin-bottom:4px">File Size</div>
+          <div style="font-size:14px;font-weight:600">{{.ParquetFile.FileSizeMB}} MB</div>
+        </div>
+        <div>
+          <div class="muted" style="font-size:12px;margin-bottom:4px">Columns</div>
+          <div style="font-size:14px;font-weight:600">{{.ParquetFile.ColumnCount}}</div>
+        </div>
+        <div>
+          <div class="muted" style="font-size:12px;margin-bottom:4px">S3 Path</div>
+          <div class="mono" style="font-size:11px;color:#6b7280;word-break:break-all">{{.ParquetFile.S3Key}}</div>
+        </div>
+      </div>
+
+      <!-- Schema -->
+      <h3 style="margin:0 0 10px;font-size:15px;font-weight:600">Schema</h3>
+      <div style="overflow-x:auto">
+        <table class="data-table" style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead>
+            <tr style="background:#f9fafb;border-bottom:2px solid #e5e7eb">
+              <th style="text-align:left;padding:8px;font-weight:600">#</th>
+              <th style="text-align:left;padding:8px;font-weight:600">Column Name</th>
+              <th style="text-align:left;padding:8px;font-weight:600">Data Type</th>
+              <th style="text-align:left;padding:8px;font-weight:600">Nullable</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{range $i, $col := .ParquetFile.Schema}}
+              <tr style="border-bottom:1px solid #f3f4f6">
+                <td style="padding:8px;color:var(--muted)">{{add $i 1}}</td>
+                <td style="padding:8px;font-family:monospace;font-weight:500">{{$col.ColumnName}}</td>
+                <td style="padding:8px;font-family:monospace;font-size:12px;color:#6b7280">{{$col.DataType}}</td>
+                <td style="padding:8px">{{if $col.Nullable}}✓{{else}}-{{end}}</td>
+              </tr>
+            {{end}}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  {{end}}
+
+  <!-- Shapefile Details -->
+  {{if .ShapefileFile}}
+    <section class="card card-compact">
+      <h2 style="margin:0 0 16px;font-size:18px;font-weight:700">Shapefile</h2>
+
+      <div class="grid-2col" style="gap:16px;margin-bottom:20px">
+        <div>
+          <div class="muted" style="font-size:12px;margin-bottom:4px">Feature Count</div>
+          <div style="font-size:14px;font-weight:600">{{formatNumber .ShapefileFile.FeatureCount}}</div>
+        </div>
+        <div>
+          <div class="muted" style="font-size:12px;margin-bottom:4px">File Size</div>
+          <div style="font-size:14px;font-weight:600">{{.ShapefileFile.FileSizeMB}} MB</div>
+        </div>
+        <div>
+          <div class="muted" style="font-size:12px;margin-bottom:4px">Geometry Type</div>
+          <div style="font-size:14px;font-weight:600">{{.ShapefileFile.GeometryType}}</div>
+        </div>
+        <div>
+          <div class="muted" style="font-size:12px;margin-bottom:4px">CRS</div>
+          <div class="mono" style="font-size:11px;color:#6b7280">{{.ShapefileFile.CRS}}</div>
+        </div>
+      </div>
+
+      <!-- Fields -->
+      <h3 style="margin:0 0 10px;font-size:15px;font-weight:600">Fields ({{len .ShapefileFile.Fields}})</h3>
+      <div style="overflow-x:auto">
+        <table class="data-table" style="width:100%;border-collapse:collapse;font-size:13px">
+          <thead>
+            <tr style="background:#f9fafb;border-bottom:2px solid #e5e7eb">
+              <th style="text-align:left;padding:8px;font-weight:600">#</th>
+              <th style="text-align:left;padding:8px;font-weight:600">Field Name</th>
+              <th style="text-align:left;padding:8px;font-weight:600">Type</th>
+              <th style="text-align:left;padding:8px;font-weight:600">Width</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{range $i, $field := .ShapefileFile.Fields}}
+              <tr style="border-bottom:1px solid #f3f4f6">
+                <td style="padding:8px;color:var(--muted)">{{add $i 1}}</td>
+                <td style="padding:8px;font-family:monospace;font-weight:500">{{$field.Name}}</td>
+                <td style="padding:8px;font-family:monospace;font-size:12px;color:#6b7280">{{$field.Type}}</td>
+                <td style="padding:8px">{{if $field.Width}}{{$field.Width}}{{else}}-{{end}}</td>
+              </tr>
+            {{end}}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  {{end}}
+
+  <!-- Links section -->
+  {{if .Record.Links}}
+    <section class="card card-compact">
+      <h2 style="margin:0 0 12px;font-size:18px;font-weight:700">Links</h2>
+      <ul style="margin:0;padding:0;list-style:none">
+        {{range .Record.Links}}
+          <li style="margin-bottom:8px">
+            <a href="{{.URL}}" target="_blank" style="color:var(--link);font-size:14px">
+              {{if .Name}}{{.Name}}{{else}}{{.URL}}{{end}}
+            </a>
+          </li>
+        {{end}}
+      </ul>
+    </section>
+  {{end}}
+{{end}}

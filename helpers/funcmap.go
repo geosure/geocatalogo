@@ -30,4 +30,7 @@ var FuncMap = template.FuncMap{
 	"upper": strings.ToUpper,
 	"lower": strings.ToLower,
 	"title": strings.Title,
+	"add": func(a, b int) int {
+		return a + b
+	},
 }
