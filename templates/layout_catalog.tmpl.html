@@ -81,6 +81,22 @@
         <option value="inference">🧠 Inference (4)</option>
       </select>
 
+      <!-- Continent filter -->
+      <select id="continent" class="select" aria-label="Filter by continent">
+        <option value="">🌐 All continents</option>
+        {{range .Stats.Continents}}
+          <option value="{{.Code}}">{{.Emoji}} {{.Name}} ({{.Count}})</option>
+        {{end}}
+      </select>
+
+      <!-- Country filter -->
+      <select id="country" class="select" aria-label="Filter by country">
+        <option value="">🌍 All countries</option>
+        {{range .Stats.Countries}}
+          <option value="{{.Code}}">{{.Flag}} {{.Name}} ({{.Count}})</option>
+        {{end}}
+      </select>
+
       <!-- Sort -->
       <select id="sort" class="select" aria-label="Sort datasets">
         <option value="name_asc">Name (A→Z)</option>
@@ -104,8 +120,25 @@
             data-format="{{.Properties.GROMetadata.DataFormat}}"
             data-status="{{.Properties.GROMetadata.ImplementationStatus}}"
             data-jobtype="{{.Properties.GROMetadata.V6JobType}}"
+            data-continent="{{.Properties.GROMetadata.Continent}}"
             data-country="{{.Properties.GROMetadata.Country}}"
             style="display:flex;flex-direction:column;gap:10px">
+
+          <!-- Geography pills (PROMINENT at top!) -->
+          {{if or .Properties.GROMetadata.Country .Properties.GROMetadata.Continent}}
+            <div class="chips" style="gap:6px;flex-wrap:wrap;margin-bottom:4px">
+              {{if .Properties.GROMetadata.Country}}
+                <span class="chip" style="font-size:14px;font-weight:600;padding:6px 12px;background:#e0f2fe;border:2px solid #0ea5e9;color:#0369a1">
+                  {{countryFlag .Properties.GROMetadata.Country}} {{countryName .Properties.GROMetadata.Country}}
+                </span>
+              {{end}}
+              {{if .Properties.GROMetadata.Continent}}
+                <span class="chip chip-sm" style="font-size:11px;background:#fef3c7;border-color:#fbbf24;color:#92400e">
+                  {{continentEmoji .Properties.GROMetadata.Continent}} {{continentName .Properties.GROMetadata.Continent}}
+                </span>
+              {{end}}
+            </div>
+          {{end}}
 
           <!-- Title -->
           <h3 style="margin:0;font-size:15px;line-height:1.3;font-weight:700">
@@ -203,21 +236,6 @@
             {{end}}
           {{end}}
 
-          <!-- Location chips -->
-          {{if or .Properties.GROMetadata.Country .Properties.GROMetadata.Continent}}
-            <div class="chips" style="gap:3px;flex-wrap:wrap">
-              {{if .Properties.GROMetadata.Continent}}
-                <span class="chip chip-sm" style="font-size:9px;background:#fef2f2;color:#991b1b;border-color:#fecaca">
-                  {{.Properties.GROMetadata.Continent}}
-                </span>
-              {{end}}
-              {{if .Properties.GROMetadata.Country}}
-                <span class="chip chip-sm" style="font-size:10px;background:#e0f2fe;border-color:#bae6fd;color:#075985">
-                  {{upper .Properties.GROMetadata.Country}}
-                </span>
-              {{end}}
-            </div>
-          {{end}}
         </li>
       {{end}}
     </ul>
@@ -239,6 +257,8 @@ const collection = document.getElementById('collection');
 const format = document.getElementById('format');
 const status = document.getElementById('status');
 const jobType = document.getElementById('jobType');
+const continent = document.getElementById('continent');
+const country = document.getElementById('country');
 const sort = document.getElementById('sort');
 const showing = document.getElementById('showing');
 const noResults = document.getElementById('noResults');
@@ -252,6 +272,8 @@ function loadStateFromURL() {
   if (params.has('format')) format.value = params.get('format');
   if (params.has('status')) status.value = params.get('status');
   if (params.has('jobType')) jobType.value = params.get('jobType');
+  if (params.has('continent')) continent.value = params.get('continent');
+  if (params.has('country')) country.value = params.get('country');
   if (params.has('sort')) sort.value = params.get('sort');
 }
 
@@ -263,6 +285,8 @@ function updateURL() {
   if (format.value) params.set('format', format.value);
   if (status.value) params.set('status', status.value);
   if (jobType.value) params.set('jobType', jobType.value);
+  if (continent.value) params.set('continent', continent.value);
+  if (country.value) params.set('country', country.value);
   if (sort.value !== 'name_asc') params.set('sort', sort.value);
 
   const url = params.toString() ? `?${params.toString()}` : window.location.pathname;
@@ -275,6 +299,8 @@ function filter() {
   const fmtVal = format.value;
   const statVal = status.value;
   const jobVal = jobType.value;
+  const continentVal = continent.value;
+  const countryVal = country.value;
 
   let visible = 0;
   datasets.forEach(d => {
@@ -283,14 +309,18 @@ function filter() {
     const fmt = d.dataset.format || '';
     const stat = d.dataset.status || '';
     const job = d.dataset.jobtype || '';
+    const cont = d.dataset.continent || '';
+    const ctry = d.dataset.country || '';
 
     const matchQuery = !query || name.includes(query);
     const matchColl = !collVal || coll === collVal;
     const matchFmt = !fmtVal || fmt === fmtVal;
     const matchStat = !statVal || stat === statVal;
     const matchJob = !jobVal || job === jobVal;
+    const matchContinent = !continentVal || cont === continentVal;
+    const matchCountry = !countryVal || ctry === countryVal;
 
-    if (matchQuery && matchColl && matchFmt && matchStat && matchJob) {
+    if (matchQuery && matchColl && matchFmt && matchStat && matchJob && matchContinent && matchCountry) {
       d.style.display = '';
       visible++;
     } else {
@@ -310,6 +340,8 @@ collection.addEventListener('change', filter);
 format.addEventListener('change', filter);
 status.addEventListener('change', filter);
 jobType.addEventListener('change', filter);
+continent.addEventListener('change', filter);
+country.addEventListener('change', filter);
 
 // Sorting
 sort.addEventListener('change', () => {

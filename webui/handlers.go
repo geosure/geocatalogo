@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/go-spatial/geocatalogo/helpers"
 	"github.com/go-spatial/geocatalogo/metadata"
 )
 
@@ -32,6 +33,9 @@ func (a *App) HandleCatalog(w http.ResponseWriter, r *http.Request) {
 
 	// Calculate stats
 	stats := CatalogStats{Total: len(records)}
+	continentCounts := make(map[string]int)
+	countryCounts := make(map[string]int)
+
 	for _, rec := range records {
 		switch rec.Properties.Collection {
 		case "existing_db":
@@ -49,6 +53,33 @@ func (a *App) HandleCatalog(w http.ResponseWriter, r *http.Request) {
 		case "external_other":
 			stats.ExternalOther++
 		}
+
+		// Count continents and countries
+		if rec.Properties.GROMetadata.Continent != "" {
+			continentCounts[rec.Properties.GROMetadata.Continent]++
+		}
+		if rec.Properties.GROMetadata.Country != "" {
+			countryCounts[rec.Properties.GROMetadata.Country]++
+		}
+	}
+
+	// Convert maps to sorted slices
+	for code, count := range continentCounts {
+		stats.Continents = append(stats.Continents, ContinentStat{
+			Code:  code,
+			Name:  helpers.ContinentToName(code),
+			Emoji: helpers.ContinentToEmoji(code),
+			Count: count,
+		})
+	}
+
+	for code, count := range countryCounts {
+		stats.Countries = append(stats.Countries, CountryStat{
+			Code:  code,
+			Name:  helpers.CountryCodeToName(code),
+			Flag:  helpers.CountryCodeToFlag(code),
+			Count: count,
+		})
 	}
 
 	pageData := PageData{

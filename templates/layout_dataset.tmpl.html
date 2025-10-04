@@ -414,7 +414,12 @@
             {{if .Record.Properties.GROMetadata.V6JobFile}}
             <tr>
               <td style="padding:4px 12px 4px 0;color:#6b7280;vertical-align:top">v6 Job File</td>
-              <td style="padding:4px 0;font-family:monospace;font-size:12px;color:#059669">{{.Record.Properties.GROMetadata.V6JobFile}}</td>
+              <td style="padding:4px 0;font-family:monospace;font-size:12px">
+                <a href="{{v6GithubURL .Record.Properties.GROMetadata.V6JobFile}}" target="_blank" rel="noopener noreferrer" style="color:#059669;text-decoration:none;border-bottom:1px dotted #059669">
+                  {{.Record.Properties.GROMetadata.V6JobFile}}
+                  <span style="font-size:10px;margin-left:4px">🔗</span>
+                </a>
+              </td>
             </tr>
             {{end}}
             {{if .Record.Properties.GROMetadata.S3Path}}

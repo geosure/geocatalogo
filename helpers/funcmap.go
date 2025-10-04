@@ -73,6 +73,97 @@ func hasJSON(abstract string) bool {
 	return strings.Contains(abstract, "{'") || strings.Contains(abstract, `{"`)
 }
 
+// CountryCodeToFlag converts ISO 3166-1 alpha-2 country code to flag emoji
+func CountryCodeToFlag(code string) string {
+	if code == "" {
+		return ""
+	}
+
+	code = strings.ToUpper(code)
+
+	// Convert to regional indicator symbols (Unicode)
+	// A = U+1F1E6, so offset from 'A' (0x41)
+	var flag strings.Builder
+	for _, c := range code {
+		if c >= 'A' && c <= 'Z' {
+			flag.WriteRune(rune(0x1F1E6 + (c - 'A')))
+		}
+	}
+
+	return flag.String()
+}
+
+// CountryCodeToName converts country code to full name
+func CountryCodeToName(code string) string {
+	names := map[string]string{
+		"ai": "Anguilla", "ar": "Argentina", "au": "Australia", "bd": "Bangladesh",
+		"br": "Brazil", "ca": "Canada", "cd": "DR Congo", "cl": "Chile",
+		"cn": "China", "co": "Colombia", "cu": "Cuba", "de": "Germany",
+		"dm": "Dominica", "ee": "Estonia", "eg": "Egypt", "es": "Spain",
+		"et": "Ethiopia", "eu": "European Union", "fr": "France", "gh": "Ghana",
+		"gt": "Guatemala", "hu": "Hungary", "id": "Indonesia", "in": "India",
+		"iq": "Iraq", "ir": "Iran", "it": "Italy", "jp": "Japan",
+		"km": "Comoros", "kr": "South Korea", "mc": "Monaco", "ml": "Mali",
+		"mm": "Myanmar", "mx": "Mexico", "na": "Namibia", "ng": "Nigeria",
+		"nz": "New Zealand", "pe": "Peru", "ph": "Philippines", "pk": "Pakistan",
+		"pt": "Portugal", "ru": "Russia", "sa": "Saudi Arabia", "sc": "Seychelles",
+		"sd": "Sudan", "sg": "Singapore", "sl": "Sierra Leone", "sy": "Syria",
+		"th": "Thailand", "tr": "Turkey", "tz": "Tanzania", "uk": "United Kingdom",
+		"us": "United States", "vn": "Vietnam", "za": "South Africa",
+	}
+
+	if name, ok := names[strings.ToLower(code)]; ok {
+		return name
+	}
+	return strings.ToUpper(code)
+}
+
+// ContinentToEmoji returns emoji for continent
+func ContinentToEmoji(continent string) string {
+	emojis := map[string]string{
+		"africa":        "🌍",
+		"asia":          "🌏",
+		"europe":        "🌍",
+		"north-america": "🌎",
+		"south-america": "🌎",
+		"oceania":       "🌏",
+		"global":        "🌐",
+	}
+
+	if emoji, ok := emojis[strings.ToLower(continent)]; ok {
+		return emoji
+	}
+	return "🌍"
+}
+
+// ContinentToName capitalizes continent name nicely
+func ContinentToName(continent string) string {
+	names := map[string]string{
+		"africa":        "Africa",
+		"asia":          "Asia",
+		"europe":        "Europe",
+		"north-america": "North America",
+		"south-america": "South America",
+		"oceania":       "Oceania",
+		"global":        "Global",
+	}
+
+	if name, ok := names[strings.ToLower(continent)]; ok {
+		return name
+	}
+	return strings.Title(continent)
+}
+
+// V6JobToGitHubURL converts a v6 job file path to GitHub URL
+func V6JobToGitHubURL(v6JobFile string) string {
+	if v6JobFile == "" {
+		return ""
+	}
+	// Remove v6/ prefix to get jobs/...
+	githubPath := strings.Replace(v6JobFile, "v6/", "", 1)
+	return fmt.Sprintf("https://github.com/geosure/v6/blob/main/%s", githubPath)
+}
+
 var FuncMap = template.FuncMap{
 	"formatNumber": func(n int64) string {
 		if n >= 1000000000 {
@@ -105,4 +196,11 @@ var FuncMap = template.FuncMap{
 	"hasMetadata":     hasMetadata,
 	"extractJSON":     extractJSON,
 	"hasJSON":         hasJSON,
+	// Geography helpers
+	"countryFlag":     CountryCodeToFlag,
+	"countryName":     CountryCodeToName,
+	"continentEmoji":  ContinentToEmoji,
+	"continentName":   ContinentToName,
+	// v6 helpers
+	"v6GithubURL":     V6JobToGitHubURL,
 }
