@@ -63,6 +63,9 @@ func (a *App) HandleCatalog(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	// Calculate DataRecords (everything except jobs)
+	stats.DataRecords = stats.Total - stats.PotentialV6
+
 	// Convert maps to sorted slices
 	for code, count := range continentCounts {
 		stats.Continents = append(stats.Continents, ContinentStat{

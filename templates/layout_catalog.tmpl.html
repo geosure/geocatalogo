@@ -1,21 +1,25 @@
 {{define "layout_catalog"}}{{template "layout" .}}{{end}}
 
-{{define "page_title"}}Data Catalog • GRO{{end}}
+{{define "page_title"}}Catalog • GRO{{end}}
 
 {{define "page_content"}}
   <!-- Header + controls -->
   <section class="card card-compact">
-    <h1 style="margin:0">GRO Data Catalog</h1>
+    <h1 style="margin:0">🗂️ GRO Catalog</h1>
     <div class="muted">
-      <span id="totalCount">{{.Stats.Total}}</span> datasets
+      <span id="totalCount">{{.Stats.Total}}</span> records
       <span class="sep">•</span>
-      <span class="hint">Search, filter by collection, format, status</span>
+      <span class="hint" style="font-weight:500">
+        {{.Stats.PotentialV6}} ⚙️ jobs + {{.Stats.DataRecords}} 📊 data sources
+      </span>
+      <span class="sep">•</span>
+      <span class="hint">Search, filter, explore</span>
     </div>
 
     <div class="toolbar" style="gap:8px;flex-wrap:wrap;margin-top:16px">
       <!-- Search -->
       <input id="q" class="search" type="search"
-             placeholder="Search datasets..."
+             placeholder="🔍 Search jobs, data, APIs..."
              aria-label="Search catalog"
              style="min-width:280px;flex:1">
 
@@ -98,7 +102,7 @@
       </select>
 
       <!-- Sort -->
-      <select id="sort" class="select" aria-label="Sort datasets">
+      <select id="sort" class="select" aria-label="Sort records">
         <option value="name_asc">Name (A→Z)</option>
         <option value="name_desc">Name (Z→A)</option>
         <option value="updated_desc">Recently Updated</option>
@@ -109,7 +113,7 @@
   <!-- Results grid -->
   <section class="card card-compact">
     <div id="resultCount" class="muted" style="margin-bottom:12px">
-      Showing <span id="showing">{{.Stats.Total}}</span> of <span id="total">{{.Stats.Total}}</span> datasets
+      Showing <span id="showing">{{.Stats.Total}}</span> of <span id="total">{{.Stats.Total}}</span> records
     </div>
 
     <ul id="catalogGrid" class="grid-cards reset" style="gap:12px;list-style:none;margin:0;padding:0">

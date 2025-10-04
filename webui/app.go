@@ -68,6 +68,7 @@ type GROMetadata struct {
 
 type CatalogStats struct {
 	Total         int
+	DataRecords   int  // Total - PotentialV6 (actual data sources)
 	ExistingDB    int
 	ExistingLocal int
 	PotentialV6   int
