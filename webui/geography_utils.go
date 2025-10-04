@@ -16,6 +16,11 @@ func CountryEmoji(code string) string {
 		"aws":       "🟡", // AWS (infrastructure) - Yellow/Gold
 		"inference": "🧠", // Inference providers - Brain
 
+		// ===== VERBS CONTINENT - APP CATEGORIES =====
+		"user-facing": "👥", // User-facing apps
+		"internal":    "🔧", // Internal tools
+		"services":    "⚙️", // API services
+
 		// North America
 		"us": "🇺🇸",
 		"ca": "🇨🇦",
@@ -182,6 +187,7 @@ func ContinentEmoji(continent string) string {
 		"oceania":       "🌏",
 		"global":        "🌐",
 		"clankr":        "🤖", // Clankr - AI Agent Continent
+		"verbs":         "🎯", // Verbs - Application Continent
 	}
 
 	if emoji, ok := emojiMap[continent]; ok {
@@ -203,6 +209,11 @@ func CountryName(code string) string {
 		"gro":       "GRO",
 		"aws":       "AWS",
 		"inference": "Inference",
+
+		// ===== VERBS CONTINENT - APP CATEGORIES =====
+		"user-facing": "User-Facing Apps",
+		"internal":    "Internal Tools",
+		"services":    "API Services",
 
 		// North America
 		"us": "United States",

@@ -183,6 +183,9 @@
         {{if .CollectionCounts.DataBots}}• {{.CollectionCounts.DataBots}} 📊 data bots{{end}}
         {{if .CollectionCounts.ScraperBots}}• {{.CollectionCounts.ScraperBots}} 🕷️ scrapers{{end}}
         {{if .CollectionCounts.AutoBots}}• {{.CollectionCounts.AutoBots}} ⚡ automation{{end}}
+        {{if .CollectionCounts.VerbApps}}• {{.CollectionCounts.VerbApps}} 🎯 verb apps{{end}}
+        {{if .CollectionCounts.InternalTools}}• {{.CollectionCounts.InternalTools}} 🔧 internal tools{{end}}
+        {{if .CollectionCounts.APIServices}}• {{.CollectionCounts.APIServices}} ⚙️ services{{end}}
       </div>
     </div>
   </div>
@@ -293,6 +296,54 @@
           <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
             {{range .Jobs}}
               {{if eq .Properties.Collection "automation_bot"}}
+                {{template "dataset_card" .}}
+              {{end}}
+            {{end}}
+          </div>
+        </section>
+        {{end}}
+
+        <!-- Verb Apps Section (for VERBS continent!) -->
+        {{if .CollectionCounts.VerbApps}}
+        <section style="margin-bottom:24px">
+          <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #10b981;padding-bottom:6px">
+            🎯 Verb Applications <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.VerbApps}})</span>
+          </h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
+            {{range .Jobs}}
+              {{if eq .Properties.Collection "verb_app"}}
+                {{template "dataset_card" .}}
+              {{end}}
+            {{end}}
+          </div>
+        </section>
+        {{end}}
+
+        <!-- Internal Tools Section (for VERBS continent!) -->
+        {{if .CollectionCounts.InternalTools}}
+        <section style="margin-bottom:24px">
+          <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #6366f1;padding-bottom:6px">
+            🔧 Internal Tools <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.InternalTools}})</span>
+          </h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
+            {{range .Jobs}}
+              {{if eq .Properties.Collection "internal_tool"}}
+                {{template "dataset_card" .}}
+              {{end}}
+            {{end}}
+          </div>
+        </section>
+        {{end}}
+
+        <!-- API Services Section (for VERBS continent!) -->
+        {{if .CollectionCounts.APIServices}}
+        <section style="margin-bottom:24px">
+          <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #8b5cf6;padding-bottom:6px">
+            ⚙️ API Services <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.APIServices}})</span>
+          </h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
+            {{range .Jobs}}
+              {{if eq .Properties.Collection "api_service"}}
                 {{template "dataset_card" .}}
               {{end}}
             {{end}}

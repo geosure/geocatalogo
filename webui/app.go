@@ -121,6 +121,9 @@ type CollectionCounts struct {
 	DataBots      int // CSV inspector, Parquet analyzer, etc.
 	ScraperBots   int // News scraper, ACLED harvester, etc.
 	AutoBots      int // Catalog updater, S3 sync, job scheduler, etc.
+	VerbApps      int // User-facing verb applications
+	InternalTools int // Internal tools (introspect, validate)
+	APIServices   int // API services (tile, search, catalog)
 	Other         int
 }
 

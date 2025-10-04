@@ -328,6 +328,12 @@ func (a *App) HandleGeography(w http.ResponseWriter, r *http.Request) {
 				counts.ScraperBots++
 			case "automation_bot":
 				counts.AutoBots++
+			case "verb_app":
+				counts.VerbApps++
+			case "internal_tool":
+				counts.InternalTools++
+			case "api_service":
+				counts.APIServices++
 			default:
 				counts.Other++
 			}
