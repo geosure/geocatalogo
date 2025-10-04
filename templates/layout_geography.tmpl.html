@@ -48,6 +48,29 @@
   .markdown-content a:hover {
     text-decoration: underline;
   }
+
+  /* Geography filter pills */
+  .geo-filter-pill {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: #fff;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #374151;
+    font-weight: 500;
+    transition: all 0.2s;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .geo-filter-pill:hover {
+    border-color: #3b82f6;
+    background: #eff6ff;
+    box-shadow: 0 2px 4px rgba(59,130,246,0.15);
+    transform: translateY(-1px);
+  }
   .markdown-content code {
     background: #f3f4f6;
     padding: 2px 6px;
@@ -159,6 +182,32 @@
       </div>
     </div>
   </div>
+
+  <!-- Sub-Geography Filters (Countries, States, or Cities) -->
+  {{if .SubGeographies}}
+  <div style="margin-bottom:24px;padding:20px;background:#f8fafc;border-radius:8px;border:1px solid #e5e7eb">
+    <h3 style="font-size:14px;font-weight:600;color:#0f172a;margin:0 0 12px 0">
+      {{if eq .Level "continent"}}
+        🌍 Filter by Country
+      {{else if eq .Level "country"}}
+        📍 Filter by State/Province
+      {{else if eq .Level "state"}}
+        🏙️ Filter by City
+      {{else}}
+        📍 Filter
+      {{end}}
+    </h3>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      {{range .SubGeographies}}
+      <a href="{{.URL}}" class="geo-filter-pill">
+        <span style="font-size:18px">{{.Emoji}}</span>
+        <span>{{.Name}}</span>
+        <span style="background:#dbeafe;color:#1e40af;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:600">{{.Count}}</span>
+      </a>
+      {{end}}
+    </div>
+  </div>
+  {{end}}
 
   <!-- Layout: Full width if no README, otherwise two columns -->
   <div style="display:grid;{{if .README}}grid-template-columns:1fr 500px{{else}}grid-template-columns:1fr{{end}};gap:32px;align-items:start">
@@ -354,4 +403,15 @@
       {{.Properties.GROMetadata.DataFormat}}
     </span>
     {{end}}
-    {{if .Properties.GROMetadata.Update
+    {{if .Properties.GROMetadata.UpdateFrequency}}
+    <span style="background:#fef3c7;color:#92400e;padding:3px 6px;border-radius:3px;font-weight:500">
+      🔄 {{.Properties.GROMetadata.UpdateFrequency}}
+    </span>
+    {{end}}
+  </div>
+
+  <a href="/dataset/{{.ID}}" style="background:#3b82f6;color:#fff;padding:6px 10px;border-radius:4px;font-size:11px;font-weight:500;text-decoration:none;display:inline-block;transition:background 0.2s">
+    View Details →
+  </a>
+</div>
+{{end}}

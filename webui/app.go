@@ -120,6 +120,14 @@ type CollectionCounts struct {
 	Other      int
 }
 
+type SubGeography struct {
+	Code  string
+	Name  string
+	Emoji string
+	Count int
+	URL   string // Link to this sub-geography's page
+}
+
 type GeographyPageData struct {
 	Level            string               // city, county, state, country, continent
 	Name             string               // Geographic name
@@ -127,6 +135,7 @@ type GeographyPageData struct {
 	Jobs             []Record             // All jobs matching this geography
 	JobCount         int                  // Number of jobs
 	CollectionCounts CollectionCounts     // Breakdown by collection type
+	SubGeographies   []SubGeography       // Countries (for continent), States (for country), Cities (for state)
 	City             string
 	County           string
 	State            string

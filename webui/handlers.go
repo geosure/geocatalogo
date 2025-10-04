@@ -2,9 +2,12 @@ package webui
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"sort"
+	"strings"
 
 	"github.com/go-spatial/geocatalogo/helpers"
 	"github.com/go-spatial/geocatalogo/metadata"
@@ -313,6 +316,76 @@ func (a *App) HandleGeography(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	// Extract sub-geographies and counts
+	var subGeographies []SubGeography
+	switch level {
+	case "continent":
+		// Extract unique countries
+		countryCounts := make(map[string]int)
+		for _, rec := range matchingRecords {
+			if rec.Properties.GROMetadata.Country != "" {
+				countryCounts[rec.Properties.GROMetadata.Country]++
+			}
+		}
+		for code, count := range countryCounts {
+			subGeographies = append(subGeographies, SubGeography{
+				Code:  code,
+				Name:  CountryName(code),
+				Emoji: CountryEmoji(code),
+				Count: count,
+				URL:   fmt.Sprintf("/geography/?continent=%s&country=%s", continent, code),
+			})
+		}
+		// Sort by count (descending)
+		sort.Slice(subGeographies, func(i, j int) bool {
+			return subGeographies[i].Count > subGeographies[j].Count
+		})
+
+	case "country":
+		// Extract unique states
+		stateCounts := make(map[string]int)
+		for _, rec := range matchingRecords {
+			if rec.Properties.GROMetadata.StateProvince != "" {
+				stateCounts[rec.Properties.GROMetadata.StateProvince]++
+			}
+		}
+		for code, count := range stateCounts {
+			subGeographies = append(subGeographies, SubGeography{
+				Code:  code,
+				Name:  strings.ToUpper(code),
+				Emoji: "📍",
+				Count: count,
+				URL:   fmt.Sprintf("/geography/?continent=%s&country=%s&state=%s", continent, country, code),
+			})
+		}
+		// Sort by count (descending)
+		sort.Slice(subGeographies, func(i, j int) bool {
+			return subGeographies[i].Count > subGeographies[j].Count
+		})
+
+	case "state":
+		// Extract unique cities
+		cityCounts := make(map[string]int)
+		for _, rec := range matchingRecords {
+			if rec.Properties.GROMetadata.City != "" {
+				cityCounts[rec.Properties.GROMetadata.City]++
+			}
+		}
+		for code, count := range cityCounts {
+			subGeographies = append(subGeographies, SubGeography{
+				Code:  code,
+				Name:  code,
+				Emoji: "🏙️",
+				Count: count,
+				URL:   fmt.Sprintf("/geography/?continent=%s&country=%s&state=%s&city=%s", continent, country, state, code),
+			})
+		}
+		// Sort by count (descending)
+		sort.Slice(subGeographies, func(i, j int) bool {
+			return subGeographies[i].Count > subGeographies[j].Count
+		})
+	}
+
 	pageData := GeographyPageData{
 		Level:            level,
 		Name:             name,
@@ -320,6 +393,7 @@ func (a *App) HandleGeography(w http.ResponseWriter, r *http.Request) {
 		Jobs:             matchingRecords,
 		JobCount:         len(matchingRecords),
 		CollectionCounts: counts,
+		SubGeographies:   subGeographies,
 		City:             city,
 		County:           county,
 		State:            state,
