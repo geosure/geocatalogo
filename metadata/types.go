@@ -72,9 +72,9 @@ type ShapefileFile struct {
 	FeatureCount int64             `json:"feature_count"`
 	FileSizeMB   float64           `json:"file_size_mb"`
 	GeometryType string            `json:"geometry_type"`
-	CRS          string            `json:"crs"`
+	CRS          string            `json:"srs"`
 	Extent       []float64         `json:"extent"`
-	Fields       []ShapefileField  `json:"fields"`
+	Fields       []ShapefileField  `json:"schema"`
 	XMLMetadata  map[string]string `json:"xml_metadata,omitempty"`
 }
 
