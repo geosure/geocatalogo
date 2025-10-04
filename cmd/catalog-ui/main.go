@@ -39,6 +39,8 @@ func main() {
 		log.Printf("   - File GDB: %d files", len(meta.FileGDB))
 		log.Printf("   - PNG: %d files", len(meta.PNG))
 		log.Printf("   - PDF: %d files", len(meta.PDF))
+		log.Printf("   - V6 Jobs: %d jobs", len(meta.V6Jobs))
+		log.Printf("   - V6 READMEs: %d files", len(meta.V6READMEs))
 	}
 
 	// Create app and router
