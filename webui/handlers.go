@@ -104,6 +104,12 @@ func (a *App) HandleDataset(w http.ResponseWriter, r *http.Request) {
 		Record: *record,
 	}
 
+	// Convert record to JSON for display
+	recordJSON, err := json.MarshalIndent(record, "", "  ")
+	if err == nil {
+		pageData.RecordJSON = string(recordJSON)
+	}
+
 	// Lookup introspection data based on type
 	if a.meta != nil {
 		meta := a.meta.Lookup(

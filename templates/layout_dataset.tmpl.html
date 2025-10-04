@@ -362,19 +362,78 @@
     </section>
   {{end}}
 
-  <!-- Links section -->
-  {{if .Record.Links}}
-    <section class="card card-compact">
-      <h2 style="margin:0 0 12px;font-size:18px;font-weight:700">Links</h2>
-      <ul style="margin:0;padding:0;list-style:none">
-        {{range .Record.Links}}
-          <li style="margin-bottom:8px">
-            <a href="{{.URL}}" target="_blank" style="color:var(--link);font-size:14px">
-              {{if .Name}}{{.Name}}{{else}}{{.URL}}{{end}}
-            </a>
-          </li>
-        {{end}}
-      </ul>
-    </section>
-  {{end}}
+  <!-- Metadata section -->
+  <section class="card card-compact">
+    <h2 style="margin:0 0 12px;font-size:18px;font-weight:700">Record Metadata</h2>
+
+    <!-- GRO Metadata -->
+    {{if .Record.Properties.GROMetadata}}
+      <div style="margin-bottom:20px">
+        <h3 style="margin:0 0 8px;font-size:14px;font-weight:600;color:#6b7280">GRO Catalog</h3>
+        <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:6px;padding:12px">
+          <table style="width:100%;font-size:13px;border-spacing:0">
+            {{if .Record.Properties.GROMetadata.Owner}}
+            <tr>
+              <td style="padding:4px 12px 4px 0;color:#6b7280;vertical-align:top;width:180px">Owner</td>
+              <td style="padding:4px 0;font-family:monospace;color:#111827">{{.Record.Properties.GROMetadata.Owner}}</td>
+            </tr>
+            {{end}}
+            {{if .Record.Properties.GROMetadata.UpdateFrequency}}
+            <tr>
+              <td style="padding:4px 12px 4px 0;color:#6b7280;vertical-align:top">Update Frequency</td>
+              <td style="padding:4px 0;color:#111827">{{.Record.Properties.GROMetadata.UpdateFrequency}}</td>
+            </tr>
+            {{end}}
+            {{if .Record.Properties.GROMetadata.V6JobFile}}
+            <tr>
+              <td style="padding:4px 12px 4px 0;color:#6b7280;vertical-align:top">v6 Job File</td>
+              <td style="padding:4px 0;font-family:monospace;font-size:12px;color:#059669">{{.Record.Properties.GROMetadata.V6JobFile}}</td>
+            </tr>
+            {{end}}
+            {{if .Record.Properties.GROMetadata.S3Path}}
+            <tr>
+              <td style="padding:4px 12px 4px 0;color:#6b7280;vertical-align:top">Source URL</td>
+              <td style="padding:4px 0"><a href="{{.Record.Properties.GROMetadata.S3Path}}" target="_blank" style="color:var(--link);font-size:13px;word-break:break-all">{{.Record.Properties.GROMetadata.S3Path}}</a></td>
+            </tr>
+            {{end}}
+          </table>
+        </div>
+      </div>
+    {{end}}
+
+    <!-- GeoCatalogo Metadata -->
+    {{if .Record.Properties.GeoCatalogo}}
+      <div>
+        <h3 style="margin:0 0 8px;font-size:14px;font-weight:600;color:#6b7280">System Info</h3>
+        <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:6px;padding:12px">
+          <table style="width:100%;font-size:13px;border-spacing:0">
+            <tr>
+              <td style="padding:4px 12px 4px 0;color:#075985;vertical-align:top;width:180px">Catalog ID</td>
+              <td style="padding:4px 0;font-family:monospace;color:#0c4a6e">{{.Record.ID}}</td>
+            </tr>
+            <tr>
+              <td style="padding:4px 12px 4px 0;color:#075985;vertical-align:top">Schema</td>
+              <td style="padding:4px 0;color:#0c4a6e">{{.Record.Properties.GeoCatalogo.Schema}}</td>
+            </tr>
+            <tr>
+              <td style="padding:4px 12px 4px 0;color:#075985;vertical-align:top">Inserted</td>
+              <td style="padding:4px 0;color:#0c4a6e">{{.Record.Properties.GeoCatalogo.Inserted}}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    {{end}}
+  </section>
+
+  <!-- Raw JSON section (collapsible) -->
+  <section class="card card-compact">
+    <details>
+      <summary style="cursor:pointer;font-size:18px;font-weight:700;padding:4px 0;user-select:none">
+        📋 Raw JSON Record
+      </summary>
+      <div style="margin-top:12px">
+        <pre style="background:#1f2937;color:#e5e7eb;padding:16px;border-radius:6px;overflow-x:auto;font-size:12px;line-height:1.5;margin:0"><code>{{.RecordJSON}}</code></pre>
+      </div>
+    </details>
+  </section>
 {{end}}

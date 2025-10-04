@@ -35,19 +35,31 @@ type Link struct {
 }
 
 type Properties struct {
-	Title       string      `json:"title"`
-	Abstract    string      `json:"abstract,omitempty"`
-	Collection  string      `json:"collection"`
-	GROMetadata GROMetadata `json:"gro_metadata"`
+	Title         string            `json:"title"`
+	Abstract      string            `json:"abstract,omitempty"`
+	Collection    string            `json:"collection"`
+	GROMetadata   GROMetadata       `json:"gro_metadata"`
+	GeoCatalogo   GeoCatalogoMeta   `json:"_geocatalogo"`
+}
+
+type GeoCatalogoMeta struct {
+	Inserted string `json:"inserted,omitempty"`
+	Source   string `json:"source,omitempty"`
+	Schema   string `json:"schema,omitempty"`
 }
 
 type GROMetadata struct {
 	ImplementationStatus string `json:"implementation_status,omitempty"`
 	DataFormat           string `json:"data_format,omitempty"`
+	GeographicScope      string `json:"geographic_scope,omitempty"`
 	Country              string `json:"country,omitempty"`
 	Continent            string `json:"continent,omitempty"`
+	Owner                string `json:"owner,omitempty"`
+	UpdateFrequency      string `json:"update_frequency,omitempty"`
 	S3Path               string `json:"s3_path,omitempty"`
 	DatabaseTable        string `json:"database_table,omitempty"`
+	V6JobFile            string `json:"v6_job_file,omitempty"`
+	FileSizeMB           string `json:"file_size_mb,omitempty"`
 }
 
 type CatalogStats struct {
@@ -63,6 +75,7 @@ type CatalogStats struct {
 
 type DatasetPageData struct {
 	Record         Record
+	RecordJSON     string
 	DatabaseTable  *metadata.DatabaseTable
 	CSVFile        *metadata.CSVFile
 	ParquetFile    *metadata.ParquetFile
