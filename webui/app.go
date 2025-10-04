@@ -59,6 +59,7 @@ type GROMetadata struct {
 	S3Path               string `json:"s3_path,omitempty"`
 	DatabaseTable        string `json:"database_table,omitempty"`
 	V6JobFile            string `json:"v6_job_file,omitempty"`
+	V6JobType            string `json:"v6_job_type,omitempty"`
 	FileSizeMB           string `json:"file_size_mb,omitempty"`
 }
 

@@ -43,6 +43,27 @@
         </span>
       {{end}}
 
+      <!-- V6 Job Type -->
+      {{if .Record.Properties.GROMetadata.V6JobType}}
+        {{if eq .Record.Properties.GROMetadata.V6JobType "bootstrap"}}
+          <span class="chip" style="background:#dbeafe;color:#1e40af;border-color:#93c5fd;font-weight:600">
+            🔧 Bootstrap
+          </span>
+        {{else if eq .Record.Properties.GROMetadata.V6JobType "collectors"}}
+          <span class="chip" style="background:#d1fae5;color:#065f46;border-color:#6ee7b7;font-weight:600">
+            📡 Collectors
+          </span>
+        {{else if eq .Record.Properties.GROMetadata.V6JobType "run"}}
+          <span class="chip" style="background:#fef3c7;color:#92400e;border-color:#fde68a;font-weight:600">
+            ▶️ Run
+          </span>
+        {{else if eq .Record.Properties.GROMetadata.V6JobType "inference"}}
+          <span class="chip" style="background:#f3e8ff;color:#6b21a8;border-color:#d8b4fe;font-weight:600">
+            🧠 Inference
+          </span>
+        {{end}}
+      {{end}}
+
       <!-- Geography -->
       {{if .Record.Properties.GROMetadata.Continent}}
         <span class="chip" style="background:#fef2f2;color:#991b1b;border-color:#fecaca">
@@ -382,6 +403,12 @@
             <tr>
               <td style="padding:4px 12px 4px 0;color:#6b7280;vertical-align:top">Update Frequency</td>
               <td style="padding:4px 0;color:#111827">{{.Record.Properties.GROMetadata.UpdateFrequency}}</td>
+            </tr>
+            {{end}}
+            {{if .Record.Properties.GROMetadata.V6JobType}}
+            <tr>
+              <td style="padding:4px 12px 4px 0;color:#6b7280;vertical-align:top">v6 Job Type</td>
+              <td style="padding:4px 0;font-weight:600;text-transform:capitalize">{{.Record.Properties.GROMetadata.V6JobType}}</td>
             </tr>
             {{end}}
             {{if .Record.Properties.GROMetadata.V6JobFile}}

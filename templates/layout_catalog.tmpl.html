@@ -72,6 +72,15 @@
         <option value="potential">Potential</option>
       </select>
 
+      <!-- V6 Job Type filter -->
+      <select id="jobType" class="select" aria-label="Filter by v6 job type">
+        <option value="">All job types</option>
+        <option value="bootstrap">🔧 Bootstrap (441)</option>
+        <option value="collectors">📡 Collectors (164)</option>
+        <option value="run">▶️ Run (18)</option>
+        <option value="inference">🧠 Inference (4)</option>
+      </select>
+
       <!-- Sort -->
       <select id="sort" class="select" aria-label="Sort datasets">
         <option value="name_asc">Name (A→Z)</option>
@@ -94,6 +103,7 @@
             data-collection="{{.Properties.Collection}}"
             data-format="{{.Properties.GROMetadata.DataFormat}}"
             data-status="{{.Properties.GROMetadata.ImplementationStatus}}"
+            data-jobtype="{{.Properties.GROMetadata.V6JobType}}"
             data-country="{{.Properties.GROMetadata.Country}}"
             style="display:flex;flex-direction:column;gap:10px">
 
@@ -228,6 +238,7 @@ const q = document.getElementById('q');
 const collection = document.getElementById('collection');
 const format = document.getElementById('format');
 const status = document.getElementById('status');
+const jobType = document.getElementById('jobType');
 const sort = document.getElementById('sort');
 const showing = document.getElementById('showing');
 const noResults = document.getElementById('noResults');
@@ -240,6 +251,7 @@ function loadStateFromURL() {
   if (params.has('collection')) collection.value = params.get('collection');
   if (params.has('format')) format.value = params.get('format');
   if (params.has('status')) status.value = params.get('status');
+  if (params.has('jobType')) jobType.value = params.get('jobType');
   if (params.has('sort')) sort.value = params.get('sort');
 }
 
@@ -250,6 +262,7 @@ function updateURL() {
   if (collection.value) params.set('collection', collection.value);
   if (format.value) params.set('format', format.value);
   if (status.value) params.set('status', status.value);
+  if (jobType.value) params.set('jobType', jobType.value);
   if (sort.value !== 'name_asc') params.set('sort', sort.value);
 
   const url = params.toString() ? `?${params.toString()}` : window.location.pathname;
@@ -261,6 +274,7 @@ function filter() {
   const collVal = collection.value;
   const fmtVal = format.value;
   const statVal = status.value;
+  const jobVal = jobType.value;
 
   let visible = 0;
   datasets.forEach(d => {
@@ -268,13 +282,15 @@ function filter() {
     const coll = d.dataset.collection || '';
     const fmt = d.dataset.format || '';
     const stat = d.dataset.status || '';
+    const job = d.dataset.jobtype || '';
 
     const matchQuery = !query || name.includes(query);
     const matchColl = !collVal || coll === collVal;
     const matchFmt = !fmtVal || fmt === fmtVal;
     const matchStat = !statVal || stat === statVal;
+    const matchJob = !jobVal || job === jobVal;
 
-    if (matchQuery && matchColl && matchFmt && matchStat) {
+    if (matchQuery && matchColl && matchFmt && matchStat && matchJob) {
       d.style.display = '';
       visible++;
     } else {
@@ -293,6 +309,7 @@ q.addEventListener('input', filter);
 collection.addEventListener('change', filter);
 format.addEventListener('change', filter);
 status.addEventListener('change', filter);
+jobType.addEventListener('change', filter);
 
 // Sorting
 sort.addEventListener('change', () => {
