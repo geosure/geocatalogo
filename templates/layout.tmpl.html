@@ -1,0 +1,52 @@
+{{define "layout"}}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>{{block "page_title" .}}GRO Data Catalog{{end}}</title>
+
+  {{/* Global styles from ui.tmpl.html */}}
+  {{template "ui_styles" .}}
+
+  {{block "head_extra" .}}{{end}}
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <a href="/"><img src="https://geosure.ai/assets/img/logo-header.png" alt="GeoSure" style="height:32px"/></a>
+      </div>
+
+      <nav class="desktop-only">
+        <div class="nav" id="top-nav">
+          <a href="/">Catalog</a>
+          <a href="/stats">Statistics</a>
+          <a href="http://localhost:8000/api" target="_blank">API Docs</a>
+        </div>
+      </nav>
+
+      <button class="hamburger" id="hamburger">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    <div class="mobile-menu" id="mobile-menu">
+      <a href="/">Catalog</a>
+      <a href="/stats">Statistics</a>
+      <a href="http://localhost:8000/api" target="_blank">API Docs</a>
+    </div>
+  </header>
+
+  <main id="main" class="container">
+    {{block "page_content" .}}{{end}}
+  </main>
+
+  {{template "ui_scripts" .}}
+  {{block "scripts_extra" .}}{{end}}
+</body>
+</html>
+{{end}}
