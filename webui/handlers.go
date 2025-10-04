@@ -187,6 +187,131 @@ func (a *App) HandleDataset(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (a *App) HandleGeography(w http.ResponseWriter, r *http.Request) {
+	// Parse URL: /geography/{level}/{name}
+	// Example: /geography/city/dallas
+	path := r.URL.Path[len("/geography/"):]
+	parts := []string{}
+	if path != "" {
+		// Split by / but preserve URL encoding
+		for _, p := range r.URL.Query()["city"] {
+			parts = append(parts, p)
+		}
+		for _, p := range r.URL.Query()["county"] {
+			parts = append(parts, p)
+		}
+		for _, p := range r.URL.Query()["state"] {
+			parts = append(parts, p)
+		}
+		for _, p := range r.URL.Query()["country"] {
+			parts = append(parts, p)
+		}
+		for _, p := range r.URL.Query()["continent"] {
+			parts = append(parts, p)
+		}
+	}
+
+	// Extract geography params from query string
+	city := r.URL.Query().Get("city")
+	county := r.URL.Query().Get("county")
+	state := r.URL.Query().Get("state")
+	country := r.URL.Query().Get("country")
+	continent := r.URL.Query().Get("continent")
+
+	// Determine level and name
+	level := ""
+	name := ""
+	if city != "" {
+		level = "city"
+		name = city
+	} else if county != "" {
+		level = "county"
+		name = county
+	} else if state != "" {
+		level = "state"
+		name = state
+	} else if country != "" {
+		level = "country"
+		name = country
+	} else if continent != "" {
+		level = "continent"
+		name = continent
+	} else {
+		http.Error(w, "No geography specified", http.StatusBadRequest)
+		return
+	}
+
+	// Find matching README
+	var readme *metadata.V6README
+	if a.meta != nil {
+		readme = a.meta.FindREADMEForGeography(city, county, state, country, continent)
+	}
+
+	// Load all records and filter by geography
+	catalogPath := os.Getenv("CATALOG_JSON_PATH")
+	if catalogPath == "" {
+		catalogPath = "/Users/jjohnson/projects/geosure/catalog/data/geocatalogo_records.json"
+	}
+
+	data, err := os.ReadFile(catalogPath)
+	if err != nil {
+		http.Error(w, "Failed to load catalog", http.StatusInternalServerError)
+		log.Printf("Error loading catalog: %v", err)
+		return
+	}
+
+	var records []Record
+	if err := json.Unmarshal(data, &records); err != nil {
+		http.Error(w, "Failed to parse catalog", http.StatusInternalServerError)
+		log.Printf("Error parsing catalog: %v", err)
+		return
+	}
+
+	// Filter ALL records by geography (not just jobs!)
+	var matchingRecords []Record
+	for _, rec := range records {
+		// Match geography
+		matches := true
+		if city != "" && rec.Properties.GROMetadata.City != city {
+			matches = false
+		}
+		if county != "" && rec.Properties.GROMetadata.Admin2 != county {
+			matches = false
+		}
+		if state != "" && rec.Properties.GROMetadata.StateProvince != state {
+			matches = false
+		}
+		if country != "" && rec.Properties.GROMetadata.Country != country {
+			matches = false
+		}
+		if continent != "" && rec.Properties.GROMetadata.Continent != continent {
+			matches = false
+		}
+
+		if matches {
+			matchingRecords = append(matchingRecords, rec)
+		}
+	}
+
+	pageData := GeographyPageData{
+		Level:       level,
+		Name:        name,
+		README:      readme,
+		Jobs:        matchingRecords,
+		JobCount:    len(matchingRecords),
+		City:        city,
+		County:      county,
+		State:       state,
+		Country:     country,
+		Continent:   continent,
+	}
+
+	if err := a.tc.Render(w, "layout_geography", pageData); err != nil {
+		http.Error(w, "Template error", http.StatusInternalServerError)
+		log.Printf("Template error: %v", err)
+	}
+}
+
 func (a *App) HandleStats(w http.ResponseWriter, r *http.Request) {
 	// TODO: Render statistics page
 	w.Write([]byte("Statistics page - coming soon!"))

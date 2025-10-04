@@ -7,6 +7,7 @@ func NewMux(app *App) *http.ServeMux {
 
 	mux.HandleFunc("/", app.HandleCatalog)
 	mux.HandleFunc("/dataset/", app.HandleDataset)
+	mux.HandleFunc("/geography/", app.HandleGeography)
 	mux.HandleFunc("/stats", app.HandleStats)
 
 	// Redirect /api to existing GeoCatalogo STAC API

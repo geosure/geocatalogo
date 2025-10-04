@@ -109,3 +109,16 @@ type DatasetPageData struct {
 	PDFFile        *metadata.PDFFile
 	V6Job          *metadata.V6Job
 }
+
+type GeographyPageData struct {
+	Level     string               // city, county, state, country, continent
+	Name      string               // Geographic name
+	README    *metadata.V6README   // README content for this geography
+	Jobs      []Record             // All jobs matching this geography
+	JobCount  int                  // Number of jobs
+	City      string
+	County    string
+	State     string
+	Country   string
+	Continent string
+}

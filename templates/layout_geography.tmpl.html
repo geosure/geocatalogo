@@ -1,0 +1,305 @@
+{{define "layout_geography"}}{{template "layout" .}}{{end}}
+
+{{define "page_title"}}{{.Name}} - Geographic Context{{end}}
+
+{{define "head_extra"}}
+<!-- Marked.js for markdown rendering -->
+<script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
+<style>
+  .markdown-content {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #1f2937;
+  }
+  .markdown-content h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #111827;
+    margin: 24px 0 12px 0;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #e5e7eb;
+  }
+  .markdown-content h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1f2937;
+    margin: 20px 0 10px 0;
+  }
+  .markdown-content h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #374151;
+    margin: 16px 0 8px 0;
+  }
+  .markdown-content p {
+    margin: 0 0 12px 0;
+  }
+  .markdown-content ul, .markdown-content ol {
+    margin: 0 0 12px 0;
+    padding-left: 24px;
+  }
+  .markdown-content li {
+    margin: 4px 0;
+  }
+  .markdown-content a {
+    color: #3b82f6;
+    text-decoration: none;
+  }
+  .markdown-content a:hover {
+    text-decoration: underline;
+  }
+  .markdown-content code {
+    background: #f3f4f6;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 13px;
+    font-family: 'Monaco', 'Courier New', monospace;
+  }
+  .markdown-content pre {
+    background: #1f2937;
+    color: #e5e7eb;
+    padding: 12px;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 12px 0;
+  }
+  .markdown-content pre code {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+  }
+  .markdown-content blockquote {
+    border-left: 4px solid #d1d5db;
+    padding-left: 16px;
+    margin: 12px 0;
+    color: #6b7280;
+  }
+  .markdown-content table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 12px 0;
+  }
+  .markdown-content th, .markdown-content td {
+    border: 1px solid #e5e7eb;
+    padding: 8px;
+    text-align: left;
+  }
+  .markdown-content th {
+    background: #f9fafb;
+    font-weight: 600;
+  }
+</style>
+{{end}}
+
+{{define "page_content"}}
+<div style="max-width:1400px;margin:0 auto;padding:20px">
+  <!-- Geographic Breadcrumb -->
+  <div style="margin-bottom:20px;display:flex;align-items:center;gap:8px;font-size:13px;color:#64748b">
+    <a href="/" style="color:#64748b;text-decoration:none">🏠 Catalog</a>
+    <span>›</span>
+
+    {{if .Continent}}
+      {{if eq .Level "continent"}}
+        <span style="font-weight:600;color:#334155">{{continentEmoji .Continent}} {{continentName .Continent}}</span>
+      {{else}}
+        <a href="/geography/?continent={{.Continent}}" style="color:#64748b;text-decoration:none">{{continentEmoji .Continent}} {{continentName .Continent}}</a>
+        <span>›</span>
+      {{end}}
+    {{end}}
+
+    {{if .Country}}
+      {{if eq .Level "country"}}
+        <span style="font-weight:600;color:#334155">{{countryFlag .Country}} {{countryName .Country}}</span>
+      {{else}}
+        <a href="/geography/?continent={{.Continent}}&country={{.Country}}" style="color:#64748b;text-decoration:none">{{countryFlag .Country}} {{countryName .Country}}</a>
+        <span>›</span>
+      {{end}}
+    {{end}}
+
+    {{if .State}}
+      {{if eq .Level "state"}}
+        <span style="font-weight:600;color:#334155">{{.State}}</span>
+      {{else}}
+        <a href="/geography/?continent={{.Continent}}&country={{.Country}}&state={{.State}}" style="color:#64748b;text-decoration:none">{{.State}}</a>
+        <span>›</span>
+      {{end}}
+    {{end}}
+
+    {{if .County}}
+      {{if eq .Level "county"}}
+        <span style="font-weight:600;color:#334155">{{.County}}</span>
+      {{else}}
+        <a href="/geography/?continent={{.Continent}}&country={{.Country}}&state={{.State}}&county={{.County}}" style="color:#64748b;text-decoration:none">{{.County}}</a>
+        <span>›</span>
+      {{end}}
+    {{end}}
+
+    {{if .City}}
+      <span style="font-weight:600;color:#334155">{{.City}}</span>
+    {{end}}
+  </div>
+
+  <!-- Page Header -->
+  <div style="margin-bottom:24px">
+    <h1 style="font-size:32px;font-weight:700;color:#0f172a;margin:0 0 8px 0">
+      📍 {{.Name}}
+    </h1>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="font-size:20px;font-weight:700;color:#3b82f6">{{.JobCount}}</div>
+      <div style="font-size:14px;color:#64748b">
+        {{if eq .JobCount 1}}dataset available{{else}}datasets available{{end}}
+      </div>
+    </div>
+  </div>
+
+  <!-- Two Column Layout: Datasets (Left) + README (Right) -->
+  <div style="display:grid;grid-template-columns:450px 1fr;gap:24px;align-items:start">
+
+    <!-- LEFT COLUMN: All Datasets -->
+    <div>
+      <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:6px">
+        🗂️ All Data Sources
+      </h2>
+
+      {{if gt .JobCount 0}}
+      <div style="display:flex;flex-direction:column;gap:12px">
+        {{range .Jobs}}
+        <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:16px;transition:all 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.05)">
+          <!-- Collection Type Icon -->
+          <div style="margin-bottom:10px">
+            {{if eq .Properties.Collection "potential_v6"}}
+              {{if eq .Properties.GROMetadata.V6JobType "bootstrap"}}
+                <span style="font-size:24px">🔧</span>
+              {{else if eq .Properties.GROMetadata.V6JobType "collectors"}}
+                <span style="font-size:24px">📡</span>
+              {{else if eq .Properties.GROMetadata.V6JobType "run"}}
+                <span style="font-size:24px">▶️</span>
+              {{else if eq .Properties.GROMetadata.V6JobType "inference"}}
+                <span style="font-size:24px">🧠</span>
+              {{else}}
+                <span style="font-size:24px">⚙️</span>
+              {{end}}
+            {{else if eq .Properties.Collection "existing_db"}}
+              <span style="font-size:24px">🗄️</span>
+            {{else if eq .Properties.Collection "existing_local"}}
+              <span style="font-size:24px">📁</span>
+            {{else if eq .Properties.Collection "external_api"}}
+              <span style="font-size:24px">🔌</span>
+            {{else if eq .Properties.Collection "external_news"}}
+              <span style="font-size:24px">📰</span>
+            {{else if eq .Properties.Collection "external_government"}}
+              <span style="font-size:24px">🏛️</span>
+            {{else if eq .Properties.Collection "external_other"}}
+              <span style="font-size:24px">🌐</span>
+            {{else}}
+              <span style="font-size:24px">📊</span>
+            {{end}}
+          </div>
+
+          <a href="/dataset/{{.ID}}" style="font-size:15px;font-weight:600;color:#0f172a;text-decoration:none;display:block;margin-bottom:8px;line-height:1.4">
+            {{.Properties.Title}}
+          </a>
+
+          {{if .Properties.Abstract}}
+          <p style="font-size:12px;color:#6b7280;margin:0 0 10px 0;line-height:1.5">
+            {{.Properties.Abstract}}
+          </p>
+          {{end}}
+
+          <!-- Metadata chips -->
+          <div style="display:flex;gap:6px;flex-wrap:wrap;font-size:10px;margin-bottom:12px">
+            <!-- Collection badge -->
+            {{if eq .Properties.Collection "potential_v6"}}
+              <span style="background:#dbeafe;color:#1e40af;padding:4px 8px;border-radius:4px;font-weight:500">
+                ⚙️ v6 job
+              </span>
+            {{else if eq .Properties.Collection "existing_db"}}
+              <span style="background:#d1fae5;color:#065f46;padding:4px 8px;border-radius:4px;font-weight:500">
+                🗄️ database
+              </span>
+            {{else if eq .Properties.Collection "existing_local"}}
+              <span style="background:#fef3c7;color:#92400e;padding:4px 8px;border-radius:4px;font-weight:500">
+                📁 file
+              </span>
+            {{else if eq .Properties.Collection "external_api"}}
+              <span style="background:#f3e8ff;color:#6b21a8;padding:4px 8px;border-radius:4px;font-weight:500">
+                🔌 API
+              </span>
+            {{else if eq .Properties.Collection "external_news"}}
+              <span style="background:#fee2e2;color:#991b1b;padding:4px 8px;border-radius:4px;font-weight:500">
+                📰 news
+              </span>
+            {{else if eq .Properties.Collection "external_government"}}
+              <span style="background:#dbeafe;color:#1e40af;padding:4px 8px;border-radius:4px;font-weight:500">
+                🏛️ government
+              </span>
+            {{else}}
+              <span style="background:#e5e7eb;color:#374151;padding:4px 8px;border-radius:4px;font-weight:500">
+                {{.Properties.Collection}}
+              </span>
+            {{end}}
+
+            {{if .Properties.GROMetadata.DataFormat}}
+            <span style="background:#f3e8ff;color:#6b21a8;padding:4px 8px;border-radius:4px;font-weight:500">
+              {{.Properties.GROMetadata.DataFormat}}
+            </span>
+            {{end}}
+            {{if .Properties.GROMetadata.UpdateFrequency}}
+            <span style="background:#fef3c7;color:#92400e;padding:4px 8px;border-radius:4px;font-weight:500">
+              🔄 {{.Properties.GROMetadata.UpdateFrequency}}
+            </span>
+            {{end}}
+          </div>
+
+          <a href="/dataset/{{.ID}}" style="background:#3b82f6;color:#fff;padding:8px 14px;border-radius:6px;font-size:12px;font-weight:500;text-decoration:none;display:inline-block;transition:background 0.2s">
+            View Details →
+          </a>
+        </div>
+        {{end}}
+      </div>
+      {{else}}
+      <div style="background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;padding:16px">
+        <p style="margin:0;font-size:13px;color:#991b1b">
+          No datasets found for this geography.
+        </p>
+      </div>
+      {{end}}
+    </div>
+
+    <!-- RIGHT COLUMN: README -->
+    <div style="position:sticky;top:20px">
+      {{if .README}}
+      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.05)">
+        <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 16px 0;display:flex;align-items:center;gap:6px">
+          📚 Geographic Context
+        </h2>
+
+        <!-- Markdown content rendered by marked.js -->
+        <div id="readme-content" class="markdown-content"></div>
+
+        <!-- Hidden raw markdown -->
+        <script id="readme-markdown" type="text/plain">{{.README.Content}}</script>
+      </div>
+      {{else}}
+      <div style="background:#fef3c7;border:1px solid #fbbf24;border-radius:8px;padding:16px">
+        <p style="margin:0;font-size:13px;color:#92400e">
+          ⚠️ No geographic context available for this location yet.
+        </p>
+      </div>
+      {{end}}
+    </div>
+
+  </div>
+</div>
+
+{{if .README}}
+<script>
+  // Render markdown on page load
+  document.addEventListener('DOMContentLoaded', function() {
+    const markdown = document.getElementById('readme-markdown').textContent;
+    const html = marked.parse(markdown);
+    document.getElementById('readme-content').innerHTML = html;
+  });
+</script>
+{{end}}
+{{end}}
