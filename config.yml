@@ -1,0 +1,39 @@
+server:
+  openapi: /openapi
+  url: http://localhost:8000
+  mimetype: application/json
+  encoding: utf-8
+  language: en-US
+  pretty_print: true
+  limit: 100
+  cors: true
+
+logging:
+  level: DEBUG
+  logfile: /tmp/geocatalogo.log
+
+metadata:
+  identification:
+    id: gro-catalog
+    title: GRO Geospatial Data Catalog
+    abstract: Global Risk Observatory unified geospatial data catalog
+    keywords:
+      - geospatial
+      - risk
+      - catalog
+    keywords_type: theme
+    fees: None
+    accessconstraints: None
+  provider:
+    name: Geosure
+    url: https://geosure.ai
+  license:
+    name: Proprietary
+    url: https://geosure.ai
+  contact:
+    name: Geosure Team
+    email: hello@geosure.ai
+
+repository:
+  type: memory
+  url: file:///Users/jjohnson/projects/geosure/catalog/data/geocatalogo_records.json
