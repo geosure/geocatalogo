@@ -59,8 +59,8 @@ type ParquetFile struct {
 
 // ParquetColumn represents a Parquet column
 type ParquetColumn struct {
-	ColumnName string `json:"column_name"`
-	DataType   string `json:"data_type"`
+	ColumnName string `json:"name"`
+	DataType   string `json:"type"`
 	Nullable   bool   `json:"nullable"`
 }
 
