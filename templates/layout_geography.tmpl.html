@@ -179,6 +179,10 @@
         {{if .CollectionCounts.APIs}}• {{.CollectionCounts.APIs}} 🔌 APIs{{end}}
         {{if .CollectionCounts.News}}• {{.CollectionCounts.News}} 📰 news{{end}}
         {{if .CollectionCounts.Government}}• {{.CollectionCounts.Government}} 🏛️ govt{{end}}
+        {{if .CollectionCounts.AIAgents}}• {{.CollectionCounts.AIAgents}} 🤖 AI agents{{end}}
+        {{if .CollectionCounts.DataBots}}• {{.CollectionCounts.DataBots}} 📊 data bots{{end}}
+        {{if .CollectionCounts.ScraperBots}}• {{.CollectionCounts.ScraperBots}} 🕷️ scrapers{{end}}
+        {{if .CollectionCounts.AutoBots}}• {{.CollectionCounts.AutoBots}} ⚡ automation{{end}}
       </div>
     </div>
   </div>
@@ -225,6 +229,70 @@
           <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
             {{range .Jobs}}
               {{if eq .Properties.Collection "existing_db"}}
+                {{template "dataset_card" .}}
+              {{end}}
+            {{end}}
+          </div>
+        </section>
+        {{end}}
+
+        <!-- AI Agents Section (for Clankr continent!) -->
+        {{if .CollectionCounts.AIAgents}}
+        <section style="margin-bottom:24px">
+          <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #8b5cf6;padding-bottom:6px">
+            🤖 AI Assistants <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.AIAgents}})</span>
+          </h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
+            {{range .Jobs}}
+              {{if eq .Properties.Collection "ai_agent"}}
+                {{template "dataset_card" .}}
+              {{end}}
+            {{end}}
+          </div>
+        </section>
+        {{end}}
+
+        <!-- Data Processing Bots Section (for Clankr continent!) -->
+        {{if .CollectionCounts.DataBots}}
+        <section style="margin-bottom:24px">
+          <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #06b6d4;padding-bottom:6px">
+            📊 Data Processing Bots <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.DataBots}})</span>
+          </h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
+            {{range .Jobs}}
+              {{if eq .Properties.Collection "data_bot"}}
+                {{template "dataset_card" .}}
+              {{end}}
+            {{end}}
+          </div>
+        </section>
+        {{end}}
+
+        <!-- Scraper/Harvester Bots Section (for Clankr continent!) -->
+        {{if .CollectionCounts.ScraperBots}}
+        <section style="margin-bottom:24px">
+          <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #84cc16;padding-bottom:6px">
+            🕷️ Scraper & Collector Bots <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.ScraperBots}})</span>
+          </h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
+            {{range .Jobs}}
+              {{if eq .Properties.Collection "scraper_bot"}}
+                {{template "dataset_card" .}}
+              {{end}}
+            {{end}}
+          </div>
+        </section>
+        {{end}}
+
+        <!-- Automation Bots Section (for Clankr continent!) -->
+        {{if .CollectionCounts.AutoBots}}
+        <section style="margin-bottom:24px">
+          <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #f59e0b;padding-bottom:6px">
+            ⚡ Automation & Orchestration Bots <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.AutoBots}})</span>
+          </h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
+            {{range .Jobs}}
+              {{if eq .Properties.Collection "automation_bot"}}
                 {{template "dataset_card" .}}
               {{end}}
             {{end}}

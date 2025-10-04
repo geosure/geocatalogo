@@ -111,13 +111,17 @@ type DatasetPageData struct {
 }
 
 type CollectionCounts struct {
-	V6Jobs     int
-	Database   int
-	Files      int
-	APIs       int
-	News       int
-	Government int
-	Other      int
+	V6Jobs        int
+	Database      int
+	Files         int
+	APIs          int
+	News          int
+	Government    int
+	AIAgents      int // Claude, GPT, Gemini, etc.
+	DataBots      int // CSV inspector, Parquet analyzer, etc.
+	ScraperBots   int // News scraper, ACLED harvester, etc.
+	AutoBots      int // Catalog updater, S3 sync, job scheduler, etc.
+	Other         int
 }
 
 type SubGeography struct {

@@ -320,6 +320,14 @@ func (a *App) HandleGeography(w http.ResponseWriter, r *http.Request) {
 				counts.News++
 			case "external_government":
 				counts.Government++
+			case "ai_agent":
+				counts.AIAgents++
+			case "data_bot":
+				counts.DataBots++
+			case "scraper_bot":
+				counts.ScraperBots++
+			case "automation_bot":
+				counts.AutoBots++
 			default:
 				counts.Other++
 			}
