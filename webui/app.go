@@ -107,4 +107,5 @@ type DatasetPageData struct {
 	FileGDBFile    *metadata.FileGDBFile
 	PNGFile        *metadata.PNGFile
 	PDFFile        *metadata.PDFFile
+	V6Job          *metadata.V6Job
 }

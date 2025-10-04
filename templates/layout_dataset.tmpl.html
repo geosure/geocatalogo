@@ -220,6 +220,14 @@
         </table>
       </div>
     </section>
+
+    <!-- YAML Definition (if loaded) -->
+    {{if .V6Job}}
+      <section class="card card-compact">
+        <h2 style="margin:0 0 12px;font-size:15px;font-weight:600;color:#334155">📄 YAML Definition</h2>
+        <pre style="background:#1f2937;color:#e5e7eb;padding:14px;border-radius:6px;overflow-x:auto;font-size:12px;line-height:1.5;margin:0;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace"><code>{{.V6Job.RawYAML}}</code></pre>
+      </section>
+    {{end}}
   {{end}}
 
   <!-- Database Table Details -->

@@ -151,6 +151,7 @@ func (a *App) HandleDataset(w http.ResponseWriter, r *http.Request) {
 			record.Properties.GROMetadata.S3Path,
 			record.Properties.GROMetadata.DatabaseTable,
 			record.Properties.GROMetadata.DataFormat,
+			record.Properties.GROMetadata.V6JobFile,
 		)
 
 		// Type assert to specific metadata types
@@ -175,6 +176,8 @@ func (a *App) HandleDataset(w http.ResponseWriter, r *http.Request) {
 			pageData.PNGFile = m
 		case *metadata.PDFFile:
 			pageData.PDFFile = m
+		case *metadata.V6Job:
+			pageData.V6Job = m
 		}
 	}
 

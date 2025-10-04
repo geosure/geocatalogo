@@ -19,6 +19,7 @@ type MetadataStore struct {
 	FileGDB    map[string]*FileGDBFile
 	PNG        map[string]*PNGFile
 	PDF        map[string]*PDFFile
+	V6Jobs     map[string]*V6Job
 }
 
 // LoadAll loads all introspection files into memory
@@ -33,6 +34,7 @@ func LoadAll(basePath string) (*MetadataStore, error) {
 		FileGDB:    make(map[string]*FileGDBFile),
 		PNG:        make(map[string]*PNGFile),
 		PDF:        make(map[string]*PDFFile),
+		V6Jobs:     make(map[string]*V6Job),
 	}
 
 	// Load database schema
@@ -85,11 +87,23 @@ func LoadAll(basePath string) (*MetadataStore, error) {
 		fmt.Printf("Warning: Could not load PDF introspection: %v\n", err)
 	}
 
+	// Load v6 job metadata
+	if err := loadV6JobMetadata(basePath+"/v6_job_metadata.json", store); err != nil {
+		fmt.Printf("Warning: Could not load v6 job metadata: %v\n", err)
+	}
+
 	return store, nil
 }
 
 // Lookup finds metadata for a given dataset by catalog ID or path
-func (s *MetadataStore) Lookup(catalogID string, s3Path string, databaseTable string, dataFormat string) interface{} {
+func (s *MetadataStore) Lookup(catalogID string, s3Path string, databaseTable string, dataFormat string, v6JobFile string) interface{} {
+	// V6 job lookup
+	if v6JobFile != "" {
+		if job, ok := s.V6Jobs[v6JobFile]; ok {
+			return job
+		}
+	}
+
 	// Database table lookup
 	if databaseTable != "" && s.Database != nil {
 		for i := range s.Database.Tables {
@@ -331,5 +345,20 @@ func loadPDFIntrospection(path string, store *MetadataStore) error {
 	for i := range result.PDFs {
 		store.PDF[result.PDFs[i].S3Key] = &result.PDFs[i]
 	}
+	return nil
+}
+func loadV6JobMetadata(path string, store *MetadataStore) error {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return err
+	}
+
+	// v6_job_metadata.json is a map: path -> V6Job
+	var jobsMap map[string]*V6Job
+	if err := json.Unmarshal(data, &jobsMap); err != nil {
+		return err
+	}
+
+	store.V6Jobs = jobsMap
 	return nil
 }
