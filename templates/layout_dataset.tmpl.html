@@ -95,23 +95,33 @@
         <div style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">📍 Location</div>
         <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:14px;color:#334155">
           {{if .Record.Properties.GROMetadata.Continent}}
-            <span>{{continentEmoji .Record.Properties.GROMetadata.Continent}} {{continentName .Record.Properties.GROMetadata.Continent}}</span>
+            <a href="/geography/?continent={{.Record.Properties.GROMetadata.Continent}}" style="color:#334155;text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#334155'">
+              {{continentEmoji .Record.Properties.GROMetadata.Continent}} {{continentName .Record.Properties.GROMetadata.Continent}}
+            </a>
           {{end}}
           {{if .Record.Properties.GROMetadata.Country}}
             <span style="color:#94a3b8">→</span>
-            <span>{{countryFlag .Record.Properties.GROMetadata.Country}} {{countryName .Record.Properties.GROMetadata.Country}}</span>
+            <a href="/geography/?continent={{.Record.Properties.GROMetadata.Continent}}&country={{.Record.Properties.GROMetadata.Country}}" style="color:#334155;text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#334155'">
+              {{countryFlag .Record.Properties.GROMetadata.Country}} {{countryName .Record.Properties.GROMetadata.Country}}
+            </a>
           {{end}}
           {{if .Record.Properties.GROMetadata.StateProvince}}
             <span style="color:#94a3b8">→</span>
-            <span>{{upper .Record.Properties.GROMetadata.StateProvince}}</span>
+            <a href="/geography/?continent={{.Record.Properties.GROMetadata.Continent}}&country={{.Record.Properties.GROMetadata.Country}}&state={{.Record.Properties.GROMetadata.StateProvince}}" style="color:#334155;text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#334155'">
+              {{upper .Record.Properties.GROMetadata.StateProvince}}
+            </a>
           {{end}}
           {{if .Record.Properties.GROMetadata.Admin2}}
             <span style="color:#94a3b8">→</span>
-            <span>{{.Record.Properties.GROMetadata.Admin2}}</span>
+            <a href="/geography/?continent={{.Record.Properties.GROMetadata.Continent}}&country={{.Record.Properties.GROMetadata.Country}}&state={{.Record.Properties.GROMetadata.StateProvince}}&county={{.Record.Properties.GROMetadata.Admin2}}" style="color:#334155;text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#334155'">
+              {{.Record.Properties.GROMetadata.Admin2}}
+            </a>
           {{end}}
           {{if .Record.Properties.GROMetadata.City}}
             <span style="color:#94a3b8">→</span>
-            <span style="font-weight:600">🏙️ {{.Record.Properties.GROMetadata.City}}</span>
+            <a href="/geography/?continent={{.Record.Properties.GROMetadata.Continent}}&country={{.Record.Properties.GROMetadata.Country}}&state={{.Record.Properties.GROMetadata.StateProvince}}&county={{.Record.Properties.GROMetadata.Admin2}}&city={{.Record.Properties.GROMetadata.City}}" style="color:#334155;text-decoration:none;font-weight:600;transition:color 0.2s" onmouseover="this.style.color='#3b82f6'" onmouseout="this.style.color='#334155'">
+              🏙️ {{.Record.Properties.GROMetadata.City}}
+            </a>
           {{end}}
         </div>
       </section>
