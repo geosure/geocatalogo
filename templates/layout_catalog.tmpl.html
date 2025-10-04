@@ -3,368 +3,228 @@
 {{define "page_title"}}Catalog • GRO{{end}}
 
 {{define "page_content"}}
-  <!-- Header + controls -->
-  <section class="card card-compact">
-    <h1 style="margin:0">🗂️ GRO Catalog</h1>
-    <div class="muted">
-      <span id="totalCount">{{.Stats.Total}}</span> records
-      <span class="sep">•</span>
-      <span class="hint" style="font-weight:500">
-        {{.Stats.PotentialV6}} ⚙️ jobs + {{.Stats.DataRecords}} 📊 data sources
-      </span>
-      <span class="sep">•</span>
-      <span class="hint">Search, filter, explore</span>
+<div style="max-width:1400px;margin:0 auto;padding:20px">
+  <!-- Header -->
+  <div style="text-align:center;margin-bottom:48px">
+    <h1 style="font-size:42px;font-weight:700;color:#0f172a;margin:0 0 12px 0">
+      🌍 GRO Data Catalog
+    </h1>
+    <p style="font-size:18px;color:#64748b;margin:0 0 12px 0">
+      Explore datasets by geography
+    </p>
+    <div style="font-size:14px;color:#94a3b8">
+      <span style="font-weight:600;color:#3b82f6">{{.Stats.Total}}</span> datasets •
+      <span>{{.Stats.PotentialV6}} ⚙️ jobs</span> •
+      <span>{{.Stats.DataRecords}} 📊 data sources</span>
     </div>
+  </div>
 
-    <div class="toolbar" style="gap:8px;flex-wrap:wrap;margin-top:16px">
-      <!-- Search -->
-      <input id="q" class="search" type="search"
-             placeholder="🔍 Search jobs, data, APIs..."
-             aria-label="Search catalog"
-             style="min-width:280px;flex:1">
-
-      <!-- Collection filter -->
-      <select id="collection" class="select" aria-label="Filter by collection">
-        <option value="">✨ All collections</option>
-        <option value="existing_db">🗄️ Database Tables ({{.Stats.ExistingDB}})</option>
-        <option value="existing_local">📁 Local Files ({{.Stats.ExistingLocal}})</option>
-        <option value="potential_v6">⚙️ v6 Jobs ({{.Stats.PotentialV6}})</option>
-        <option value="external_api">🔌 External APIs ({{.Stats.ExternalAPI}})</option>
-        <option value="external_news">📰 News Sources ({{.Stats.ExternalNews}})</option>
-        <option value="external_government">🏛️ Government ({{.Stats.ExternalGov}})</option>
-        <option value="external_other">🔗 Other External ({{.Stats.ExternalOther}})</option>
-      </select>
-
-      <!-- Format filter -->
-      <select id="format" class="select" aria-label="Filter by format">
-        <option value="">All formats</option>
-        <optgroup label="🗄️ Database">
-          <option value="database">📊 Database Tables</option>
-        </optgroup>
-        <optgroup label="📋 Tabular Data">
-          <option value="csv">📄 CSV</option>
-          <option value="tsv">📄 TSV</option>
-          <option value="xls">📗 Excel (XLS)</option>
-          <option value="xlsx">📗 Excel (XLSX)</option>
-          <option value="json">📝 JSON</option>
-        </optgroup>
-        <optgroup label="🌍 Geospatial Data">
-          <option value="parquet">🗂️ Parquet</option>
-          <option value="shapefile">🗺️ Shapefile</option>
-          <option value="geopackage">📦 GeoPackage</option>
-          <option value="filegdb">🗃️ File Geodatabase</option>
-          <option value="geojson">🌐 GeoJSON</option>
-        </optgroup>
-        <optgroup label="📄 Documents">
-          <option value="pdf">📕 PDF</option>
-          <option value="image">🖼️ Image</option>
-          <option value="html">🌐 HTML</option>
-        </optgroup>
-        <optgroup label="🔗 External Sources">
-          <option value="api">🔌 API</option>
-          <option value="news">📰 News</option>
-          <option value="academic">🎓 Academic</option>
-          <option value="government">🏛️ Government</option>
-        </optgroup>
-      </select>
-
-      <!-- Status filter -->
-      <select id="status" class="select" aria-label="Filter by status">
-        <option value="">All statuses</option>
-        <option value="implemented">✓ Implemented</option>
-        <option value="draft">📝 Draft</option>
-        <option value="potential">💡 Potential</option>
-      </select>
-
-      <!-- V6 Job Type filter -->
-      <select id="jobType" class="select" aria-label="Filter by v6 job type">
-        <option value="">All job types</option>
-        <option value="bootstrap">🔧 Bootstrap (441)</option>
-        <option value="collectors">📡 Collectors (164)</option>
-        <option value="run">▶️ Run (18)</option>
-        <option value="inference">🧠 Inference (4)</option>
-      </select>
-
-      <!-- Continent filter -->
-      <select id="continent" class="select" aria-label="Filter by continent">
-        <option value="">🌐 All continents</option>
-        {{range .Stats.Continents}}
-          <option value="{{.Code}}">{{.Emoji}} {{.Name}} ({{.Count}})</option>
-        {{end}}
-      </select>
-
-      <!-- Country filter -->
-      <select id="country" class="select" aria-label="Filter by country">
-        <option value="">🌍 All countries</option>
-        {{range .Stats.Countries}}
-          <option value="{{.Code}}">{{.Flag}} {{.Name}} ({{.Count}})</option>
-        {{end}}
-      </select>
-
-      <!-- Sort -->
-      <select id="sort" class="select" aria-label="Sort records">
-        <option value="name_asc">Name (A→Z)</option>
-        <option value="name_desc">Name (Z→A)</option>
-        <option value="updated_desc">Recently Updated</option>
-      </select>
-    </div>
+  <!-- Search Bar -->
+  <section style="margin-bottom:48px">
+    <input id="search" type="search"
+           placeholder="🔍 Search datasets by name, location, or type..."
+           aria-label="Search catalog"
+           style="width:100%;max-width:700px;margin:0 auto;display:block;padding:18px 24px;font-size:16px;border:2px solid #e5e7eb;border-radius:12px;transition:all 0.2s"
+           onfocus="this.style.borderColor='#3b82f6';this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.1)'"
+           onblur="this.style.borderColor='#e5e7eb';this.style.boxShadow='none'">
   </section>
 
-  <!-- Results grid -->
-  <section class="card card-compact">
-    <div id="resultCount" class="muted" style="margin-bottom:12px">
-      Showing <span id="showing">{{.Stats.Total}}</span> of <span id="total">{{.Stats.Total}}</span> records
-    </div>
+  <!-- Geographic Navigation -->
+  <section style="margin-bottom:32px">
+    <h2 style="font-size:24px;font-weight:600;color:#0f172a;margin:0 0 24px 0;text-align:center">
+      Browse by Region
+    </h2>
 
-    <ul id="catalogGrid" class="grid-cards reset" style="gap:12px;list-style:none;margin:0;padding:0">
-      {{range .Records}}
-        <li class="card card-compact dataset"
-            data-name="{{.Properties.Title}}"
-            data-collection="{{.Properties.Collection}}"
-            data-format="{{.Properties.GROMetadata.DataFormat}}"
-            data-status="{{.Properties.GROMetadata.ImplementationStatus}}"
-            data-jobtype="{{.Properties.GROMetadata.V6JobType}}"
-            data-continent="{{.Properties.GROMetadata.Continent}}"
-            data-country="{{.Properties.GROMetadata.Country}}"
-            style="display:flex;flex-direction:column;gap:10px">
+    <!-- Continents Grid -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px">
+      {{range .Stats.Continents}}
+      <a href="/geography/?continent={{.Code}}" style="text-decoration:none">
+        <div style="background:#fff;border:2px solid #e5e7eb;border-radius:12px;padding:24px;transition:all 0.2s;cursor:pointer"
+             onmouseover="this.style.borderColor='#3b82f6';this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'"
+             onmouseout="this.style.borderColor='#e5e7eb';this.style.boxShadow='none'">
 
-          <!-- Geography pills (PROMINENT at top!) -->
-          {{if or .Properties.GROMetadata.Country .Properties.GROMetadata.Continent}}
-            <div class="chips" style="gap:6px;flex-wrap:wrap;margin-bottom:4px">
-              {{if .Properties.GROMetadata.Country}}
-                <span class="chip" style="font-size:14px;font-weight:600;padding:6px 12px;background:#e0f2fe;border:2px solid #0ea5e9;color:#0369a1">
-                  {{countryFlag .Properties.GROMetadata.Country}} {{countryName .Properties.GROMetadata.Country}}
-                </span>
-              {{end}}
-              {{if .Properties.GROMetadata.Continent}}
-                <span class="chip chip-sm" style="font-size:11px;background:#fef3c7;border-color:#fbbf24;color:#92400e">
-                  {{continentEmoji .Properties.GROMetadata.Continent}} {{continentName .Properties.GROMetadata.Continent}}
-                </span>
-              {{end}}
+          <!-- Continent Emoji & Name -->
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <span style="font-size:36px">{{.Emoji}}</span>
+              <h3 style="font-size:20px;font-weight:600;color:#0f172a;margin:0">{{.Name}}</h3>
             </div>
-          {{end}}
-
-          <!-- Title -->
-          <h3 style="margin:0;font-size:15px;line-height:1.3;font-weight:700">
-            <a href="/dataset/{{.ID}}" style="color:var(--accent);text-decoration:none">
-              {{.Properties.Title}}
-            </a>
-          </h3>
-
-          <!-- Metadata chips -->
-          <div class="chips" style="gap:4px;flex-wrap:wrap">
-            <!-- Collection -->
-            <span class="chip chip-sm" style="background:#eff6ff;color:#1e40af;border-color:#bfdbfe">
-              {{.Properties.Collection}}
-            </span>
-
-            <!-- Format -->
-            {{if .Properties.GROMetadata.DataFormat}}
-              <span class="chip chip-sm" style="font-family:monospace;font-size:9px;background:#f5f5f5;color:#404040">
-                {{.Properties.GROMetadata.DataFormat}}
-              </span>
-            {{end}}
-
-            <!-- Status badge -->
-            {{if eq .Properties.GROMetadata.ImplementationStatus "implemented"}}
-              <span class="chip chip-sm" style="background:#dcfce7;color:#15803d;border-color:#bbf7d0">
-                ✓ Implemented
-              </span>
-            {{else if eq .Properties.GROMetadata.ImplementationStatus "draft"}}
-              <span class="chip chip-sm" style="background:#fef3c7;color:#92400e;border-color:#fde68a">
-                Draft
-              </span>
-            {{else}}
-              <span class="chip chip-sm" style="background:#f3f4f6;color:#6b7280;border-color:#e5e7eb">
-                Potential
-              </span>
-            {{end}}
+            <span style="font-size:14px;color:#94a3b8">→</span>
           </div>
 
-          <!-- Description (clean, without metadata) -->
-          {{if .Properties.Abstract}}
-            {{$cleanDesc := cleanAbstract .Properties.Abstract}}
-            {{if $cleanDesc}}
-              <p class="snippet" style="margin:0;font-size:13px;color:#374151;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">
-                {{$cleanDesc}}
-              </p>
-            {{end}}
-          {{end}}
+          <!-- Count -->
+          <div style="display:flex;align-items:baseline;gap:8px">
+            <span style="font-size:32px;font-weight:700;color:#3b82f6">{{.Count}}</span>
+            <span style="font-size:14px;color:#64748b">{{if eq .Count 1}}dataset{{else}}datasets{{end}}</span>
+          </div>
 
-          <!-- Metadata pills (if metadata found in abstract) -->
-          {{if .Properties.Abstract}}
-            {{if hasMetadata .Properties.Abstract}}
-              <div class="chips" style="gap:4px;flex-wrap:wrap">
-                {{$rows := extractMetadata .Properties.Abstract "Rows"}}
-                {{if $rows}}
-                  <span class="chip chip-sm" style="font-size:9px;background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d">
-                    <span style="opacity:0.7">ROWS:</span> <span style="font-weight:600;margin-left:2px">{{$rows}}</span>
-                  </span>
-                {{end}}
-
-                {{$features := extractMetadata .Properties.Abstract "features"}}
-                {{if $features}}
-                  <span class="chip chip-sm" style="font-size:9px;background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d">
-                    <span style="opacity:0.7">FEATURES:</span> <span style="font-weight:600;margin-left:2px">{{$features}}</span>
-                  </span>
-                {{end}}
-
-                {{$size := extractMetadata .Properties.Abstract "Size"}}
-                {{if $size}}
-                  <span class="chip chip-sm" style="font-size:9px;background:#fef3c7;border:1px solid #fde68a;color:#92400e">
-                    <span style="opacity:0.8">SIZE:</span> <span style="font-weight:600;margin-left:2px">{{$size}}</span>
-                  </span>
-                {{end}}
-
-                {{$columns := extractMetadata .Properties.Abstract "Columns"}}
-                {{if $columns}}
-                  <span class="chip chip-sm" style="font-size:9px;background:#f5f3ff;border:1px solid #ddd6fe;color:#6b21a8">
-                    <span style="opacity:0.8">COLS:</span> <span style="font-weight:600;margin-left:2px">{{$columns}}</span>
-                  </span>
-                {{end}}
-
-                {{$fields := extractMetadata .Properties.Abstract "fields"}}
-                {{if $fields}}
-                  <span class="chip chip-sm" style="font-size:9px;background:#f5f3ff;border:1px solid #ddd6fe;color:#6b21a8">
-                    <span style="opacity:0.8">FIELDS:</span> <span style="font-weight:600;margin-left:2px">{{$fields}}</span>
-                  </span>
-                {{end}}
-
-                {{$schema := extractMetadata .Properties.Abstract "Schema"}}
-                {{if $schema}}
-                  <span class="chip chip-sm" style="font-size:9px;background:#f0f9ff;border:1px solid #bae6fd;color:#075985">
-                    <span style="opacity:0.7">SCHEMA:</span> <span style="font-weight:600;margin-left:2px;font-family:monospace">{{$schema}}</span>
-                  </span>
-                {{end}}
-              </div>
-            {{end}}
-          {{end}}
-
-        </li>
+        </div>
+      </a>
       {{end}}
-    </ul>
-
-    <!-- No results message -->
-    <div id="noResults" class="hidden" style="text-align:center;padding:40px;color:var(--muted)">
-      <p style="font-size:16px;margin:0">No datasets match your filters</p>
-      <p style="font-size:13px;margin:8px 0 0">Try adjusting your search or filters</p>
     </div>
   </section>
+
+  <!-- Top Countries -->
+  <section style="margin-top:48px" id="topCountries">
+    <h2 style="font-size:24px;font-weight:600;color:#0f172a;margin:0 0 24px 0;text-align:center">
+      Popular Countries
+    </h2>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px">
+      {{range $index, $country := .Stats.Countries}}
+        {{if lt $index 12}}
+        <a href="/geography/?country={{$country.Code}}" style="text-decoration:none">
+          <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:16px;transition:all 0.2s"
+               onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)'"
+               onmouseout="this.style.borderColor='#e5e7eb';this.style.transform='translateY(0)'">
+
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+              <span style="font-size:24px">{{$country.Flag}}</span>
+              <span style="font-size:15px;font-weight:600;color:#0f172a">{{$country.Name}}</span>
+            </div>
+
+            <div style="font-size:12px;color:#64748b">
+              <span style="font-weight:600;color:#3b82f6">{{$country.Count}}</span> datasets
+            </div>
+          </div>
+        </a>
+        {{end}}
+      {{end}}
+    </div>
+  </section>
+
+  <!-- Quick Stats -->
+  <section style="margin-top:64px;padding:32px;background:#f8fafc;border-radius:12px;border:1px solid #e5e7eb">
+    <h2 style="font-size:20px;font-weight:600;color:#0f172a;margin:0 0 20px 0;text-align:center">
+      Dataset Types
+    </h2>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px">
+      <div style="text-align:center;padding:16px">
+        <div style="font-size:28px;font-weight:700;color:#3b82f6;margin-bottom:4px">{{.Stats.PotentialV6}}</div>
+        <div style="font-size:13px;color:#64748b">⚙️ v6 Jobs</div>
+      </div>
+
+      <div style="text-align:center;padding:16px">
+        <div style="font-size:28px;font-weight:700;color:#059669;margin-bottom:4px">{{.Stats.ExistingDB}}</div>
+        <div style="font-size:13px;color:#64748b">🗄️ Database Tables</div>
+      </div>
+
+      <div style="text-align:center;padding:16px">
+        <div style="font-size:28px;font-weight:700;color:#d97706;margin-bottom:4px">{{.Stats.ExistingLocal}}</div>
+        <div style="font-size:13px;color:#64748b">📁 Local Files</div>
+      </div>
+
+      <div style="text-align:center;padding:16px">
+        <div style="font-size:28px;font-weight:700;color:#7c3aed;margin-bottom:4px">{{.Stats.ExternalAPI}}</div>
+        <div style="font-size:13px;color:#64748b">🔌 External APIs</div>
+      </div>
+
+      <div style="text-align:center;padding:16px">
+        <div style="font-size:28px;font-weight:700;color:#dc2626;margin-bottom:4px">{{.Stats.ExternalNews}}</div>
+        <div style="font-size:13px;color:#64748b">📰 News Sources</div>
+      </div>
+
+      <div style="text-align:center;padding:16px">
+        <div style="font-size:28px;font-weight:700;color:#2563eb;margin-bottom:4px">{{.Stats.ExternalGov}}</div>
+        <div style="font-size:13px;color:#64748b">🏛️ Government</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Search Results (hidden by default, shown when searching) -->
+  <div id="searchResults" style="display:none;margin-top:48px">
+    <div style="margin-bottom:16px;font-size:14px;color:#64748b;text-align:center">
+      Found <span id="resultCount" style="font-weight:600;color:#3b82f6">0</span> datasets
+    </div>
+
+    <div id="resultsGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px">
+      {{range .Records}}
+      <div class="searchResult" data-name="{{.Properties.Title}}" data-collection="{{.Properties.Collection}}"
+           data-continent="{{.Properties.GROMetadata.Continent}}" data-country="{{.Properties.GROMetadata.Country}}"
+           style="display:none;background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:16px">
+
+        <!-- Geography badges -->
+        {{if .Properties.GROMetadata.Country}}
+        <div style="margin-bottom:10px">
+          <span style="display:inline-block;padding:4px 10px;background:#e0f2fe;color:#0369a1;border-radius:4px;font-size:11px;font-weight:500">
+            {{countryFlag .Properties.GROMetadata.Country}} {{countryName .Properties.GROMetadata.Country}}
+          </span>
+        </div>
+        {{end}}
+
+        <!-- Title -->
+        <a href="/dataset/{{.ID}}" style="font-size:15px;font-weight:600;color:#0f172a;text-decoration:none;display:block;margin-bottom:8px;line-height:1.4">
+          {{.Properties.Title}}
+        </a>
+
+        <!-- Collection badge -->
+        <div style="margin-bottom:8px">
+          {{if eq .Properties.Collection "potential_v6"}}
+            <span style="font-size:10px;padding:3px 8px;background:#dbeafe;color:#1e40af;border-radius:3px;font-weight:500">⚙️ v6 job</span>
+          {{else if eq .Properties.Collection "existing_db"}}
+            <span style="font-size:10px;padding:3px 8px;background:#d1fae5;color:#065f46;border-radius:3px;font-weight:500">🗄️ database</span>
+          {{else if eq .Properties.Collection "existing_local"}}
+            <span style="font-size:10px;padding:3px 8px;background:#fef3c7;color:#92400e;border-radius:3px;font-weight:500">📁 file</span>
+          {{else if eq .Properties.Collection "external_api"}}
+            <span style="font-size:10px;padding:3px 8px;background:#f3e8ff;color:#6b21a8;border-radius:3px;font-weight:500">🔌 API</span>
+          {{end}}
+        </div>
+
+        <!-- Abstract -->
+        {{if .Properties.Abstract}}
+        <p style="font-size:12px;color:#6b7280;margin:0;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">
+          {{.Properties.Abstract}}
+        </p>
+        {{end}}
+      </div>
+      {{end}}
+    </div>
+  </div>
+</div>
 {{end}}
 
 {{define "scripts_extra"}}
 <script>
-// Client-side filtering (just like Explore!) + URL state management
-const datasets = Array.from(document.querySelectorAll('.dataset'));
-const q = document.getElementById('q');
-const collection = document.getElementById('collection');
-const format = document.getElementById('format');
-const status = document.getElementById('status');
-const jobType = document.getElementById('jobType');
-const continent = document.getElementById('continent');
-const country = document.getElementById('country');
-const sort = document.getElementById('sort');
-const showing = document.getElementById('showing');
-const noResults = document.getElementById('noResults');
-const catalogGrid = document.getElementById('catalogGrid');
+// Simple search functionality
+const searchInput = document.getElementById('search');
+const searchResults = document.getElementById('searchResults');
+const resultsGrid = document.getElementById('resultsGrid');
+const resultCount = document.getElementById('resultCount');
+const allResults = document.querySelectorAll('.searchResult');
+const topCountries = document.getElementById('topCountries');
 
-// Load state from URL on page load
-function loadStateFromURL() {
-  const params = new URLSearchParams(window.location.search);
-  if (params.has('q')) q.value = params.get('q');
-  if (params.has('collection')) collection.value = params.get('collection');
-  if (params.has('format')) format.value = params.get('format');
-  if (params.has('status')) status.value = params.get('status');
-  if (params.has('jobType')) jobType.value = params.get('jobType');
-  if (params.has('continent')) continent.value = params.get('continent');
-  if (params.has('country')) country.value = params.get('country');
-  if (params.has('sort')) sort.value = params.get('sort');
-}
+searchInput.addEventListener('input', (e) => {
+  const query = e.target.value.toLowerCase().trim();
 
-// Update URL with current filter state
-function updateURL() {
-  const params = new URLSearchParams();
-  if (q.value) params.set('q', q.value);
-  if (collection.value) params.set('collection', collection.value);
-  if (format.value) params.set('format', format.value);
-  if (status.value) params.set('status', status.value);
-  if (jobType.value) params.set('jobType', jobType.value);
-  if (continent.value) params.set('continent', continent.value);
-  if (country.value) params.set('country', country.value);
-  if (sort.value !== 'name_asc') params.set('sort', sort.value);
+  if (!query) {
+    // Hide search results, show geography navigation
+    searchResults.style.display = 'none';
+    topCountries.style.display = 'block';
+    allResults.forEach(r => r.style.display = 'none');
+    return;
+  }
 
-  const url = params.toString() ? `?${params.toString()}` : window.location.pathname;
-  window.history.replaceState({}, '', url);
-}
+  // Show search results, hide geography navigation
+  searchResults.style.display = 'block';
+  topCountries.style.display = 'none';
 
-function filter() {
-  const query = q.value.toLowerCase().trim();
-  const collVal = collection.value;
-  const fmtVal = format.value;
-  const statVal = status.value;
-  const jobVal = jobType.value;
-  const continentVal = continent.value;
-  const countryVal = country.value;
+  let count = 0;
+  allResults.forEach(result => {
+    const name = result.dataset.name.toLowerCase();
+    const collection = result.dataset.collection.toLowerCase();
+    const continent = result.dataset.continent.toLowerCase();
+    const country = result.dataset.country.toLowerCase();
 
-  let visible = 0;
-  datasets.forEach(d => {
-    const name = (d.dataset.name || '').toLowerCase();
-    const coll = d.dataset.collection || '';
-    const fmt = d.dataset.format || '';
-    const stat = d.dataset.status || '';
-    const job = d.dataset.jobtype || '';
-    const cont = d.dataset.continent || '';
-    const ctry = d.dataset.country || '';
-
-    const matchQuery = !query || name.includes(query);
-    const matchColl = !collVal || coll === collVal;
-    const matchFmt = !fmtVal || fmt === fmtVal;
-    const matchStat = !statVal || stat === statVal;
-    const matchJob = !jobVal || job === jobVal;
-    const matchContinent = !continentVal || cont === continentVal;
-    const matchCountry = !countryVal || ctry === countryVal;
-
-    if (matchQuery && matchColl && matchFmt && matchStat && matchJob && matchContinent && matchCountry) {
-      d.style.display = '';
-      visible++;
+    if (name.includes(query) || collection.includes(query) || continent.includes(query) || country.includes(query)) {
+      result.style.display = 'block';
+      count++;
     } else {
-      d.style.display = 'none';
+      result.style.display = 'none';
     }
   });
 
-  showing.textContent = visible;
-  noResults.style.display = visible === 0 ? 'block' : 'none';
-  catalogGrid.style.display = visible === 0 ? 'none' : 'grid';
-
-  updateURL();
-}
-
-q.addEventListener('input', filter);
-collection.addEventListener('change', filter);
-format.addEventListener('change', filter);
-status.addEventListener('change', filter);
-jobType.addEventListener('change', filter);
-continent.addEventListener('change', filter);
-country.addEventListener('change', filter);
-
-// Sorting
-sort.addEventListener('change', () => {
-  const val = sort.value;
-  const sorted = [...datasets].sort((a, b) => {
-    const nameA = (a.dataset.name || '').toLowerCase();
-    const nameB = (b.dataset.name || '').toLowerCase();
-
-    if (val === 'name_asc') return nameA.localeCompare(nameB);
-    if (val === 'name_desc') return nameB.localeCompare(nameA);
-    return 0;
-  });
-
-  sorted.forEach(d => catalogGrid.appendChild(d));
-  updateURL();
+  resultCount.textContent = count;
 });
-
-// Load state and apply filters on page load
-loadStateFromURL();
-filter();
 </script>
 {{end}}
