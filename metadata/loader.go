@@ -20,6 +20,7 @@ type MetadataStore struct {
 	PNG        map[string]*PNGFile
 	PDF        map[string]*PDFFile
 	V6Jobs     map[string]*V6Job
+	V6READMEs  []V6README
 }
 
 // LoadAll loads all introspection files into memory
@@ -90,6 +91,11 @@ func LoadAll(basePath string) (*MetadataStore, error) {
 	// Load v6 job metadata
 	if err := loadV6JobMetadata(basePath+"/v6_job_metadata.json", store); err != nil {
 		fmt.Printf("Warning: Could not load v6 job metadata: %v\n", err)
+	}
+
+	// Load v6 README metadata
+	if err := loadV6READMEMetadata(basePath+"/v6_readme_metadata.json", store); err != nil {
+		fmt.Printf("Warning: Could not load v6 README metadata: %v\n", err)
 	}
 
 	return store, nil
@@ -360,5 +366,73 @@ func loadV6JobMetadata(path string, store *MetadataStore) error {
 	}
 
 	store.V6Jobs = jobsMap
+	return nil
+}
+
+func loadV6READMEMetadata(path string, store *MetadataStore) error {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return err
+	}
+
+	var readmes []V6README
+	if err := json.Unmarshal(data, &readmes); err != nil {
+		return err
+	}
+
+	store.V6READMEs = readmes
+	return nil
+}
+
+// FindREADMEForGeography finds README matching geographic hierarchy
+func (s *MetadataStore) FindREADMEForGeography(city, county, state, country, continent string) *V6README {
+	// Try city level first (most specific)
+	if city != "" {
+		for i := range s.V6READMEs {
+			geo := s.V6READMEs[i].Geography
+			if geoCity, ok := geo["city"].(string); ok && geoCity == city {
+				if level, ok := geo["level"].(string); ok && level == "city" {
+					return &s.V6READMEs[i]
+				}
+			}
+		}
+	}
+
+	// Try county
+	if county != "" {
+		for i := range s.V6READMEs {
+			geo := s.V6READMEs[i].Geography
+			if geoCounty, ok := geo["county"].(string); ok && geoCounty == county {
+				if level, ok := geo["level"].(string); ok && level == "county" {
+					return &s.V6READMEs[i]
+				}
+			}
+		}
+	}
+
+	// Try state
+	if state != "" {
+		for i := range s.V6READMEs {
+			geo := s.V6READMEs[i].Geography
+			if geoState, ok := geo["state"].(string); ok && geoState == state {
+				if level, ok := geo["level"].(string); ok && level == "state" {
+					return &s.V6READMEs[i]
+				}
+			}
+		}
+	}
+
+	// Try country
+	if country != "" {
+		for i := range s.V6READMEs {
+			geo := s.V6READMEs[i].Geography
+			if geoCountry, ok := geo["country"].(string); ok && geoCountry == country {
+				if level, ok := geo["level"].(string); ok && level == "country" {
+					return &s.V6READMEs[i]
+				}
+			}
+		}
+	}
+
 	return nil
 }
