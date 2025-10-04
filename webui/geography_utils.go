@@ -21,6 +21,13 @@ func CountryEmoji(code string) string {
 		"internal":    "🔧", // Internal tools
 		"services":    "⚙️", // API services
 
+		// ===== TEAM CONTINENT - TEAM ROLES =====
+		"leadership":       "👔", // Leadership team
+		"engineering":      "⚙️", // Engineering team
+		"data-engineering": "📊", // Data engineering
+		"research":         "🔬", // Research contributors
+		"advisors":         "🎓", // Advisors & mentors
+
 		// North America
 		"us": "🇺🇸",
 		"ca": "🇨🇦",
@@ -188,6 +195,8 @@ func ContinentEmoji(continent string) string {
 		"global":        "🌐",
 		"clankr":        "🤖", // Clankr - AI Agent Continent
 		"verbs":         "🎯", // Verbs - Application Continent
+		"team":          "👥", // Team - The People Behind GRO
+		"infra":         "🏗️", // Infra - AWS Infrastructure (Planet Infra)
 	}
 
 	if emoji, ok := emojiMap[continent]; ok {
@@ -214,6 +223,13 @@ func CountryName(code string) string {
 		"user-facing": "User-Facing Apps",
 		"internal":    "Internal Tools",
 		"services":    "API Services",
+
+		// ===== TEAM CONTINENT - TEAM ROLES =====
+		"leadership":       "Leadership",
+		"engineering":      "Engineering",
+		"data-engineering": "Data Engineering",
+		"research":         "Research",
+		"advisors":         "Advisors",
 
 		// North America
 		"us": "United States",

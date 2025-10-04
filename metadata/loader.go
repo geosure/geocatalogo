@@ -21,6 +21,7 @@ type MetadataStore struct {
 	PDF        map[string]*PDFFile
 	V6Jobs     map[string]*V6Job
 	V6READMEs  []V6README
+	Agents     map[string]*Agent
 }
 
 // LoadAll loads all introspection files into memory
@@ -36,6 +37,7 @@ func LoadAll(basePath string) (*MetadataStore, error) {
 		PNG:        make(map[string]*PNGFile),
 		PDF:        make(map[string]*PDFFile),
 		V6Jobs:     make(map[string]*V6Job),
+		Agents:     make(map[string]*Agent),
 	}
 
 	// Load database schema
@@ -98,11 +100,21 @@ func LoadAll(basePath string) (*MetadataStore, error) {
 		fmt.Printf("Warning: Could not load v6 README metadata: %v\n", err)
 	}
 
+	// Load agent introspection
+	if err := loadAgentIntrospection(basePath+"/agents_introspection.json", store); err != nil {
+		fmt.Printf("Warning: Could not load agent introspection: %v\n", err)
+	}
+
 	return store, nil
 }
 
 // Lookup finds metadata for a given dataset by catalog ID or path
 func (s *MetadataStore) Lookup(catalogID string, s3Path string, databaseTable string, dataFormat string, v6JobFile string) interface{} {
+	// Agent lookup by catalog ID
+	if agent, ok := s.Agents[catalogID]; ok {
+		return agent
+	}
+
 	// V6 job lookup
 	if v6JobFile != "" {
 		if job, ok := s.V6Jobs[v6JobFile]; ok {
@@ -432,6 +444,32 @@ func (s *MetadataStore) FindREADMEForGeography(city, county, state, country, con
 				}
 			}
 		}
+	}
+
+	return nil
+}
+
+func loadAgentIntrospection(path string, store *MetadataStore) error {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return err
+	}
+
+	var introspection AgentIntrospection
+	if err := json.Unmarshal(data, &introspection); err != nil {
+		return err
+	}
+
+	// Index all CLI agents by ID
+	for i := range introspection.Agents {
+		agent := &introspection.Agents[i]
+		store.Agents[agent.AgentID] = agent
+	}
+
+	// Index all Claude Projects agents (leadership_projects) by ID
+	for i := range introspection.LeadershipProjects {
+		agent := &introspection.LeadershipProjects[i]
+		store.Agents[agent.AgentID] = agent
 	}
 
 	return nil

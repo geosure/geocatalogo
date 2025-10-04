@@ -181,6 +181,8 @@ func (a *App) HandleDataset(w http.ResponseWriter, r *http.Request) {
 			pageData.PDFFile = m
 		case *metadata.V6Job:
 			pageData.V6Job = m
+		case *metadata.Agent:
+			pageData.Agent = m
 		}
 	}
 
@@ -332,6 +334,10 @@ func (a *App) HandleGeography(w http.ResponseWriter, r *http.Request) {
 				counts.HistoricalAgents++
 			case "verb_app":
 				counts.VerbApps++
+			case "team_member":
+				counts.TeamMembers++
+			case "infrastructure":
+				counts.Infrastructure++
 			case "internal_tool":
 				counts.InternalTools++
 			case "api_service":

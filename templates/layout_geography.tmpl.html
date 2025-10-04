@@ -187,6 +187,7 @@
         {{if .CollectionCounts.VerbApps}}• {{.CollectionCounts.VerbApps}} 🎯 verb apps{{end}}
         {{if .CollectionCounts.InternalTools}}• {{.CollectionCounts.InternalTools}} 🔧 internal tools{{end}}
         {{if .CollectionCounts.APIServices}}• {{.CollectionCounts.APIServices}} ⚙️ services{{end}}
+        {{if .CollectionCounts.TeamMembers}}• {{.CollectionCounts.TeamMembers}} 👥 team{{end}}
       </div>
     </div>
   </div>
@@ -361,6 +362,22 @@
           <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
             {{range .Jobs}}
               {{if eq .Properties.Collection "api_service"}}
+                {{template "dataset_card" .}}
+              {{end}}
+            {{end}}
+          </div>
+        </section>
+        {{end}}
+
+        <!-- Team Members Section (for TEAM continent!) -->
+        {{if .CollectionCounts.TeamMembers}}
+        <section style="margin-bottom:24px">
+          <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #3b82f6;padding-bottom:6px">
+            👥 Team Members <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.TeamMembers}})</span>
+          </h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
+            {{range .Jobs}}
+              {{if eq .Properties.Collection "team_member"}}
                 {{template "dataset_card" .}}
               {{end}}
             {{end}}

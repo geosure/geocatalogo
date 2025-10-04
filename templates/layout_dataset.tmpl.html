@@ -231,6 +231,9 @@
       </div>
     </section>
 
+    <!-- Agent Introspection (if this is an agent) -->
+    {{template "partials/agent_introspection" .}}
+
     <!-- YAML Definition (if loaded) -->
     {{if .V6Job}}
       <section class="card card-compact">

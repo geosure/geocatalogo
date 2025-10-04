@@ -108,6 +108,7 @@ type DatasetPageData struct {
 	PNGFile        *metadata.PNGFile
 	PDFFile        *metadata.PDFFile
 	V6Job          *metadata.V6Job
+	Agent          *metadata.Agent
 }
 
 type CollectionCounts struct {
@@ -125,6 +126,8 @@ type CollectionCounts struct {
 	VerbApps        int // User-facing verb applications
 	InternalTools   int // Internal tools (introspect, validate)
 	APIServices     int // API services (tile, search, catalog)
+	TeamMembers     int // GRO team members
+	Infrastructure  int // AWS infrastructure components
 	Other           int
 }
 
