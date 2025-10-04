@@ -92,9 +92,9 @@ func LoadAll(basePath string) (*MetadataStore, error) {
 func (s *MetadataStore) Lookup(catalogID string, s3Path string, databaseTable string, dataFormat string) interface{} {
 	// Database table lookup
 	if databaseTable != "" && s.Database != nil {
-		for _, table := range s.Database.Tables {
-			if table.Name == databaseTable {
-				return table
+		for i := range s.Database.Tables {
+			if s.Database.Tables[i].Name == databaseTable {
+				return &s.Database.Tables[i]
 			}
 		}
 	}
