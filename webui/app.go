@@ -111,20 +111,21 @@ type DatasetPageData struct {
 }
 
 type CollectionCounts struct {
-	V6Jobs        int
-	Database      int
-	Files         int
-	APIs          int
-	News          int
-	Government    int
-	AIAgents      int // Claude, GPT, Gemini, etc.
-	DataBots      int // CSV inspector, Parquet analyzer, etc.
-	ScraperBots   int // News scraper, ACLED harvester, etc.
-	AutoBots      int // Catalog updater, S3 sync, job scheduler, etc.
-	VerbApps      int // User-facing verb applications
-	InternalTools int // Internal tools (introspect, validate)
-	APIServices   int // API services (tile, search, catalog)
-	Other         int
+	V6Jobs          int
+	Database        int
+	Files           int
+	APIs            int
+	News            int
+	Government      int
+	AIAgents        int // Claude, GPT, Gemini, etc.
+	DataBots        int // CSV inspector, Parquet analyzer, etc.
+	ScraperBots     int // News scraper, ACLED harvester, etc.
+	AutoBots        int // Catalog updater, S3 sync, job scheduler, etc.
+	HistoricalAgents int // Way Barrios' archived prompt engineering examples
+	VerbApps        int // User-facing verb applications
+	InternalTools   int // Internal tools (introspect, validate)
+	APIServices     int // API services (tile, search, catalog)
+	Other           int
 }
 
 type SubGeography struct {

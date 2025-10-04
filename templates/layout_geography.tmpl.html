@@ -183,6 +183,7 @@
         {{if .CollectionCounts.DataBots}}• {{.CollectionCounts.DataBots}} 📊 data bots{{end}}
         {{if .CollectionCounts.ScraperBots}}• {{.CollectionCounts.ScraperBots}} 🕷️ scrapers{{end}}
         {{if .CollectionCounts.AutoBots}}• {{.CollectionCounts.AutoBots}} ⚡ automation{{end}}
+        {{if .CollectionCounts.HistoricalAgents}}• {{.CollectionCounts.HistoricalAgents}} 📜 historical{{end}}
         {{if .CollectionCounts.VerbApps}}• {{.CollectionCounts.VerbApps}} 🎯 verb apps{{end}}
         {{if .CollectionCounts.InternalTools}}• {{.CollectionCounts.InternalTools}} 🔧 internal tools{{end}}
         {{if .CollectionCounts.APIServices}}• {{.CollectionCounts.APIServices}} ⚙️ services{{end}}
@@ -296,6 +297,22 @@
           <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
             {{range .Jobs}}
               {{if eq .Properties.Collection "automation_bot"}}
+                {{template "dataset_card" .}}
+              {{end}}
+            {{end}}
+          </div>
+        </section>
+        {{end}}
+
+        <!-- Historical Agents Section (archived prompt engineering examples) -->
+        {{if .CollectionCounts.HistoricalAgents}}
+        <section style="margin-bottom:24px">
+          <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #92400e;padding-bottom:6px">
+            📜 Historical Agents <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.HistoricalAgents}})</span>
+          </h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
+            {{range .Jobs}}
+              {{if eq .Properties.Collection "historical_agent"}}
                 {{template "dataset_card" .}}
               {{end}}
             {{end}}
