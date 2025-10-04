@@ -8,6 +8,14 @@ func CountryEmoji(code string) string {
 
 	// Map country codes to emoji flags
 	emojiMap := map[string]string{
+		// ===== CLANKR CONTINENT - AI PROVIDER "COUNTRIES" =====
+		"anthropic": "🟣", // Anthropic (Claude) - Purple (brand color)
+		"openai":    "🟢", // OpenAI (GPT) - Green
+		"google":    "🔵", // Google (Gemini) - Blue
+		"gro":       "🟠", // GRO (internal bots) - Orange
+		"aws":       "🟡", // AWS (infrastructure) - Yellow/Gold
+		"inference": "🧠", // Inference providers - Brain
+
 		// North America
 		"us": "🇺🇸",
 		"ca": "🇨🇦",
@@ -173,6 +181,7 @@ func ContinentEmoji(continent string) string {
 		"asia":          "🌏",
 		"oceania":       "🌏",
 		"global":        "🌐",
+		"clankr":        "🤖", // Clankr - AI Agent Continent
 	}
 
 	if emoji, ok := emojiMap[continent]; ok {
@@ -187,6 +196,14 @@ func CountryName(code string) string {
 	code = strings.ToLower(code)
 
 	nameMap := map[string]string{
+		// ===== CLANKR CONTINENT - AI PROVIDER "COUNTRIES" =====
+		"anthropic": "Anthropic",
+		"openai":    "OpenAI",
+		"google":    "Google",
+		"gro":       "GRO",
+		"aws":       "AWS",
+		"inference": "Inference",
+
 		// North America
 		"us": "United States",
 		"ca": "Canada",
