@@ -144,131 +144,137 @@
     <h1 style="font-size:32px;font-weight:700;color:#0f172a;margin:0 0 8px 0">
       📍 {{.Name}}
     </h1>
-    <div style="display:flex;align-items:center;gap:12px">
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
       <div style="font-size:20px;font-weight:700;color:#3b82f6">{{.JobCount}}</div>
       <div style="font-size:14px;color:#64748b">
-        {{if eq .JobCount 1}}dataset available{{else}}datasets available{{end}}
+        {{if eq .JobCount 1}}dataset{{else}}datasets{{end}}
+      </div>
+      <div style="font-size:13px;color:#94a3b8">
+        {{if .CollectionCounts.V6Jobs}}• {{.CollectionCounts.V6Jobs}} ⚙️ jobs{{end}}
+        {{if .CollectionCounts.Database}}• {{.CollectionCounts.Database}} 🗄️ database{{end}}
+        {{if .CollectionCounts.Files}}• {{.CollectionCounts.Files}} 📁 files{{end}}
+        {{if .CollectionCounts.APIs}}• {{.CollectionCounts.APIs}} 🔌 APIs{{end}}
+        {{if .CollectionCounts.News}}• {{.CollectionCounts.News}} 📰 news{{end}}
+        {{if .CollectionCounts.Government}}• {{.CollectionCounts.Government}} 🏛️ govt{{end}}
       </div>
     </div>
   </div>
 
-  <!-- Two Column Layout: Datasets (Left) + README (Right) -->
-  <div style="display:grid;grid-template-columns:450px 1fr;gap:24px;align-items:start">
+  <!-- Layout: Full width if no README, otherwise two columns -->
+  <div style="display:grid;{{if .README}}grid-template-columns:1fr 500px{{else}}grid-template-columns:1fr{{end}};gap:32px;align-items:start">
 
-    <!-- LEFT COLUMN: All Datasets -->
+    <!-- MAIN COLUMN: All Datasets (Grouped by Collection) -->
     <div>
-      <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:6px">
-        🗂️ All Data Sources
-      </h2>
-
       {{if gt .JobCount 0}}
-      <div style="display:flex;flex-direction:column;gap:12px">
-        {{range .Jobs}}
-        <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:16px;transition:all 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.05)">
-          <!-- Collection Type Icon -->
-          <div style="margin-bottom:10px">
-            {{if eq .Properties.Collection "potential_v6"}}
-              {{if eq .Properties.GROMetadata.V6JobType "bootstrap"}}
-                <span style="font-size:24px">🔧</span>
-              {{else if eq .Properties.GROMetadata.V6JobType "collectors"}}
-                <span style="font-size:24px">📡</span>
-              {{else if eq .Properties.GROMetadata.V6JobType "run"}}
-                <span style="font-size:24px">▶️</span>
-              {{else if eq .Properties.GROMetadata.V6JobType "inference"}}
-                <span style="font-size:24px">🧠</span>
-              {{else}}
-                <span style="font-size:24px">⚙️</span>
+
+        <!-- APIs Section (FIRST) -->
+        {{if .CollectionCounts.APIs}}
+        <section style="margin-bottom:24px">
+          <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #7c3aed;padding-bottom:6px">
+            🔌 External APIs <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.APIs}})</span>
+          </h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
+            {{range .Jobs}}
+              {{if eq .Properties.Collection "external_api"}}
+                {{template "dataset_card" .}}
               {{end}}
-            {{else if eq .Properties.Collection "existing_db"}}
-              <span style="font-size:24px">🗄️</span>
-            {{else if eq .Properties.Collection "existing_local"}}
-              <span style="font-size:24px">📁</span>
-            {{else if eq .Properties.Collection "external_api"}}
-              <span style="font-size:24px">🔌</span>
-            {{else if eq .Properties.Collection "external_news"}}
-              <span style="font-size:24px">📰</span>
-            {{else if eq .Properties.Collection "external_government"}}
-              <span style="font-size:24px">🏛️</span>
-            {{else if eq .Properties.Collection "external_other"}}
-              <span style="font-size:24px">🌐</span>
-            {{else}}
-              <span style="font-size:24px">📊</span>
             {{end}}
           </div>
-
-          <a href="/dataset/{{.ID}}" style="font-size:15px;font-weight:600;color:#0f172a;text-decoration:none;display:block;margin-bottom:8px;line-height:1.4">
-            {{.Properties.Title}}
-          </a>
-
-          {{if .Properties.Abstract}}
-          <p style="font-size:12px;color:#6b7280;margin:0 0 10px 0;line-height:1.5">
-            {{.Properties.Abstract}}
-          </p>
-          {{end}}
-
-          <!-- Metadata chips -->
-          <div style="display:flex;gap:6px;flex-wrap:wrap;font-size:10px;margin-bottom:12px">
-            <!-- Collection badge -->
-            {{if eq .Properties.Collection "potential_v6"}}
-              <span style="background:#dbeafe;color:#1e40af;padding:4px 8px;border-radius:4px;font-weight:500">
-                ⚙️ v6 job
-              </span>
-            {{else if eq .Properties.Collection "existing_db"}}
-              <span style="background:#d1fae5;color:#065f46;padding:4px 8px;border-radius:4px;font-weight:500">
-                🗄️ database
-              </span>
-            {{else if eq .Properties.Collection "existing_local"}}
-              <span style="background:#fef3c7;color:#92400e;padding:4px 8px;border-radius:4px;font-weight:500">
-                📁 file
-              </span>
-            {{else if eq .Properties.Collection "external_api"}}
-              <span style="background:#f3e8ff;color:#6b21a8;padding:4px 8px;border-radius:4px;font-weight:500">
-                🔌 API
-              </span>
-            {{else if eq .Properties.Collection "external_news"}}
-              <span style="background:#fee2e2;color:#991b1b;padding:4px 8px;border-radius:4px;font-weight:500">
-                📰 news
-              </span>
-            {{else if eq .Properties.Collection "external_government"}}
-              <span style="background:#dbeafe;color:#1e40af;padding:4px 8px;border-radius:4px;font-weight:500">
-                🏛️ government
-              </span>
-            {{else}}
-              <span style="background:#e5e7eb;color:#374151;padding:4px 8px;border-radius:4px;font-weight:500">
-                {{.Properties.Collection}}
-              </span>
-            {{end}}
-
-            {{if .Properties.GROMetadata.DataFormat}}
-            <span style="background:#f3e8ff;color:#6b21a8;padding:4px 8px;border-radius:4px;font-weight:500">
-              {{.Properties.GROMetadata.DataFormat}}
-            </span>
-            {{end}}
-            {{if .Properties.GROMetadata.UpdateFrequency}}
-            <span style="background:#fef3c7;color:#92400e;padding:4px 8px;border-radius:4px;font-weight:500">
-              🔄 {{.Properties.GROMetadata.UpdateFrequency}}
-            </span>
-            {{end}}
-          </div>
-
-          <a href="/dataset/{{.ID}}" style="background:#3b82f6;color:#fff;padding:8px 14px;border-radius:6px;font-size:12px;font-weight:500;text-decoration:none;display:inline-block;transition:background 0.2s">
-            View Details →
-          </a>
-        </div>
+        </section>
         {{end}}
-      </div>
+
+        <!-- Government Section -->
+        {{if .CollectionCounts.Government}}
+        <section style="margin-bottom:24px">
+          <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #2563eb;padding-bottom:6px">
+            🏛️ Government Sources <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.Government}})</span>
+          </h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
+            {{range .Jobs}}
+              {{if eq .Properties.Collection "external_government"}}
+                {{template "dataset_card" .}}
+              {{end}}
+            {{end}}
+          </div>
+        </section>
+        {{end}}
+
+        <!-- News Section -->
+        {{if .CollectionCounts.News}}
+        <section style="margin-bottom:24px">
+          <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #dc2626;padding-bottom:6px">
+            📰 News Sources <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.News}})</span>
+          </h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
+            {{range .Jobs}}
+              {{if eq .Properties.Collection "external_news"}}
+                {{template "dataset_card" .}}
+              {{end}}
+            {{end}}
+          </div>
+        </section>
+        {{end}}
+
+        <!-- v6 Jobs Section -->
+        {{if .CollectionCounts.V6Jobs}}
+        <section style="margin-bottom:24px">
+          <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #3b82f6;padding-bottom:6px">
+            ⚙️ v6 Jobs <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.V6Jobs}})</span>
+          </h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
+            {{range .Jobs}}
+              {{if eq .Properties.Collection "potential_v6"}}
+                {{template "dataset_card" .}}
+              {{end}}
+            {{end}}
+          </div>
+        </section>
+        {{end}}
+
+        <!-- Database Section -->
+        {{if .CollectionCounts.Database}}
+        <section style="margin-bottom:24px">
+          <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #059669;padding-bottom:6px">
+            🗄️ Database Tables <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.Database}})</span>
+          </h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
+            {{range .Jobs}}
+              {{if eq .Properties.Collection "existing_db"}}
+                {{template "dataset_card" .}}
+              {{end}}
+            {{end}}
+          </div>
+        </section>
+        {{end}}
+
+        <!-- Files Section -->
+        {{if .CollectionCounts.Files}}
+        <section style="margin-bottom:24px">
+          <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #d97706;padding-bottom:6px">
+            📁 Local Files <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.Files}})</span>
+          </h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
+            {{range .Jobs}}
+              {{if eq .Properties.Collection "existing_local"}}
+                {{template "dataset_card" .}}
+              {{end}}
+            {{end}}
+          </div>
+        </section>
+        {{end}}
+
       {{else}}
-      <div style="background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;padding:16px">
-        <p style="margin:0;font-size:13px;color:#991b1b">
+      <div style="background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;padding:24px;text-align:center">
+        <p style="margin:0;font-size:15px;color:#991b1b;font-weight:500">
           No datasets found for this geography.
         </p>
       </div>
       {{end}}
     </div>
 
-    <!-- RIGHT COLUMN: README -->
+    <!-- RIGHT COLUMN: README (only if exists) -->
+    {{if .README}}
     <div style="position:sticky;top:20px">
-      {{if .README}}
       <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.05)">
         <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 16px 0;display:flex;align-items:center;gap:6px">
           📚 Geographic Context
@@ -280,14 +286,8 @@
         <!-- Hidden raw markdown -->
         <script id="readme-markdown" type="text/plain">{{.README.Content}}</script>
       </div>
-      {{else}}
-      <div style="background:#fef3c7;border:1px solid #fbbf24;border-radius:8px;padding:16px">
-        <p style="margin:0;font-size:13px;color:#92400e">
-          ⚠️ No geographic context available for this location yet.
-        </p>
-      </div>
-      {{end}}
     </div>
+    {{end}}
 
   </div>
 </div>
@@ -303,3 +303,55 @@
 </script>
 {{end}}
 {{end}}
+
+{{define "dataset_card"}}
+<div style="background:#fff;border:1px solid #e5e7eb;border-radius:6px;padding:12px;transition:all 0.2s;box-shadow:0 1px 2px rgba(0,0,0,0.04)">
+  <!-- Collection Type Icon (smaller) -->
+  <div style="margin-bottom:6px">
+    {{if eq .Properties.Collection "potential_v6"}}
+      {{if eq .Properties.GROMetadata.V6JobType "bootstrap"}}
+        <span style="font-size:20px">🔧</span>
+      {{else if eq .Properties.GROMetadata.V6JobType "collectors"}}
+        <span style="font-size:20px">📡</span>
+      {{else if eq .Properties.GROMetadata.V6JobType "run"}}
+        <span style="font-size:20px">▶️</span>
+      {{else if eq .Properties.GROMetadata.V6JobType "inference"}}
+        <span style="font-size:20px">🧠</span>
+      {{else}}
+        <span style="font-size:20px">⚙️</span>
+      {{end}}
+    {{else if eq .Properties.Collection "existing_db"}}
+      <span style="font-size:20px">🗄️</span>
+    {{else if eq .Properties.Collection "existing_local"}}
+      <span style="font-size:20px">📁</span>
+    {{else if eq .Properties.Collection "external_api"}}
+      <span style="font-size:20px">🔌</span>
+    {{else if eq .Properties.Collection "external_news"}}
+      <span style="font-size:20px">📰</span>
+    {{else if eq .Properties.Collection "external_government"}}
+      <span style="font-size:20px">🏛️</span>
+    {{else if eq .Properties.Collection "external_other"}}
+      <span style="font-size:20px">🌐</span>
+    {{else}}
+      <span style="font-size:20px">📊</span>
+    {{end}}
+  </div>
+
+  <a href="/dataset/{{.ID}}" style="font-size:14px;font-weight:600;color:#0f172a;text-decoration:none;display:block;margin-bottom:6px;line-height:1.3">
+    {{.Properties.Title}}
+  </a>
+
+  {{if .Properties.Abstract}}
+  <p style="font-size:11px;color:#6b7280;margin:0 0 8px 0;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">
+    {{.Properties.Abstract}}
+  </p>
+  {{end}}
+
+  <!-- Metadata chips (smaller) -->
+  <div style="display:flex;gap:4px;flex-wrap:wrap;font-size:9px;margin-bottom:8px">
+    {{if .Properties.GROMetadata.DataFormat}}
+    <span style="background:#f3e8ff;color:#6b21a8;padding:3px 6px;border-radius:3px;font-weight:500">
+      {{.Properties.GROMetadata.DataFormat}}
+    </span>
+    {{end}}
+    {{if .Properties.GROMetadata.Update

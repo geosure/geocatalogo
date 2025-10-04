@@ -110,15 +110,26 @@ type DatasetPageData struct {
 	V6Job          *metadata.V6Job
 }
 
+type CollectionCounts struct {
+	V6Jobs     int
+	Database   int
+	Files      int
+	APIs       int
+	News       int
+	Government int
+	Other      int
+}
+
 type GeographyPageData struct {
-	Level     string               // city, county, state, country, continent
-	Name      string               // Geographic name
-	README    *metadata.V6README   // README content for this geography
-	Jobs      []Record             // All jobs matching this geography
-	JobCount  int                  // Number of jobs
-	City      string
-	County    string
-	State     string
-	Country   string
-	Continent string
+	Level            string               // city, county, state, country, continent
+	Name             string               // Geographic name
+	README           *metadata.V6README   // README content for this geography
+	Jobs             []Record             // All jobs matching this geography
+	JobCount         int                  // Number of jobs
+	CollectionCounts CollectionCounts     // Breakdown by collection type
+	City             string
+	County           string
+	State            string
+	Country          string
+	Continent        string
 }

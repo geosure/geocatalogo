@@ -269,6 +269,8 @@ func (a *App) HandleGeography(w http.ResponseWriter, r *http.Request) {
 
 	// Filter ALL records by geography (not just jobs!)
 	var matchingRecords []Record
+	var counts CollectionCounts
+
 	for _, rec := range records {
 		// Match geography
 		matches := true
@@ -290,20 +292,39 @@ func (a *App) HandleGeography(w http.ResponseWriter, r *http.Request) {
 
 		if matches {
 			matchingRecords = append(matchingRecords, rec)
+
+			// Count by collection type
+			switch rec.Properties.Collection {
+			case "potential_v6":
+				counts.V6Jobs++
+			case "existing_db":
+				counts.Database++
+			case "existing_local":
+				counts.Files++
+			case "external_api":
+				counts.APIs++
+			case "external_news":
+				counts.News++
+			case "external_government":
+				counts.Government++
+			default:
+				counts.Other++
+			}
 		}
 	}
 
 	pageData := GeographyPageData{
-		Level:       level,
-		Name:        name,
-		README:      readme,
-		Jobs:        matchingRecords,
-		JobCount:    len(matchingRecords),
-		City:        city,
-		County:      county,
-		State:       state,
-		Country:     country,
-		Continent:   continent,
+		Level:            level,
+		Name:             name,
+		README:           readme,
+		Jobs:             matchingRecords,
+		JobCount:         len(matchingRecords),
+		CollectionCounts: counts,
+		City:             city,
+		County:           county,
+		State:            state,
+		Country:          country,
+		Continent:        continent,
 	}
 
 	if err := a.tc.Render(w, "layout_geography", pageData); err != nil {
