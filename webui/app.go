@@ -52,8 +52,11 @@ type GROMetadata struct {
 	ImplementationStatus string `json:"implementation_status,omitempty"`
 	DataFormat           string `json:"data_format,omitempty"`
 	GeographicScope      string `json:"geographic_scope,omitempty"`
-	Country              string `json:"country,omitempty"`
 	Continent            string `json:"continent,omitempty"`
+	Country              string `json:"country,omitempty"`
+	StateProvince        string `json:"state_province,omitempty"`
+	Admin2               string `json:"admin2,omitempty"`
+	City                 string `json:"city,omitempty"`
 	Owner                string `json:"owner,omitempty"`
 	UpdateFrequency      string `json:"update_frequency,omitempty"`
 	S3Path               string `json:"s3_path,omitempty"`
@@ -72,6 +75,22 @@ type CatalogStats struct {
 	ExternalNews  int
 	ExternalGov   int
 	ExternalOther int
+	Continents    []ContinentStat
+	Countries     []CountryStat
+}
+
+type ContinentStat struct {
+	Code  string
+	Name  string
+	Emoji string
+	Count int
+}
+
+type CountryStat struct {
+	Code  string
+	Name  string
+	Flag  string
+	Count int
 }
 
 type DatasetPageData struct {
