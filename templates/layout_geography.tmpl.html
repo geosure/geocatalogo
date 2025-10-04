@@ -216,7 +216,23 @@
     <div>
       {{if gt .JobCount 0}}
 
-        <!-- APIs Section (FIRST) -->
+        <!-- Database Section (FIRST - especially important for global datasets) -->
+        {{if .CollectionCounts.Database}}
+        <section style="margin-bottom:24px">
+          <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #059669;padding-bottom:6px">
+            🗄️ Database Tables <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.Database}})</span>
+          </h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
+            {{range .Jobs}}
+              {{if eq .Properties.Collection "existing_db"}}
+                {{template "dataset_card" .}}
+              {{end}}
+            {{end}}
+          </div>
+        </section>
+        {{end}}
+
+        <!-- APIs Section -->
         {{if .CollectionCounts.APIs}}
         <section style="margin-bottom:24px">
           <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #7c3aed;padding-bottom:6px">
@@ -273,22 +289,6 @@
           <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
             {{range .Jobs}}
               {{if eq .Properties.Collection "potential_v6"}}
-                {{template "dataset_card" .}}
-              {{end}}
-            {{end}}
-          </div>
-        </section>
-        {{end}}
-
-        <!-- Database Section -->
-        {{if .CollectionCounts.Database}}
-        <section style="margin-bottom:24px">
-          <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #059669;padding-bottom:6px">
-            🗄️ Database Tables <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.Database}})</span>
-          </h2>
-          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
-            {{range .Jobs}}
-              {{if eq .Properties.Collection "existing_db"}}
                 {{template "dataset_card" .}}
               {{end}}
             {{end}}

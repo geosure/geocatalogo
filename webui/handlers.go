@@ -289,8 +289,18 @@ func (a *App) HandleGeography(w http.ResponseWriter, r *http.Request) {
 		if country != "" && rec.Properties.GROMetadata.Country != country {
 			matches = false
 		}
-		if continent != "" && rec.Properties.GROMetadata.Continent != continent {
-			matches = false
+		if continent != "" {
+			// Special case: 'global' continent should match geographic_scope='global'
+			// instead of continent field (which is empty for global datasets)
+			if continent == "global" {
+				if rec.Properties.GROMetadata.GeographicScope != "global" {
+					matches = false
+				}
+			} else {
+				if rec.Properties.GROMetadata.Continent != continent {
+					matches = false
+				}
+			}
 		}
 
 		if matches {
