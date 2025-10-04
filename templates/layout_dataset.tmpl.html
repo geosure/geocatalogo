@@ -87,6 +87,145 @@
     {{end}}
   </section>
 
+  <!-- V6 Job Details (for potential_v6 collection) -->
+  {{if eq .Record.Properties.Collection "potential_v6"}}
+    <!-- Geographic Hierarchy -->
+    {{if or .Record.Properties.GROMetadata.City .Record.Properties.GROMetadata.Admin2 .Record.Properties.GROMetadata.StateProvince .Record.Properties.GROMetadata.Country .Record.Properties.GROMetadata.Continent}}
+      <section class="card" style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);color:white;border:none">
+        <div style="font-size:13px;font-weight:600;opacity:0.9;margin-bottom:8px">📍 GEOGRAPHIC SCOPE</div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:16px">
+          {{if .Record.Properties.GROMetadata.Continent}}
+            <span style="font-weight:700">{{continentEmoji .Record.Properties.GROMetadata.Continent}} {{continentName .Record.Properties.GROMetadata.Continent}}</span>
+          {{end}}
+          {{if .Record.Properties.GROMetadata.Country}}
+            <span style="opacity:0.7">→</span>
+            <span style="font-weight:700">{{countryFlag .Record.Properties.GROMetadata.Country}} {{countryName .Record.Properties.GROMetadata.Country}}</span>
+          {{end}}
+          {{if .Record.Properties.GROMetadata.StateProvince}}
+            <span style="opacity:0.7">→</span>
+            <span style="font-weight:600">{{upper .Record.Properties.GROMetadata.StateProvince}}</span>
+          {{end}}
+          {{if .Record.Properties.GROMetadata.Admin2}}
+            <span style="opacity:0.7">→</span>
+            <span style="font-weight:600">{{.Record.Properties.GROMetadata.Admin2}}</span>
+          {{end}}
+          {{if .Record.Properties.GROMetadata.City}}
+            <span style="opacity:0.7">→</span>
+            <span style="font-weight:700;font-size:18px">🏙️ {{.Record.Properties.GROMetadata.City}}</span>
+          {{end}}
+        </div>
+      </section>
+    {{end}}
+
+    <!-- Quick Stats & Actions -->
+    <section class="card card-compact">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:20px">
+        <!-- Implementation Status -->
+        <div style="background:#fef3c7;border:2px solid #fbbf24;border-radius:8px;padding:12px">
+          <div style="font-size:11px;font-weight:600;color:#92400e;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">📝 Status</div>
+          <div style="font-size:18px;font-weight:700;color:#92400e">{{if .Record.Properties.GROMetadata.ImplementationStatus}}{{title .Record.Properties.GROMetadata.ImplementationStatus}}{{else}}Unknown{{end}}</div>
+        </div>
+
+        <!-- Data Format / Runtime -->
+        {{if .Record.Properties.GROMetadata.DataFormat}}
+        <div style="background:#e0f2fe;border:2px solid #0ea5e9;border-radius:8px;padding:12px">
+          <div style="font-size:11px;font-weight:600;color:#075985;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">⚙️ Runtime</div>
+          <div style="font-size:18px;font-weight:700;color:#075985;font-family:monospace">{{.Record.Properties.GROMetadata.DataFormat}}</div>
+        </div>
+        {{end}}
+
+        <!-- Update Frequency -->
+        {{if .Record.Properties.GROMetadata.UpdateFrequency}}
+        <div style="background:#f0fdf4;border:2px solid #22c55e;border-radius:8px;padding:12px">
+          <div style="font-size:11px;font-weight:600;color:#15803d;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">🔄 Frequency</div>
+          <div style="font-size:18px;font-weight:700;color:#15803d">{{title .Record.Properties.GROMetadata.UpdateFrequency}}</div>
+        </div>
+        {{end}}
+
+        <!-- Owner -->
+        {{if .Record.Properties.GROMetadata.Owner}}
+        <div style="background:#fef2f2;border:2px solid #f87171;border-radius:8px;padding:12px">
+          <div style="font-size:11px;font-weight:600;color:#991b1b;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px">👥 Owner</div>
+          <div style="font-size:14px;font-weight:700;color:#991b1b;font-family:monospace">{{.Record.Properties.GROMetadata.Owner}}</div>
+        </div>
+        {{end}}
+      </div>
+
+      <!-- Action Links (Prominent!) -->
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        {{range .Record.Links}}
+          {{if eq .Name "v6 Job Definition (GitHub)"}}
+            <a href="{{.URL}}" target="_blank" rel="noopener noreferrer"
+               style="flex:1;min-width:250px;display:flex;align-items:center;justify-content:center;gap:8px;background:#10b981;color:white;padding:14px 20px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;border:none;box-shadow:0 4px 6px rgba(16,185,129,0.3);transition:all 0.2s">
+              <span style="font-size:18px">📄</span>
+              View Job Definition (YAML)
+              <span style="font-size:12px">🔗</span>
+            </a>
+          {{else if eq .Name "Catalog API Record"}}
+            <a href="{{.URL}}" target="_blank" rel="noopener noreferrer"
+               style="flex:1;min-width:250px;display:flex;align-items:center;justify-content:center;gap:8px;background:#3b82f6;color:white;padding:14px 20px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;border:none;box-shadow:0 4px 6px rgba(59,130,246,0.3);transition:all 0.2s">
+              <span style="font-size:18px">🔌</span>
+              API Record
+              <span style="font-size:12px">🔗</span>
+            </a>
+          {{end}}
+        {{end}}
+      </div>
+    </section>
+
+    <!-- Job Definition Details -->
+    <section class="card card-compact">
+      <h2 style="margin:0 0 16px;font-size:18px;font-weight:700">⚙️ Job Configuration</h2>
+
+      <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:16px">
+        <table style="width:100%;font-size:14px;border-spacing:0">
+          {{if .Record.Properties.GROMetadata.V6JobType}}
+          <tr>
+            <td style="padding:8px 16px 8px 0;color:#6b7280;vertical-align:top;width:200px;font-weight:600">Job Type</td>
+            <td style="padding:8px 0;color:#111827">
+              {{if eq .Record.Properties.GROMetadata.V6JobType "bootstrap"}}
+                <span style="font-size:16px">🔧 <strong>Bootstrap</strong></span> - Infrastructure setup
+              {{else if eq .Record.Properties.GROMetadata.V6JobType "collectors"}}
+                <span style="font-size:16px">📡 <strong>Collectors</strong></span> - Data ingestion
+              {{else if eq .Record.Properties.GROMetadata.V6JobType "run"}}
+                <span style="font-size:16px">▶️ <strong>Run</strong></span> - Orchestration
+              {{else if eq .Record.Properties.GROMetadata.V6JobType "inference"}}
+                <span style="font-size:16px">🧠 <strong>Inference</strong></span> - Analytics/ML
+              {{else}}
+                {{.Record.Properties.GROMetadata.V6JobType}}
+              {{end}}
+            </td>
+          </tr>
+          {{end}}
+
+          {{if .Record.Properties.GROMetadata.V6JobFile}}
+          <tr>
+            <td style="padding:8px 16px 8px 0;color:#6b7280;vertical-align:top;font-weight:600">Job File Path</td>
+            <td style="padding:8px 0;font-family:monospace;font-size:12px;color:#374151;word-break:break-all">
+              {{.Record.Properties.GROMetadata.V6JobFile}}
+            </td>
+          </tr>
+          {{end}}
+
+          {{if .Record.Properties.GROMetadata.GeographicScope}}
+          <tr>
+            <td style="padding:8px 16px 8px 0;color:#6b7280;vertical-align:top;font-weight:600">Geographic Scope</td>
+            <td style="padding:8px 0;color:#111827">
+              {{if eq .Record.Properties.GROMetadata.GeographicScope "global"}}
+                🌍 <strong>Global</strong>
+              {{else if eq .Record.Properties.GROMetadata.GeographicScope "regional"}}
+                🗺️ <strong>Regional</strong>
+              {{else}}
+                {{.Record.Properties.GROMetadata.GeographicScope}}
+              {{end}}
+            </td>
+          </tr>
+          {{end}}
+        </table>
+      </div>
+    </section>
+  {{end}}
+
   <!-- Database Table Details -->
   {{if .DatabaseTable}}
     <section class="card card-compact">
