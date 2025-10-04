@@ -276,6 +276,76 @@
     </section>
   {{end}}
 
+  <!-- GeoPackage Details -->
+  {{if .GeoPackageFile}}
+    <section class="card card-compact">
+      <h2 style="margin:0 0 16px;font-size:18px;font-weight:700">GeoPackage</h2>
+
+      <div class="grid-2col" style="gap:16px;margin-bottom:20px">
+        <div>
+          <div class="muted" style="font-size:12px;margin-bottom:4px">File Size</div>
+          <div style="font-size:14px;font-weight:600">{{.GeoPackageFile.FileSizeMB}} MB</div>
+        </div>
+        <div>
+          <div class="muted" style="font-size:12px;margin-bottom:4px">Layers</div>
+          <div style="font-size:14px;font-weight:600">{{len .GeoPackageFile.Layers}}</div>
+        </div>
+        <div>
+          <div class="muted" style="font-size:12px;margin-bottom:4px">S3 Path</div>
+          <div class="mono" style="font-size:11px;color:#6b7280;word-break:break-all">{{.GeoPackageFile.S3Key}}</div>
+        </div>
+      </div>
+
+      <!-- Layers -->
+      {{range $layerIdx, $layer := .GeoPackageFile.Layers}}
+        <h3 style="margin:20px 0 10px;font-size:15px;font-weight:600">
+          {{if eq $layerIdx 0}}Layer{{else}}Layer {{add $layerIdx 1}}{{end}}: {{$layer.Name}}
+        </h3>
+
+        <div class="grid-2col" style="gap:16px;margin-bottom:16px">
+          <div>
+            <div class="muted" style="font-size:12px;margin-bottom:4px">Feature Count</div>
+            <div style="font-size:14px;font-weight:600">{{formatNumber $layer.FeatureCount}}</div>
+          </div>
+          <div>
+            <div class="muted" style="font-size:12px;margin-bottom:4px">Geometry Type</div>
+            <div style="font-size:14px">{{if $layer.GeometryType}}{{$layer.GeometryType}}{{else}}-{{end}}</div>
+          </div>
+        </div>
+
+        {{if $layer.CRS}}
+          <div style="margin-bottom:16px">
+            <div class="muted" style="font-size:12px;margin-bottom:4px">CRS</div>
+            <div class="mono" style="font-size:11px;color:#6b7280;max-height:200px;overflow-y:auto">{{$layer.CRS}}</div>
+          </div>
+        {{end}}
+
+        <!-- Fields -->
+        <h4 style="margin:12px 0 8px;font-size:14px;font-weight:600">Fields ({{len $layer.Fields}})</h4>
+        <div style="overflow-x:auto">
+          <table class="data-table" style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:20px">
+            <thead>
+              <tr style="background:#f9fafb;border-bottom:2px solid #e5e7eb">
+                <th style="text-align:left;padding:8px;font-weight:600">#</th>
+                <th style="text-align:left;padding:8px;font-weight:600">Field Name</th>
+                <th style="text-align:left;padding:8px;font-weight:600">Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{range $i, $field := $layer.Fields}}
+                <tr style="border-bottom:1px solid #f3f4f6">
+                  <td style="padding:8px;color:var(--muted)">{{add $i 1}}</td>
+                  <td style="padding:8px;font-family:monospace;font-weight:500">{{$field.Name}}</td>
+                  <td style="padding:8px;font-family:monospace;font-size:12px;color:#6b7280">{{$field.Type}}</td>
+                </tr>
+              {{end}}
+            </tbody>
+          </table>
+        </div>
+      {{end}}
+    </section>
+  {{end}}
+
   <!-- Links section -->
   {{if .Record.Links}}
     <section class="card card-compact">

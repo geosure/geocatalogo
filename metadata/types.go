@@ -96,12 +96,12 @@ type GeoPackageFile struct {
 
 // GeoPackageLayer represents a GeoPackage layer
 type GeoPackageLayer struct {
-	Name         string               `json:"name"`
-	FeatureCount int64                `json:"feature_count"`
-	GeometryType string               `json:"geometry_type"`
-	CRS          string               `json:"crs"`
-	Extent       []float64            `json:"extent"`
-	Fields       []GeoPackageField    `json:"fields"`
+	Name         string            `json:"layer_name"`
+	FeatureCount int64             `json:"feature_count"`
+	GeometryType string            `json:"geometry_type"`
+	CRS          string            `json:"srs"`
+	Extent       []float64         `json:"extent"`
+	Fields       []GeoPackageField `json:"schema"`
 }
 
 // GeoPackageField represents a GeoPackage field
