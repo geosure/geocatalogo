@@ -56,11 +56,13 @@
       {{end}}
     </div>
 
-    <!-- Description -->
+    <!-- Description (hide if it's just metadata for database tables) -->
     {{if .Record.Properties.Abstract}}
-      <p style="margin:0;color:#374151;line-height:1.6">
-        {{.Record.Properties.Abstract}}
-      </p>
+      {{if not .DatabaseTable}}
+        <p style="margin:0;color:#374151;line-height:1.6">
+          {{.Record.Properties.Abstract}}
+        </p>
+      {{end}}
     {{end}}
   </section>
 
@@ -69,27 +71,41 @@
     <section class="card card-compact">
       <h2 style="margin:0 0 16px;font-size:18px;font-weight:700">Database Table</h2>
 
-      <div class="grid-2col" style="gap:16px;margin-bottom:20px">
-        <div>
-          <div class="muted" style="font-size:12px;margin-bottom:4px">Table Name</div>
-          <div class="mono" style="font-size:14px;font-weight:600">{{.DatabaseTable.Name}}</div>
-        </div>
-        <div>
-          <div class="muted" style="font-size:12px;margin-bottom:4px">Schema</div>
-          <div class="mono" style="font-size:14px">{{.DatabaseTable.Schema}}</div>
-        </div>
-        <div>
-          <div class="muted" style="font-size:12px;margin-bottom:4px">Row Count</div>
-          <div style="font-size:14px;font-weight:600">{{formatNumber .DatabaseTable.RowCount}}</div>
-        </div>
-        <div>
-          <div class="muted" style="font-size:12px;margin-bottom:4px">Size</div>
-          <div style="font-size:14px;font-weight:600">{{.DatabaseTable.Size}}</div>
-        </div>
+      <!-- Metadata pills -->
+      <div class="chips" style="gap:8px;flex-wrap:wrap;margin-bottom:20px">
+        <!-- Table Name -->
+        <span class="chip" style="background:#f9fafb;border:1px solid #e5e7eb;color:#111827;padding:6px 12px">
+          <span style="color:#6b7280;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px">Table:</span>
+          <span class="mono" style="font-weight:600;margin-left:6px">{{.DatabaseTable.Name}}</span>
+        </span>
+
+        <!-- Schema -->
+        <span class="chip" style="background:#f0f9ff;border:1px solid #bae6fd;color:#075985;padding:6px 12px">
+          <span style="opacity:0.7;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px">Schema:</span>
+          <span class="mono" style="font-weight:600;margin-left:6px">{{.DatabaseTable.Schema}}</span>
+        </span>
+
+        <!-- Row Count -->
+        <span class="chip" style="background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d;padding:6px 12px">
+          <span style="opacity:0.7;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px">Rows:</span>
+          <span style="font-weight:700;margin-left:6px">{{formatNumber .DatabaseTable.RowCount}}</span>
+        </span>
+
+        <!-- Size -->
+        <span class="chip" style="background:#fef3c7;border:1px solid #fde68a;color:#92400e;padding:6px 12px">
+          <span style="opacity:0.8;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px">Size:</span>
+          <span style="font-weight:700;margin-left:6px">{{.DatabaseTable.Size}}</span>
+        </span>
+
+        <!-- Columns count -->
+        <span class="chip" style="background:#f5f3ff;border:1px solid #ddd6fe;color:#6b21a8;padding:6px 12px">
+          <span style="opacity:0.8;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px">Columns:</span>
+          <span style="font-weight:700;margin-left:6px">{{len .DatabaseTable.Columns}}</span>
+        </span>
       </div>
 
       <!-- Columns -->
-      <h3 style="margin:0 0 10px;font-size:15px;font-weight:600">Columns ({{len .DatabaseTable.Columns}})</h3>
+      <h3 style="margin:0 0 10px;font-size:15px;font-weight:600">Columns</h3>
       <div style="overflow-x:auto">
         <table class="data-table" style="width:100%;border-collapse:collapse;font-size:13px">
           <thead>
@@ -113,7 +129,7 @@
 
       <!-- Indexes -->
       {{if .DatabaseTable.Indexes}}
-        <h3 style="margin:20px 0 10px;font-size:15px;font-weight:600">Indexes ({{len .DatabaseTable.Indexes}})</h3>
+        <h3 style="margin:20px 0 10px;font-size:15px;font-weight:600">Indexes</h3>
         <ul style="margin:0;padding-left:20px;line-height:1.8">
           {{range .DatabaseTable.Indexes}}
             <li style="font-family:monospace;font-size:13px">{{.}}</li>

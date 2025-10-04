@@ -34,13 +34,34 @@
       <!-- Format filter -->
       <select id="format" class="select" aria-label="Filter by format">
         <option value="">All formats</option>
-        <option value="database">Database</option>
-        <option value="csv">CSV</option>
-        <option value="parquet">Parquet</option>
-        <option value="shapefile">Shapefile</option>
-        <option value="geopackage">GeoPackage</option>
-        <option value="api">API</option>
-        <option value="news">News</option>
+        <optgroup label="Database">
+          <option value="database">Database Tables</option>
+        </optgroup>
+        <optgroup label="Tabular Data">
+          <option value="csv">CSV</option>
+          <option value="tsv">TSV</option>
+          <option value="parquet">Parquet</option>
+          <option value="xls">Excel (XLS)</option>
+          <option value="xlsx">Excel (XLSX)</option>
+          <option value="json">JSON</option>
+        </optgroup>
+        <optgroup label="Geospatial Data">
+          <option value="shapefile">Shapefile</option>
+          <option value="geopackage">GeoPackage</option>
+          <option value="filegdb">File Geodatabase</option>
+          <option value="geojson">GeoJSON</option>
+        </optgroup>
+        <optgroup label="Documents">
+          <option value="pdf">PDF</option>
+          <option value="image">Image</option>
+          <option value="html">HTML</option>
+        </optgroup>
+        <optgroup label="External Sources">
+          <option value="api">API</option>
+          <option value="news">News</option>
+          <option value="academic">Academic</option>
+          <option value="government">Government</option>
+        </optgroup>
       </select>
 
       <!-- Status filter -->
@@ -113,11 +134,63 @@
             {{end}}
           </div>
 
-          <!-- Description -->
+          <!-- Description (clean, without metadata) -->
           {{if .Properties.Abstract}}
-            <p class="snippet" style="margin:0;font-size:13px;color:#374151;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">
-              {{.Properties.Abstract}}
-            </p>
+            {{$cleanDesc := cleanAbstract .Properties.Abstract}}
+            {{if $cleanDesc}}
+              <p class="snippet" style="margin:0;font-size:13px;color:#374151;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">
+                {{$cleanDesc}}
+              </p>
+            {{end}}
+          {{end}}
+
+          <!-- Metadata pills (if metadata found in abstract) -->
+          {{if .Properties.Abstract}}
+            {{if hasMetadata .Properties.Abstract}}
+              <div class="chips" style="gap:4px;flex-wrap:wrap">
+                {{$rows := extractMetadata .Properties.Abstract "Rows"}}
+                {{if $rows}}
+                  <span class="chip chip-sm" style="font-size:9px;background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d">
+                    <span style="opacity:0.7">ROWS:</span> <span style="font-weight:600;margin-left:2px">{{$rows}}</span>
+                  </span>
+                {{end}}
+
+                {{$features := extractMetadata .Properties.Abstract "features"}}
+                {{if $features}}
+                  <span class="chip chip-sm" style="font-size:9px;background:#f0fdf4;border:1px solid #bbf7d0;color:#15803d">
+                    <span style="opacity:0.7">FEATURES:</span> <span style="font-weight:600;margin-left:2px">{{$features}}</span>
+                  </span>
+                {{end}}
+
+                {{$size := extractMetadata .Properties.Abstract "Size"}}
+                {{if $size}}
+                  <span class="chip chip-sm" style="font-size:9px;background:#fef3c7;border:1px solid #fde68a;color:#92400e">
+                    <span style="opacity:0.8">SIZE:</span> <span style="font-weight:600;margin-left:2px">{{$size}}</span>
+                  </span>
+                {{end}}
+
+                {{$columns := extractMetadata .Properties.Abstract "Columns"}}
+                {{if $columns}}
+                  <span class="chip chip-sm" style="font-size:9px;background:#f5f3ff;border:1px solid #ddd6fe;color:#6b21a8">
+                    <span style="opacity:0.8">COLS:</span> <span style="font-weight:600;margin-left:2px">{{$columns}}</span>
+                  </span>
+                {{end}}
+
+                {{$fields := extractMetadata .Properties.Abstract "fields"}}
+                {{if $fields}}
+                  <span class="chip chip-sm" style="font-size:9px;background:#f5f3ff;border:1px solid #ddd6fe;color:#6b21a8">
+                    <span style="opacity:0.8">FIELDS:</span> <span style="font-weight:600;margin-left:2px">{{$fields}}</span>
+                  </span>
+                {{end}}
+
+                {{$schema := extractMetadata .Properties.Abstract "Schema"}}
+                {{if $schema}}
+                  <span class="chip chip-sm" style="font-size:9px;background:#f0f9ff;border:1px solid #bae6fd;color:#075985">
+                    <span style="opacity:0.7">SCHEMA:</span> <span style="font-weight:600;margin-left:2px;font-family:monospace">{{$schema}}</span>
+                  </span>
+                {{end}}
+              </div>
+            {{end}}
           {{end}}
 
           <!-- Location chips -->
@@ -149,7 +222,7 @@
 
 {{define "scripts_extra"}}
 <script>
-// Client-side filtering (just like Explore!)
+// Client-side filtering (just like Explore!) + URL state management
 const datasets = Array.from(document.querySelectorAll('.dataset'));
 const q = document.getElementById('q');
 const collection = document.getElementById('collection');
@@ -159,6 +232,29 @@ const sort = document.getElementById('sort');
 const showing = document.getElementById('showing');
 const noResults = document.getElementById('noResults');
 const catalogGrid = document.getElementById('catalogGrid');
+
+// Load state from URL on page load
+function loadStateFromURL() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.has('q')) q.value = params.get('q');
+  if (params.has('collection')) collection.value = params.get('collection');
+  if (params.has('format')) format.value = params.get('format');
+  if (params.has('status')) status.value = params.get('status');
+  if (params.has('sort')) sort.value = params.get('sort');
+}
+
+// Update URL with current filter state
+function updateURL() {
+  const params = new URLSearchParams();
+  if (q.value) params.set('q', q.value);
+  if (collection.value) params.set('collection', collection.value);
+  if (format.value) params.set('format', format.value);
+  if (status.value) params.set('status', status.value);
+  if (sort.value !== 'name_asc') params.set('sort', sort.value);
+
+  const url = params.toString() ? `?${params.toString()}` : window.location.pathname;
+  window.history.replaceState({}, '', url);
+}
 
 function filter() {
   const query = q.value.toLowerCase().trim();
@@ -189,6 +285,8 @@ function filter() {
   showing.textContent = visible;
   noResults.style.display = visible === 0 ? 'block' : 'none';
   catalogGrid.style.display = visible === 0 ? 'none' : 'grid';
+
+  updateURL();
 }
 
 q.addEventListener('input', filter);
@@ -209,6 +307,11 @@ sort.addEventListener('change', () => {
   });
 
   sorted.forEach(d => catalogGrid.appendChild(d));
+  updateURL();
 });
+
+// Load state and apply filters on page load
+loadStateFromURL();
+filter();
 </script>
 {{end}}
