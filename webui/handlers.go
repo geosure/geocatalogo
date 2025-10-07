@@ -933,6 +933,63 @@ func (a *App) HandleCollections(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (a *App) HandleOwners(w http.ResponseWriter, r *http.Request) {
+	// Load all records to count owners
+	catalogPath := os.Getenv("CATALOG_JSON_PATH")
+	if catalogPath == "" {
+		catalogPath = "/Users/jjohnson/projects/geosure/catalog/data/geocatalogo_records.json"
+	}
+
+	data, err := os.ReadFile(catalogPath)
+	if err != nil {
+		http.Error(w, "Failed to load catalog", http.StatusInternalServerError)
+		return
+	}
+
+	var records []Record
+	if err := json.Unmarshal(data, &records); err != nil {
+		http.Error(w, "Failed to parse catalog", http.StatusInternalServerError)
+		return
+	}
+
+	// Count owners
+	ownerCounts := make(map[string]int)
+	for _, rec := range records {
+		if rec.Properties.GROMetadata.Owner != "" {
+			ownerCounts[rec.Properties.GROMetadata.Owner]++
+		}
+	}
+
+	// Convert to sorted slice
+	var owners []OwnerStat
+	for owner, count := range ownerCounts {
+		owners = append(owners, OwnerStat{
+			Name:  owner,
+			Count: count,
+		})
+	}
+
+	// Sort by count descending
+	sort.Slice(owners, func(i, j int) bool {
+		return owners[i].Count > owners[j].Count
+	})
+
+	pageData := struct {
+		Owners     []OwnerStat
+		TotalOwners int
+		TotalRecords int
+	}{
+		Owners:      owners,
+		TotalOwners: len(owners),
+		TotalRecords: len(records),
+	}
+
+	if err := a.tc.Render(w, "layout_owners", pageData); err != nil {
+		http.Error(w, "Template error", http.StatusInternalServerError)
+		log.Printf("Template error: %v", err)
+	}
+}
+
 func (a *App) HandleCollectionDetail(w http.ResponseWriter, r *http.Request) {
 	// Extract collection name from URL: /collection/{name}
 	path := r.URL.Path

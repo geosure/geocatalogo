@@ -13,6 +13,7 @@ func NewMux(app *App) *http.ServeMux {
 	mux.HandleFunc("/owner/", app.HandleOwner)
 	mux.HandleFunc("/collection/", app.HandleCollectionDetail)
 	mux.HandleFunc("GET /collections", app.HandleCollections) // Go 1.22+ exact match syntax
+	mux.HandleFunc("GET /owners", app.HandleOwners)           // Go 1.22+ exact match syntax
 	mux.HandleFunc("GET /query", app.HandleQuery)             // Go 1.22+ exact match syntax
 	mux.HandleFunc("GET /stats", app.HandleStats)             // Go 1.22+ exact match syntax
 	mux.HandleFunc("GET /api-docs", app.HandleAPIDocs)        // Go 1.22+ exact match syntax
