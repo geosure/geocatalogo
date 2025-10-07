@@ -14,27 +14,341 @@
     Complete guide to querying the GRO data universe - for humans and AI agents
   </p>
 
-  <!-- Quick Start -->
-  <section class="card" style="background:#f0f9ff;border:1px solid #bae6fd">
-    <h2 style="margin:0 0 16px;color:#075985">🚀 Quick Start</h2>
-    <div style="background:#fff;border-radius:6px;padding:16px;font-family:monospace;font-size:13px">
-      <div style="color:#64748b;margin-bottom:8px"># API Base URL</div>
-      <div style="color:#0b63ce;font-weight:600">http://localhost:8000</div>
+  <!-- Interactive Query Builder -->
+  <section class="card" style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);border:none;color:white">
+    <h2 style="margin:0 0 16px;color:white">🎯 Interactive Query Builder</h2>
+    <p style="margin:0 0 24px;opacity:0.95">
+      Build and test queries directly in your browser. Click "Run Query" to see live results.
+    </p>
 
-      <div style="color:#64748b;margin:16px 0 8px"># Get a specific record</div>
-      <div>curl 'http://localhost:8000/?recordids=clankr_catalog_agent'</div>
+    <div style="background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border-radius:8px;padding:20px">
+      <!-- Query Type Selection -->
+      <div style="margin-bottom:20px">
+        <label style="display:block;margin-bottom:8px;font-weight:600">Query Type:</label>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button class="query-type-btn active" data-type="property" style="background:rgba(255,255,255,0.3);border:2px solid rgba(255,255,255,0.5);color:white;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600">Property Filters</button>
+          <button class="query-type-btn" data-type="text" style="background:rgba(255,255,255,0.1);border:2px solid rgba(255,255,255,0.3);color:white;padding:8px 16px;border-radius:6px;cursor:pointer">Text Search</button>
+          <button class="query-type-btn" data-type="recordid" style="background:rgba(255,255,255,0.1);border:2px solid rgba(255,255,255,0.3);color:white;padding:8px 16px;border-radius:6px;cursor:pointer">Record ID</button>
+        </div>
+      </div>
 
-      <div style="color:#64748b;margin:16px 0 8px"># Search by keyword</div>
-      <div>curl 'http://localhost:8000/?q=database'</div>
+      <!-- Property Filter Builder -->
+      <div id="property-builder" style="display:block">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-bottom:16px">
+          <!-- Geographic Filters -->
+          <div>
+            <label style="display:block;margin-bottom:6px;font-size:13px;opacity:0.9">Continent</label>
+            <select id="filter-continent" class="filter-input" style="width:100%;padding:8px;border-radius:4px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:white;font-size:14px">
+              <option value="">Any</option>
+              <option value="clankr">🤖 Clankr (Operations)</option>
+              <option value="north_america">🌎 North America</option>
+              <option value="south_america">🌎 South America</option>
+              <option value="africa">🌍 Africa</option>
+              <option value="europe">🌍 Europe</option>
+              <option value="asia">🌏 Asia</option>
+              <option value="oceania">🌏 Oceania</option>
+            </select>
+          </div>
 
-      <div style="color:#64748b;margin:16px 0 8px"># Get multiple records</div>
-      <div>curl 'http://localhost:8000/?recordids=clankr_agent,clankr_infra_agent'</div>
+          <div>
+            <label style="display:block;margin-bottom:6px;font-size:13px;opacity:0.9">Country</label>
+            <input type="text" id="filter-country" class="filter-input" placeholder="e.g., colombia, united_states" style="width:100%;padding:8px;border-radius:4px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:white;font-size:14px">
+          </div>
+
+          <!-- Metadata Filters -->
+          <div>
+            <label style="display:block;margin-bottom:6px;font-size:13px;opacity:0.9">Collection</label>
+            <select id="filter-collection" class="filter-input" style="width:100%;padding:8px;border-radius:4px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:white;font-size:14px">
+              <option value="">Any</option>
+              <option value="ai_agent">🤖 AI Agents</option>
+              <option value="existing_db">🗄️ Database Tables</option>
+              <option value="automation_bot">⚙️ Automation Bots</option>
+              <option value="catalog_management_bot">📋 Catalog Bots</option>
+              <option value="potential_v6">📂 v6 Jobs</option>
+              <option value="external_source">🌐 External Sources</option>
+              <option value="data_file">📄 Data Files</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="display:block;margin-bottom:6px;font-size:13px;opacity:0.9">Status</label>
+            <select id="filter-status" class="filter-input" style="width:100%;padding:8px;border-radius:4px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:white;font-size:14px">
+              <option value="">Any</option>
+              <option value="active">✅ Active</option>
+              <option value="implemented">✅ Implemented</option>
+              <option value="draft">📝 Draft</option>
+              <option value="deprecated">⚠️ Deprecated</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="display:block;margin-bottom:6px;font-size:13px;opacity:0.9">Data Format</label>
+            <select id="filter-data-format" class="filter-input" style="width:100%;padding:8px;border-radius:4px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:white;font-size:14px">
+              <option value="">Any</option>
+              <option value="database">🗄️ Database</option>
+              <option value="python_script">🐍 Python Script</option>
+              <option value="yaml">📋 YAML</option>
+              <option value="csv">📊 CSV</option>
+              <option value="parquet">📦 Parquet</option>
+              <option value="shapefile">🗺️ Shapefile</option>
+              <option value="geopackage">📦 GeoPackage</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="display:block;margin-bottom:6px;font-size:13px;opacity:0.9">Owner</label>
+            <input type="text" id="filter-owner" class="filter-input" placeholder="e.g., @clankr, @data-platform" style="width:100%;padding:8px;border-radius:4px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:white;font-size:14px">
+          </div>
+        </div>
+
+        <!-- Advanced Filters (Collapsible) -->
+        <div style="margin-bottom:16px">
+          <button id="toggle-advanced" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);color:white;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:13px">
+            + Show Advanced Filters
+          </button>
+        </div>
+
+        <div id="advanced-filters" style="display:none;margin-bottom:16px">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px">
+            <div>
+              <label style="display:block;margin-bottom:6px;font-size:13px;opacity:0.9">Database Table</label>
+              <input type="text" id="filter-database-table" class="filter-input" placeholder="e.g., raw_articles" style="width:100%;padding:8px;border-radius:4px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:white;font-size:14px">
+            </div>
+
+            <div>
+              <label style="display:block;margin-bottom:6px;font-size:13px;opacity:0.9">v6 Job Type</label>
+              <select id="filter-v6-job-type" class="filter-input" style="width:100%;padding:8px;border-radius:4px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:white;font-size:14px">
+                <option value="">Any</option>
+                <option value="bootstrap">Bootstrap</option>
+                <option value="collector">Collector</option>
+                <option value="inference">Inference</option>
+                <option value="run">Run</option>
+              </select>
+            </div>
+
+            <div>
+              <label style="display:block;margin-bottom:6px;font-size:13px;opacity:0.9">City</label>
+              <input type="text" id="filter-city" class="filter-input" placeholder="e.g., los_angeles" style="width:100%;padding:8px;border-radius:4px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:white;font-size:14px">
+            </div>
+
+            <div>
+              <label style="display:block;margin-bottom:6px;font-size:13px;opacity:0.9">Geographic Scope</label>
+              <select id="filter-geographic-scope" class="filter-input" style="width:100%;padding:8px;border-radius:4px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:white;font-size:14px">
+                <option value="">Any</option>
+                <option value="global">🌍 Global</option>
+                <option value="regional">🗺️ Regional</option>
+                <option value="national">🏳️ National</option>
+                <option value="local">📍 Local</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Text Search Builder -->
+      <div id="text-builder" style="display:none;margin-bottom:16px">
+        <label style="display:block;margin-bottom:8px;font-weight:600">Search Query:</label>
+        <input type="text" id="text-query" placeholder="e.g., database, Lambda deployment, news articles" style="width:100%;padding:12px;border-radius:6px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:white;font-size:16px">
+      </div>
+
+      <!-- Record ID Builder -->
+      <div id="recordid-builder" style="display:none;margin-bottom:16px">
+        <label style="display:block;margin-bottom:8px;font-weight:600">Record ID(s):</label>
+        <input type="text" id="recordid-query" placeholder="e.g., clankr_catalog_agent or clankr_agent,clankr_infra_agent" style="width:100%;padding:12px;border-radius:6px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:white;font-size:16px">
+        <p style="margin:8px 0 0;font-size:12px;opacity:0.8">Comma-separated for multiple records</p>
+      </div>
+
+      <!-- Result Limit -->
+      <div style="margin-bottom:20px">
+        <label style="display:block;margin-bottom:8px;font-weight:600">Max Results:</label>
+        <input type="number" id="max-records" value="10" min="1" max="1000" style="width:120px;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:white;font-size:14px">
+      </div>
+
+      <!-- Generated URL -->
+      <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:16px;margin-bottom:16px">
+        <label style="display:block;margin-bottom:8px;font-weight:600;font-size:13px">Generated API URL:</label>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input type="text" id="generated-url" readonly style="flex:1;padding:10px;border-radius:4px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.1);color:white;font-family:monospace;font-size:12px">
+          <button id="copy-url-btn" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);color:white;padding:10px 16px;border-radius:4px;cursor:pointer;white-space:nowrap">Copy</button>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <button id="run-query-btn" style="background:#10b981;border:none;color:white;padding:12px 24px;border-radius:6px;cursor:pointer;font-weight:600;font-size:16px;box-shadow:0 4px 6px rgba(0,0,0,0.2)">
+          ▶️ Run Query
+        </button>
+        <button id="clear-filters-btn" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);color:white;padding:12px 24px;border-radius:6px;cursor:pointer;font-weight:600">
+          🗑️ Clear All
+        </button>
+        <button id="example-btn" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);color:white;padding:12px 24px;border-radius:6px;cursor:pointer;font-weight:600">
+          💡 Load Example
+        </button>
+      </div>
     </div>
   </section>
 
-  <!-- API Endpoints -->
+  <!-- Query Results -->
+  <section class="card" id="results-section" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h2 style="margin:0">📊 Query Results</h2>
+      <div id="result-stats" style="font-size:14px;color:#64748b"></div>
+    </div>
+
+    <div id="results-container"></div>
+  </section>
+
+  <!-- Property Filters Reference -->
   <section class="card">
-    <h2 style="margin:0 0 24px">📋 API Endpoints</h2>
+    <h2 style="margin:0 0 24px">🎯 Property Filters Reference</h2>
+    <p class="muted" style="margin:0 0 24px">
+      Property filters enable precise, structured querying of catalog metadata. Combine multiple filters for powerful queries.
+    </p>
+
+    <div style="display:grid;gap:24px">
+      <!-- Geographic Filters -->
+      <div>
+        <h3 style="margin:0 0 16px;color:#0f766e;font-size:18px;border-bottom:2px solid #99f6e4;padding-bottom:8px">
+          🌍 Geographic Filters
+        </h3>
+        <table style="width:100%;border-collapse:collapse;font-size:14px">
+          <tr style="border-bottom:1px solid #e5e7eb">
+            <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce;width:200px">continent</td>
+            <td style="padding:12px 0">Filter by continent (exact match)</td>
+            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?continent=clankr</td>
+          </tr>
+          <tr style="border-bottom:1px solid #e5e7eb">
+            <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">country</td>
+            <td style="padding:12px 0">Filter by country (exact match)</td>
+            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?country=colombia</td>
+          </tr>
+          <tr style="border-bottom:1px solid #e5e7eb">
+            <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">state</td>
+            <td style="padding:12px 0">Filter by state/province (exact match)</td>
+            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?state=california</td>
+          </tr>
+          <tr style="border-bottom:1px solid #e5e7eb">
+            <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">city</td>
+            <td style="padding:12px 0">Filter by city (exact match)</td>
+            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?city=los_angeles</td>
+          </tr>
+          <tr>
+            <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">admin2</td>
+            <td style="padding:12px 0">Filter by county/admin2 (exact match)</td>
+            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?admin2=orange</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Metadata Filters -->
+      <div>
+        <h3 style="margin:0 0 16px;color:#7c2d12;font-size:18px;border-bottom:2px solid #fed7aa;padding-bottom:8px">
+          📋 Metadata Filters
+        </h3>
+        <table style="width:100%;border-collapse:collapse;font-size:14px">
+          <tr style="border-bottom:1px solid #e5e7eb">
+            <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce;width:200px">collection</td>
+            <td style="padding:12px 0">Filter by collection type (exact match)</td>
+            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?collection=ai_agent</td>
+          </tr>
+          <tr style="border-bottom:1px solid #e5e7eb">
+            <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">type</td>
+            <td style="padding:12px 0">Filter by resource type (exact match)</td>
+            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?type=dataset</td>
+          </tr>
+          <tr style="border-bottom:1px solid #e5e7eb">
+            <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">owner</td>
+            <td style="padding:12px 0">Filter by owner (exact match)</td>
+            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?owner=@clankr</td>
+          </tr>
+          <tr style="border-bottom:1px solid #e5e7eb">
+            <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">data_format</td>
+            <td style="padding:12px 0">Filter by data format (exact match)</td>
+            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?data_format=database</td>
+          </tr>
+          <tr style="border-bottom:1px solid #e5e7eb">
+            <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">status</td>
+            <td style="padding:12px 0">Filter by implementation status (exact match)</td>
+            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?status=active</td>
+          </tr>
+          <tr>
+            <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">geographic_scope</td>
+            <td style="padding:12px 0">Filter by geographic scope (exact match)</td>
+            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?geographic_scope=global</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- System Filters -->
+      <div>
+        <h3 style="margin:0 0 16px;color:#1e40af;font-size:18px;border-bottom:2px solid #bfdbfe;padding-bottom:8px">
+          ⚙️ System Filters
+        </h3>
+        <table style="width:100%;border-collapse:collapse;font-size:14px">
+          <tr style="border-bottom:1px solid #e5e7eb">
+            <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce;width:200px">database_table</td>
+            <td style="padding:12px 0">Filter by database table (partial match)</td>
+            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?database_table=article</td>
+          </tr>
+          <tr style="border-bottom:1px solid #e5e7eb">
+            <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">v6_job_file</td>
+            <td style="padding:12px 0">Filter by v6 job file path (partial match)</td>
+            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?v6_job_file=bootstrap</td>
+          </tr>
+          <tr style="border-bottom:1px solid #e5e7eb">
+            <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">v6_job_type</td>
+            <td style="padding:12px 0">Filter by v6 job type (partial match)</td>
+            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?v6_job_type=collector</td>
+          </tr>
+          <tr>
+            <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">s3_path</td>
+            <td style="padding:12px 0">Filter by S3 path (partial match)</td>
+            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?s3_path=geosure-data</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- General Filters -->
+      <div>
+        <h3 style="margin:0 0 16px;color:#4a5568;font-size:18px;border-bottom:2px solid #e2e8f0;padding-bottom:8px">
+          🔍 General Filters
+        </h3>
+        <table style="width:100%;border-collapse:collapse;font-size:14px">
+          <tr>
+            <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce;width:200px">title</td>
+            <td style="padding:12px 0">Filter by title (partial match)</td>
+            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?title=news</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- Combination Examples -->
+    <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:20px;margin-top:24px">
+      <h3 style="margin:0 0 16px;color:#075985">💪 Combining Multiple Filters</h3>
+      <p style="margin:0 0 16px;color:#0c4a6e">
+        Combine multiple property filters using AND logic (all must match). Mix property filters with text search for powerful queries.
+      </p>
+
+      <div style="background:white;border-radius:6px;padding:16px;font-family:monospace;font-size:13px">
+        <div style="color:#64748b;margin-bottom:4px"># All active AI agents in clankr ecosystem</div>
+        <div style="margin-bottom:16px">?continent=clankr&collection=ai_agent&status=active</div>
+
+        <div style="color:#64748b;margin-bottom:4px"># All database tables containing "article"</div>
+        <div style="margin-bottom:16px">?collection=existing_db&database_table=article</div>
+
+        <div style="color:#64748b;margin-bottom:4px"># All v6 collector jobs with text search</div>
+        <div style="margin-bottom:16px">?collection=potential_v6&v6_job_type=collector&q=news</div>
+
+        <div style="color:#64748b;margin-bottom:4px"># All Python scripts owned by @clankr</div>
+        <div>?data_format=python_script&owner=@clankr</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Traditional Endpoints -->
+  <section class="card">
+    <h2 style="margin:0 0 24px">📋 Traditional Query Methods</h2>
 
     <div style="margin-bottom:32px">
       <h3 style="margin:0 0 12px;color:#334155;font-size:18px">GET /?recordids={id}</h3>
@@ -70,7 +384,7 @@
             <td style="padding:8px 0">Search query (keywords, natural language)</td>
           </tr>
           <tr style="border-bottom:1px solid #e2e8f0">
-            <td style="padding:8px 12px 8px 0;font-family:monospace;color:#0b63ce">maxrecords</td>
+            <td style="padding:8px 12px 12px 0;font-family:monospace;color:#0b63ce">maxrecords</td>
             <td style="padding:8px 0">Maximum results to return (default: 100)</td>
           </tr>
         </table>
@@ -99,8 +413,10 @@
 
     <div style="background:#1e293b;color:#e2e8f0;border-radius:6px;padding:16px;font-family:monospace;font-size:12px;overflow-x:auto">
 <pre style="margin:0">{
-  "Matches": 1,
-  "Returned": 1,
+  "ElapsedTime": 0,
+  "Matches": 6,
+  "Returned": 6,
+  "NextRecord": 6,
   "Records": [{
     "id": "clankr_catalog_agent",
     "type": "Feature",
@@ -109,231 +425,18 @@
       "abstract": "Your guide to GRO's complete data universe...",
       "collection": "ai_agent",
       "gro_metadata": {
+        "continent": "clankr",
         "implementation_status": "active",
         "data_format": "lambda_service",
         "owner": "@clankr"
       },
       "execution": {
         "model": "claude-sonnet-4-5",
-        "runtime": "Claude Code CLI",
-        "working_directory": "/Users/jjohnson/projects/geosure/catalog"
-      },
-      "organizational_context": {
-        "reports_to": ["clankr_agent (COO)"],
-        "manages": ["50+ introspection bots", "GeoCatalogo API server"]
-      },
-      "capabilities": {
-        "primary": ["Catalog management", "Agent discovery", "Database introspection"]
+        "runtime": "Claude Code CLI"
       }
     }
   }]
 }</pre>
-    </div>
-  </section>
-
-  <!-- Common Query Patterns -->
-  <section class="card">
-    <h2 style="margin:0 0 24px">💡 Common Query Patterns</h2>
-
-    <div style="display:grid;gap:16px">
-      <!-- Agent Discovery -->
-      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px">
-        <h3 style="margin:0 0 12px;color:#475569;font-size:16px">🤖 Agent Discovery</h3>
-        <div style="font-family:monospace;font-size:13px">
-          <div style="color:#64748b;margin-bottom:4px"># Get all AI agents</div>
-          <div>curl 'http://localhost:8000/?q=ai_agent'</div>
-
-          <div style="color:#64748b;margin:16px 0 4px"># Find agent by capability</div>
-          <div>curl 'http://localhost:8000/?q=geocoding'</div>
-
-          <div style="color:#64748b;margin:16px 0 4px"># Get specific agent</div>
-          <div>curl 'http://localhost:8000/?recordids=clankr_infra_agent'</div>
-        </div>
-      </div>
-
-      <!-- Database Discovery -->
-      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px">
-        <h3 style="margin:0 0 12px;color:#475569;font-size:16px">🗄️ Database Discovery</h3>
-        <div style="font-family:monospace;font-size:13px">
-          <div style="color:#64748b;margin-bottom:4px"># List all database tables</div>
-          <div>curl 'http://localhost:8000/?q=existing_db'</div>
-
-          <div style="color:#64748b;margin:16px 0 4px"># Find specific table</div>
-          <div>curl 'http://localhost:8000/?recordids=db_geosure_news'</div>
-
-          <div style="color:#64748b;margin:16px 0 4px"># Search by table content</div>
-          <div>curl 'http://localhost:8000/?q=news+articles'</div>
-        </div>
-      </div>
-
-      <!-- File Discovery -->
-      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px">
-        <h3 style="margin:0 0 12px;color:#475569;font-size:16px">📄 File Discovery</h3>
-        <div style="font-family:monospace;font-size:13px">
-          <div style="color:#64748b;margin-bottom:4px"># Find CSV files</div>
-          <div>curl 'http://localhost:8000/?q=csv'</div>
-
-          <div style="color:#64748b;margin:16px 0 4px"># Find Parquet files</div>
-          <div>curl 'http://localhost:8000/?q=parquet'</div>
-
-          <div style="color:#64748b;margin:16px 0 4px"># Search by location</div>
-          <div>curl 'http://localhost:8000/?q=s3://geosure-data'</div>
-        </div>
-      </div>
-
-      <!-- v6 Job Discovery -->
-      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px">
-        <h3 style="margin:0 0 12px;color:#475569;font-size:16px">📋 v6 Job Discovery</h3>
-        <div style="font-family:monospace;font-size:13px">
-          <div style="color:#64748b;margin-bottom:4px"># List all v6 jobs</div>
-          <div>curl 'http://localhost:8000/?q=potential_v6'</div>
-
-          <div style="color:#64748b;margin:16px 0 4px"># Find jobs by location</div>
-          <div>curl 'http://localhost:8000/?q=dar+es+salaam'</div>
-
-          <div style="color:#64748b;margin:16px 0 4px"># Find jobs by type</div>
-          <div>curl 'http://localhost:8000/?q=ingest'</div>
-        </div>
-      </div>
-
-      <!-- External Source Discovery -->
-      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px">
-        <h3 style="margin:0 0 12px;color:#475569;font-size:16px">🌐 External Source Discovery</h3>
-        <div style="font-family:monospace;font-size:13px">
-          <div style="color:#64748b;margin-bottom:4px"># Find news APIs</div>
-          <div>curl 'http://localhost:8000/?q=external_news'</div>
-
-          <div style="color:#64748b;margin:16px 0 4px"># Find government data</div>
-          <div>curl 'http://localhost:8000/?q=external_government'</div>
-
-          <div style="color:#64748b;margin:16px 0 4px"># Search by country</div>
-          <div>curl 'http://localhost:8000/?q=Nigeria'</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- For AI Agents -->
-  <section class="card" style="background:#f1f5f9;border:1px solid #cbd5e1">
-    <h2 style="margin:0 0 16px;color:#334155">🧠 For AI Agents</h2>
-    <p style="color:#475569;margin:0 0 24px;line-height:1.6">
-      This catalog enables autonomous agent coordination and discovery without human intervention.
-    </p>
-
-    <div style="background:#e2e8f0;border-radius:8px;padding:16px;margin-bottom:16px">
-      <h3 style="margin:0 0 12px;color:#334155;font-size:16px">On Bootstrap</h3>
-      <div style="font-family:monospace;font-size:13px">
-        <div style="color:#64748b;margin-bottom:4px"># Discover all agents in ecosystem</div>
-        <div>curl 'http://localhost:8000/?q=ai_agent' | jq '.Records[]'</div>
-
-        <div style="color:#64748b;margin:16px 0 4px"># Build operational map</div>
-        <div>curl 'http://localhost:8000/?recordids=clankr_agent,clankr_infra_agent,clankr_catalog_agent'</div>
-      </div>
-    </div>
-
-    <div style="background:#e2e8f0;border-radius:8px;padding:16px;margin-bottom:16px">
-      <h3 style="margin:0 0 12px;color:#334155;font-size:16px">Task Delegation</h3>
-      <div style="font-family:monospace;font-size:13px">
-        <div style="color:#64748b;margin-bottom:4px"># "Who can deploy Lambda functions?"</div>
-        <div>curl 'http://localhost:8000/?q=Lambda+deployment'</div>
-        <div style="color:#64748b;margin-top:4px"># → Returns: clankr_infra_agent</div>
-
-        <div style="color:#64748b;margin:16px 0 4px"># "Who manages the job registry?"</div>
-        <div>curl 'http://localhost:8000/?q=v6+jobs'</div>
-        <div style="color:#64748b;margin-top:4px"># → Returns: clankr_v6_scaffolder</div>
-      </div>
-    </div>
-
-    <div style="background:#e2e8f0;border-radius:8px;padding:16px">
-      <h3 style="margin:0 0 12px;color:#334155;font-size:16px">Continuous Discovery</h3>
-      <div style="font-family:monospace;font-size:13px">
-        <div style="color:#64748b;margin-bottom:4px"># Daily check for new agents</div>
-        <div>curl 'http://localhost:8000/?q=agent+status:active'</div>
-
-        <div style="color:#64748b;margin:16px 0 4px"># Get catalog statistics</div>
-        <div>curl 'http://localhost:8000/' | jq '{total: .Matches, returned: .Returned}'</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Response Fields -->
-  <section class="card">
-    <h2 style="margin:0 0 16px">📝 Enriched Metadata Fields</h2>
-    <p class="muted" style="margin:0 0 16px">
-      Beyond basic metadata, records include rich introspection data
-    </p>
-
-    <table style="width:100%;border-collapse:collapse;font-size:14px">
-      <thead>
-        <tr style="border-bottom:2px solid #e5e7eb">
-          <th style="text-align:left;padding:12px 12px 12px 0;color:#6b7280;font-weight:600">Field</th>
-          <th style="text-align:left;padding:12px 0;color:#6b7280;font-weight:600">Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr style="border-bottom:1px solid #f3f4f6">
-          <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">execution</td>
-          <td style="padding:12px 0">Runtime, model, working directory, dependencies</td>
-        </tr>
-        <tr style="border-bottom:1px solid #f3f4f6">
-          <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">organizational_context</td>
-          <td style="padding:12px 0">Reports to, manages, coordinates with, purpose</td>
-        </tr>
-        <tr style="border-bottom:1px solid #f3f4f6">
-          <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">capabilities</td>
-          <td style="padding:12px 0">Primary/secondary capabilities, integrations, outputs</td>
-        </tr>
-        <tr style="border-bottom:1px solid #f3f4f6">
-          <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">operational</td>
-          <td style="padding:12px 0">Function, runtime, model, processed stats (for bots/services)</td>
-        </tr>
-        <tr style="border-bottom:1px solid #f3f4f6">
-          <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">database</td>
-          <td style="padding:12px 0">Schema, columns, indexes, row count (for tables)</td>
-        </tr>
-        <tr>
-          <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">file_metadata</td>
-          <td style="padding:12px 0">Row count, columns, geometry type (for files)</td>
-        </tr>
-      </tbody>
-    </table>
-  </section>
-
-  <!-- Technical Details -->
-  <section class="card">
-    <h2 style="margin:0 0 16px">⚙️ Technical Details</h2>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px">
-      <div>
-        <strong style="color:#475569">Format:</strong>
-        <div style="color:#64748b;margin-top:4px">GeoJSON (STAC-compatible)</div>
-      </div>
-
-      <div>
-        <strong style="color:#475569">Authentication:</strong>
-        <div style="color:#64748b;margin-top:4px">None (local development)</div>
-      </div>
-
-      <div>
-        <strong style="color:#475569">Response Time:</strong>
-        <div style="color:#64748b;margin-top:4px">&lt;50ms (in-memory)</div>
-      </div>
-
-      <div>
-        <strong style="color:#475569">Records Indexed:</strong>
-        <div style="color:#64748b;margin-top:4px">1,803 entities</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Quick Links -->
-  <section class="card">
-    <h2 style="margin:0 0 16px">🔗 Try It Now</h2>
-    <div style="display:flex;gap:12px;flex-wrap:wrap">
-      <a href="http://localhost:8000/" target="_blank" class="btn btn-primary">Open API</a>
-      <a href="http://localhost:8000/?recordids=clankr_catalog_agent" target="_blank" class="btn btn-secondary">Example Record</a>
-      <a href="http://localhost:8000/?q=agent" target="_blank" class="btn btn-secondary">Example Search</a>
-      <a href="/stats" class="btn btn-secondary">View Statistics</a>
     </div>
   </section>
 
@@ -365,4 +468,217 @@
   background:#e5e7eb;
   transform:translateY(-2px);
 }
+.query-type-btn.active {
+  background:rgba(255,255,255,0.3) !important;
+  border:2px solid rgba(255,255,255,0.7) !important;
+  font-weight:700;
+}
+.filter-input::placeholder {
+  color:rgba(255,255,255,0.5);
+}
+.result-card {
+  background:#f8fafc;
+  border:1px solid #e2e8f0;
+  border-radius:8px;
+  padding:16px;
+  margin-bottom:12px;
+  transition:all 0.2s;
+}
+.result-card:hover {
+  border-color:#0b63ce;
+  box-shadow:0 4px 6px rgba(0,0,0,0.1);
+}
 </style>
+
+<script>
+// Query Builder Logic
+const API_BASE = 'http://localhost:8000';
+
+// DOM Elements
+const propertyBuilder = document.getElementById('property-builder');
+const textBuilder = document.getElementById('text-builder');
+const recordidBuilder = document.getElementById('recordid-builder');
+const generatedUrl = document.getElementById('generated-url');
+const resultsSection = document.getElementById('results-section');
+const resultsContainer = document.getElementById('results-container');
+const resultStats = document.getElementById('result-stats');
+const advancedFilters = document.getElementById('advanced-filters');
+const toggleAdvancedBtn = document.getElementById('toggle-advanced');
+
+// Query type switching
+document.querySelectorAll('.query-type-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.query-type-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const type = btn.dataset.type;
+    propertyBuilder.style.display = type === 'property' ? 'block' : 'none';
+    textBuilder.style.display = type === 'text' ? 'block' : 'none';
+    recordidBuilder.style.display = type === 'recordid' ? 'block' : 'none';
+
+    updateGeneratedUrl();
+  });
+});
+
+// Toggle advanced filters
+toggleAdvancedBtn.addEventListener('click', () => {
+  const isVisible = advancedFilters.style.display === 'block';
+  advancedFilters.style.display = isVisible ? 'none' : 'block';
+  toggleAdvancedBtn.textContent = isVisible ? '+ Show Advanced Filters' : '- Hide Advanced Filters';
+});
+
+// Update URL as filters change
+document.querySelectorAll('.filter-input, #text-query, #recordid-query, #max-records').forEach(input => {
+  input.addEventListener('input', updateGeneratedUrl);
+  input.addEventListener('change', updateGeneratedUrl);
+});
+
+function updateGeneratedUrl() {
+  const activeType = document.querySelector('.query-type-btn.active').dataset.type;
+  const params = new URLSearchParams();
+
+  if (activeType === 'property') {
+    // Add property filters
+    const filters = {
+      continent: document.getElementById('filter-continent').value,
+      country: document.getElementById('filter-country').value,
+      collection: document.getElementById('filter-collection').value,
+      status: document.getElementById('filter-status').value,
+      data_format: document.getElementById('filter-data-format').value,
+      owner: document.getElementById('filter-owner').value,
+      database_table: document.getElementById('filter-database-table').value,
+      v6_job_type: document.getElementById('filter-v6-job-type').value,
+      city: document.getElementById('filter-city').value,
+      geographic_scope: document.getElementById('filter-geographic-scope').value
+    };
+
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value) params.append(key, value);
+    });
+  } else if (activeType === 'text') {
+    const query = document.getElementById('text-query').value;
+    if (query) params.append('q', query);
+  } else if (activeType === 'recordid') {
+    const recordids = document.getElementById('recordid-query').value;
+    if (recordids) params.append('recordids', recordids);
+  }
+
+  const maxRecords = document.getElementById('max-records').value;
+  if (maxRecords && maxRecords !== '10') params.append('maxrecords', maxRecords);
+
+  const url = params.toString() ? `${API_BASE}/?${params.toString()}` : API_BASE;
+  generatedUrl.value = url;
+}
+
+// Copy URL to clipboard
+document.getElementById('copy-url-btn').addEventListener('click', () => {
+  generatedUrl.select();
+  document.execCommand('copy');
+
+  const btn = document.getElementById('copy-url-btn');
+  const originalText = btn.textContent;
+  btn.textContent = '✓ Copied!';
+  setTimeout(() => btn.textContent = originalText, 2000);
+});
+
+// Clear all filters
+document.getElementById('clear-filters-btn').addEventListener('click', () => {
+  document.querySelectorAll('.filter-input').forEach(input => {
+    if (input.tagName === 'SELECT') {
+      input.selectedIndex = 0;
+    } else {
+      input.value = '';
+    }
+  });
+  document.getElementById('text-query').value = '';
+  document.getElementById('recordid-query').value = '';
+  document.getElementById('max-records').value = '10';
+  updateGeneratedUrl();
+  resultsSection.style.display = 'none';
+});
+
+// Load example query
+document.getElementById('example-btn').addEventListener('click', () => {
+  // Set to property filter mode
+  document.querySelector('[data-type="property"]').click();
+
+  // Set example filters
+  document.getElementById('filter-continent').value = 'clankr';
+  document.getElementById('filter-collection').value = 'ai_agent';
+  document.getElementById('filter-status').value = 'active';
+  document.getElementById('max-records').value = '10';
+
+  updateGeneratedUrl();
+});
+
+// Run query
+document.getElementById('run-query-btn').addEventListener('click', async () => {
+  const url = generatedUrl.value;
+
+  if (!url || url === API_BASE) {
+    alert('Please configure at least one filter, search term, or record ID');
+    return;
+  }
+
+  // Show loading state
+  resultsSection.style.display = 'block';
+  resultsContainer.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b">⏳ Loading results...</div>';
+  resultStats.textContent = '';
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    // Update stats
+    resultStats.textContent = `Found ${data.Matches} matches, showing ${data.Returned}`;
+
+    // Render results
+    if (data.Records && data.Records.length > 0) {
+      resultsContainer.innerHTML = data.Records.map(record => {
+        const props = record.properties;
+        const gro = props.gro_metadata || {};
+
+        return `
+          <div class="result-card">
+            <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:12px">
+              <div>
+                <h3 style="margin:0 0 4px;color:#0f172a;font-size:16px">${props.title || record.id}</h3>
+                <div style="font-size:13px;color:#64748b;font-family:monospace">${record.id}</div>
+              </div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                ${props.collection ? `<span style="background:#dbeafe;color:#1e40af;padding:4px 8px;border-radius:4px;font-size:11px;font-weight:600">${props.collection}</span>` : ''}
+                ${gro.implementation_status ? `<span style="background:#dcfce7;color:#15803d;padding:4px 8px;border-radius:4px;font-size:11px;font-weight:600">${gro.implementation_status}</span>` : ''}
+              </div>
+            </div>
+
+            ${props.abstract ? `<p style="margin:0 0 12px;color:#475569;font-size:14px;line-height:1.5">${props.abstract.substring(0, 200)}${props.abstract.length > 200 ? '...' : ''}</p>` : ''}
+
+            <div style="display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:#64748b">
+              ${gro.continent ? `<span>🌍 ${gro.continent}</span>` : ''}
+              ${gro.country ? `<span>🏳️ ${gro.country}</span>` : ''}
+              ${gro.data_format ? `<span>📦 ${gro.data_format}</span>` : ''}
+              ${gro.owner ? `<span>👤 ${gro.owner}</span>` : ''}
+            </div>
+
+            <div style="margin-top:12px">
+              <a href="${API_BASE}/?recordids=${record.id}" target="_blank" style="color:#0b63ce;text-decoration:none;font-size:13px;font-weight:500">
+                View Full Record →
+              </a>
+            </div>
+          </div>
+        `;
+      }).join('');
+    } else {
+      resultsContainer.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b">No results found. Try adjusting your filters.</div>';
+    }
+
+  } catch (error) {
+    resultsContainer.innerHTML = `<div style="background:#fee;border:1px solid #fcc;border-radius:6px;padding:16px;color:#c00">
+      <strong>Error:</strong> ${error.message}
+    </div>`;
+  }
+});
+
+// Initialize
+updateGeneratedUrl();
+</script>
