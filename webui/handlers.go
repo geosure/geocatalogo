@@ -1130,14 +1130,32 @@ func (a *App) HandleCollectionDetail(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	// Group by implementation status
+	// Group by implementation status OR by category for infrastructure OR build hierarchy for v6
 	byStatus := make(map[string][]Record)
-	for _, rec := range records {
-		status := rec.Properties.GROMetadata.ImplementationStatus
-		if status == "" {
-			status = "unspecified"
+	byCategory := make(map[string][]Record)
+	var hierarchy *TreeNode
+
+	if collectionName == "infrastructure" {
+		// For infrastructure, group by data_format (which contains the actual AWS service type)
+		for _, rec := range records {
+			category := rec.Properties.GROMetadata.DataFormat
+			if category == "" {
+				category = "uncategorized"
+			}
+			byCategory[category] = append(byCategory[category], rec)
 		}
-		byStatus[status] = append(byStatus[status], rec)
+	} else if collectionName == "potential_v6" {
+		// For v6 jobs, build hierarchical tree from v6_job_file paths
+		hierarchy = buildV6Hierarchy(records)
+	} else {
+		// For other collections, group by implementation status
+		for _, rec := range records {
+			status := rec.Properties.GROMetadata.ImplementationStatus
+			if status == "" {
+				status = "unspecified"
+			}
+			byStatus[status] = append(byStatus[status], rec)
+		}
 	}
 
 	// Collection metadata
@@ -1184,6 +1202,8 @@ func (a *App) HandleCollectionDetail(w http.ResponseWriter, r *http.Request) {
 		TotalCount:            len(records),
 		Records:               records,
 		ByStatus:              byStatus,
+		ByCategory:            byCategory,
+		Hierarchy:             hierarchy,
 	}
 
 	if err := a.tc.Render(w, "layout_collection_detail", pageData); err != nil {
@@ -1197,5 +1217,124 @@ func (a *App) HandleQuery(w http.ResponseWriter, r *http.Request) {
 	if err := a.tc.Render(w, "layout_query", nil); err != nil {
 		http.Error(w, "Template error", http.StatusInternalServerError)
 		log.Printf("❌ Query page template error: %v", err)
+	}
+}
+
+// buildV6Hierarchy constructs a hierarchical tree from v6 job file paths
+// Example path: "v6/jobs/africa/ml/bamako/bootstrap/040_import_bamako_air_quality.yml"
+// This creates a tree structure like:
+//   jobs/
+//     ├── africa/
+//     │   └── ml/
+//     │       └── bamako/
+//     │           └── bootstrap/
+//     │               └── 040_import_bamako_air_quality.yml
+func buildV6Hierarchy(records []Record) *TreeNode {
+	root := &TreeNode{
+		Name:     "jobs",
+		Path:     "jobs",
+		Level:    0,
+		Children: make(map[string]*TreeNode),
+	}
+
+	for i := range records {
+		rec := &records[i]
+		jobFile := rec.Properties.GROMetadata.V6JobFile
+		if jobFile == "" {
+			continue
+		}
+
+		// Parse path: "v6/jobs/africa/ml/bamako/bootstrap/040_import_bamako_air_quality.yml"
+		// Split and skip "v6/" prefix, start from "jobs"
+		parts := strings.Split(jobFile, "/")
+		if len(parts) < 2 || parts[0] != "v6" || parts[1] != "jobs" {
+			continue
+		}
+
+		// Start from "jobs" (parts[1])
+		current := root
+
+		// Traverse/create tree structure for all parts after "jobs"
+		for j := 2; j < len(parts); j++ {
+			part := parts[j]
+			isLeaf := (j == len(parts)-1) // Last part is the filename
+
+			if current.Children == nil {
+				current.Children = make(map[string]*TreeNode)
+			}
+
+			node, exists := current.Children[part]
+			if !exists {
+				node = &TreeNode{
+					Name:     part,
+					Path:     strings.Join(parts[1:j+1], "/"), // Full path from "jobs"
+					Level:    j - 1,
+					IsLeaf:   isLeaf,
+					Children: make(map[string]*TreeNode),
+				}
+				current.Children[part] = node
+			}
+
+			if isLeaf {
+				node.Record = rec
+				node.Count = 1
+			}
+
+			current = node
+		}
+	}
+
+	// Calculate counts for all non-leaf nodes
+	calculateCounts(root)
+
+	// Convert Children maps to sorted slices for stable template rendering
+	sortChildrenRecursive(root)
+
+	return root
+}
+
+// calculateCounts recursively calculates the total count of leaf nodes under each node
+func calculateCounts(node *TreeNode) int {
+	if node.IsLeaf {
+		return 1
+	}
+
+	totalCount := 0
+	for _, child := range node.Children {
+		totalCount += calculateCounts(child)
+	}
+	node.Count = totalCount
+	return totalCount
+}
+
+// sortChildrenRecursive converts Children maps to sorted slices recursively
+func sortChildrenRecursive(node *TreeNode) {
+	if node.IsLeaf || len(node.Children) == 0 {
+		return
+	}
+
+	// Convert map to slice
+	children := make([]*TreeNode, 0, len(node.Children))
+	for _, child := range node.Children {
+		children = append(children, child)
+	}
+
+	// Sort by name
+	sort.Slice(children, func(i, j int) bool {
+		// Directories first, then files
+		if !children[i].IsLeaf && children[j].IsLeaf {
+			return true
+		}
+		if children[i].IsLeaf && !children[j].IsLeaf {
+			return false
+		}
+		return children[i].Name < children[j].Name
+	})
+
+	node.ChildrenSorted = children
+
+	// Recursively sort children
+	for _, child := range children {
+		sortChildrenRecursive(child)
 	}
 }

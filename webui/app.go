@@ -212,4 +212,18 @@ type CollectionDetailPageData struct {
 	TotalCount            int
 	Records               []Record
 	ByStatus              map[string][]Record // Grouped by implementation_status
+	ByCategory            map[string][]Record // Grouped by state_province (for infrastructure)
+	Hierarchy             *TreeNode           // For potential_v6: hierarchical tree structure
+}
+
+// TreeNode represents a node in the v6 job hierarchy
+type TreeNode struct {
+	Name     string                // Node name (e.g., "clankr", "africa", "collectors")
+	Path     string                // Full path component
+	Level    int                   // Depth level in tree
+	IsLeaf   bool                  // True if this is a job file (not a directory)
+	Record   *Record               // Pointer to the actual job record (for leaf nodes)
+	Children map[string]*TreeNode  // Child nodes (used during construction)
+	ChildrenSorted []*TreeNode      // Sorted child nodes (for display)
+	Count    int                   // Total count of leaf nodes under this node
 }

@@ -3,6 +3,30 @@
 {{define "page_title"}}{{.CollectionName}} • Collections{{end}}
 
 {{define "page_content"}}
+<style>
+  /* Hide default details marker */
+  details summary {
+    list-style: none;
+  }
+  details summary::-webkit-details-marker {
+    display: none;
+  }
+  details summary::marker {
+    display: none;
+  }
+  /* Add custom indicator */
+  details summary::before {
+    content: '▼';
+    margin-right: 8px;
+    color: #94a3b8;
+    font-size: 12px;
+    transition: transform 0.2s;
+    display: inline-block;
+  }
+  details:not([open]) summary::before {
+    content: '▶';
+  }
+</style>
 <div style="max-width:1400px;margin:0 auto;padding:20px">
   <!-- Header -->
   <div style="margin-bottom:32px">
@@ -23,6 +47,142 @@
   </div>
 
   {{if gt .TotalCount 0}}
+
+  <!-- Hierarchical Tree (for v6 Jobs) -->
+  {{if .Hierarchy}}
+  <section style="margin-bottom:48px">
+    <h2 style="font-size:20px;font-weight:600;color:#0f172a;margin:0 0 20px 0">
+      Job Registry Hierarchy
+    </h2>
+    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;font-family:'Monaco','Menlo',monospace;font-size:13px">
+      {{template "tree_node" .Hierarchy}}
+    </div>
+  </section>
+  {{end}}
+
+  <!-- Group by Category (for Infrastructure) -->
+  {{if .ByCategory}}
+  <section style="margin-bottom:48px">
+    <h2 style="font-size:20px;font-weight:600;color:#0f172a;margin:0 0 20px 0">
+      By Infrastructure Category
+    </h2>
+
+    {{range $category, $records := .ByCategory}}
+    <details style="margin-bottom:24px">
+      <summary style="cursor:pointer;padding:16px 20px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;font-weight:600;color:#334155;font-size:16px;display:flex;align-items:center;gap:12px;list-style:none"
+               onmouseover="this.style.background='#f1f5f9'"
+               onmouseout="this.style.background='#f8fafc'">
+        <span style="font-size:24px">
+          {{if eq $category "lambda_function"}}⚡
+          {{else if eq $category "lambda_authorizer"}}🔐
+          {{else if eq $category "http_api"}}🌐
+          {{else if eq $category "authorizer"}}🔒
+          {{else if eq $category "custom_domain"}}🌐
+          {{else if eq $category "vpc"}}🔀
+          {{else if eq $category "subnet"}}🔀
+          {{else if eq $category "security_group"}}🛡️
+          {{else if eq $category "nat_gateway"}}🚪
+          {{else if eq $category "vpc_endpoint"}}🔗
+          {{else if eq $category "postgresql"}}🐘
+          {{else if eq $category "subnet_group"}}🗄️
+          {{else if eq $category "parameter_group"}}⚙️
+          {{else if eq $category "db_proxy"}}🔄
+          {{else if eq $category "s3_bucket"}}💾
+          {{else if eq $category "bucket_policy"}}📋
+          {{else if eq $category "iam_role"}}👤
+          {{else if eq $category "secret"}}🔐
+          {{else if eq $category "oidc_provider"}}🔑
+          {{else if eq $category "state_machine"}}🔄
+          {{else if eq $category "eventbridge_rule"}}⏰
+          {{else if eq $category "cfn_stack"}}📋
+          {{else if eq $category "log_group"}}📝
+          {{else if eq $category "metrics"}}📊
+          {{else if eq $category "dns_record"}}🌍
+          {{else if eq $category "certificate"}}🔒
+          {{else if eq $category "ec2_instance"}}💻
+          {{else if eq $category "instance_profile"}}👤
+          {{else if eq $category "amplify_app"}}🎨
+          {{else}}📦{{end}}
+        </span>
+        <span style="flex:1">
+          {{if eq $category "lambda_function"}}Lambda Functions
+          {{else if eq $category "lambda_authorizer"}}Lambda Authorizers
+          {{else if eq $category "http_api"}}HTTP APIs
+          {{else if eq $category "authorizer"}}API Gateway Authorizers
+          {{else if eq $category "custom_domain"}}Custom Domains
+          {{else if eq $category "vpc"}}VPC
+          {{else if eq $category "subnet"}}Subnets
+          {{else if eq $category "security_group"}}Security Groups
+          {{else if eq $category "nat_gateway"}}NAT Gateway
+          {{else if eq $category "vpc_endpoint"}}VPC Endpoints
+          {{else if eq $category "postgresql"}}RDS PostgreSQL
+          {{else if eq $category "subnet_group"}}DB Subnet Groups
+          {{else if eq $category "parameter_group"}}DB Parameter Groups
+          {{else if eq $category "db_proxy"}}RDS Proxy
+          {{else if eq $category "s3_bucket"}}S3 Buckets
+          {{else if eq $category "bucket_policy"}}S3 Bucket Policies
+          {{else if eq $category "iam_role"}}IAM Roles
+          {{else if eq $category "secret"}}Secrets Manager
+          {{else if eq $category "oidc_provider"}}OIDC Providers
+          {{else if eq $category "state_machine"}}Step Functions
+          {{else if eq $category "eventbridge_rule"}}EventBridge Rules
+          {{else if eq $category "cfn_stack"}}CloudFormation Stacks
+          {{else if eq $category "log_group"}}CloudWatch Log Groups
+          {{else if eq $category "metrics"}}CloudWatch Metrics
+          {{else if eq $category "dns_record"}}Route53 DNS Records
+          {{else if eq $category "certificate"}}ACM Certificates
+          {{else if eq $category "ec2_instance"}}EC2 Instances
+          {{else if eq $category "instance_profile"}}EC2 Instance Profiles
+          {{else if eq $category "amplify_app"}}Amplify Apps
+          {{else}}{{$category}}{{end}}
+        </span>
+        <span style="background:#fff;padding:4px 12px;border-radius:12px;font-size:14px;color:#64748b;font-weight:500">
+          {{len $records}}
+        </span>
+      </summary>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;margin-top:16px;padding:0 4px">
+        {{range $records}}
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#94a3b8';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
+
+          <!-- Title -->
+          <h3 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;line-height:1.4">
+            {{.Properties.Title}}
+          </h3>
+
+          <!-- Metadata Pills -->
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">
+            {{if .Properties.GROMetadata.DataFormat}}
+            <span style="display:inline-block;padding:4px 8px;background:#f1f5f9;color:#475569;border-radius:4px;font-size:11px;font-weight:500">
+              {{.Properties.GROMetadata.DataFormat}}
+            </span>
+            {{end}}
+            {{if .Properties.GROMetadata.City}}
+            <span style="display:inline-block;padding:4px 8px;background:#eff6ff;color:#1e40af;border-radius:4px;font-size:11px;font-weight:500">
+              {{.Properties.GROMetadata.City}}
+            </span>
+            {{end}}
+          </div>
+
+          <!-- Description -->
+          {{if .Properties.Abstract}}
+          <p style="font-size:13px;color:#64748b;margin:0 0 12px 0;line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">
+            {{.Properties.Abstract}}
+          </p>
+          {{end}}
+
+          <!-- View Details Link -->
+          <a href="/{{.Properties.Collection}}/{{.ID}}" style="font-size:13px;color:#0b63ce;text-decoration:none;font-weight:500">
+            View details →
+          </a>
+        </div>
+        {{end}}
+      </div>
+    </details>
+    {{end}}
+  </section>
+  {{end}}
 
   <!-- Group by Implementation Status -->
   {{if .ByStatus}}
@@ -144,4 +304,29 @@
   {{end}}
 
 </div>
+{{end}}
+
+{{define "tree_node"}}
+  {{if .IsLeaf}}
+    <!-- Leaf node (actual job file) -->
+    <div style="padding:4px 0;margin-left:{{.Level}}em">
+      <span style="color:#94a3b8">📄</span>
+      <a href="/{{.Record.Properties.Collection}}/{{.Record.ID}}" style="color:#0b63ce;text-decoration:none;margin-left:8px">{{.Name}}</a>
+      <span style="color:#94a3b8;margin-left:8px;font-size:11px">{{.Record.Properties.Title}}</span>
+    </div>
+  {{else}}
+    <!-- Directory node -->
+    <details style="margin-left:{{.Level}}em">
+      <summary style="cursor:pointer;padding:4px 0;list-style:none;user-select:none"
+               onmouseover="this.style.background='#f8fafc'"
+               onmouseout="this.style.background='transparent'">
+        <span style="color:#64748b;font-weight:600">{{if eq .Level 0}}📁{{else if eq .Level 1}}🌍{{else if eq .Level 2}}🏴{{else if eq .Level 3}}🏙️{{else}}📂{{end}}</span>
+        <span style="margin-left:8px;color:#334155;font-weight:500">{{.Name}}/</span>
+        <span style="color:#94a3b8;margin-left:8px;font-size:11px">({{.Count}})</span>
+      </summary>
+      {{range .ChildrenSorted}}
+        {{template "tree_node" .}}
+      {{end}}
+    </details>
+  {{end}}
 {{end}}
