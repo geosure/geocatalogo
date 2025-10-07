@@ -84,6 +84,12 @@ type CatalogStats struct {
 	ExternalOther int
 	Continents    []ContinentStat
 	Countries     []CountryStat
+	Formats       []FormatStat
+}
+
+type FormatStat struct {
+	Name  string
+	Count int
 }
 
 type ContinentStat struct {

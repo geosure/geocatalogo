@@ -337,6 +337,27 @@
     </div>
   </section>
 
+  <!-- Browse by Resource Type/Format -->
+  <section style="margin-top:48px" id="browseByFormat">
+    <h2 style="font-size:24px;font-weight:600;color:#0f172a;margin:0 0 12px 0;text-align:center">
+      📁 Browse by Resource Type/Format
+    </h2>
+    <p style="font-size:14px;color:#64748b;margin:0 0 24px 0;text-align:center">
+      Catalog tracks everything from databases to APIs to Lambda functions
+    </p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px">
+      {{range $format := .Stats.Formats}}
+        <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:12px;text-align:center">
+          <div style="font-size:13px;font-weight:600;color:#0f172a;margin-bottom:4px">{{$format.Name}}</div>
+          <div style="font-size:11px;color:#64748b">
+            <span style="font-weight:600;color:#3b82f6">{{$format.Count}}</span>
+          </div>
+        </div>
+      {{end}}
+    </div>
+  </section>
+
   <!-- Browse by Country -->
   <section style="margin-top:48px" id="browseByCountry">
     <h2 style="font-size:24px;font-weight:600;color:#0f172a;margin:0 0 24px 0;text-align:center">

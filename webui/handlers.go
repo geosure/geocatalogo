@@ -44,6 +44,7 @@ func (a *App) HandleCatalog(w http.ResponseWriter, r *http.Request) {
 	stats := CatalogStats{Total: len(records)}
 	continentCounts := make(map[string]int)
 	countryCounts := make(map[string]int)
+	formatCounts := make(map[string]int)
 
 	for _, rec := range records {
 		switch rec.Properties.Collection {
@@ -70,6 +71,11 @@ func (a *App) HandleCatalog(w http.ResponseWriter, r *http.Request) {
 		if rec.Properties.GROMetadata.Country != "" {
 			countryCounts[rec.Properties.GROMetadata.Country]++
 		}
+
+		// Count data formats
+		if rec.Properties.GROMetadata.DataFormat != "" {
+			formatCounts[rec.Properties.GROMetadata.DataFormat]++
+		}
 	}
 
 	// Calculate DataRecords (everything except jobs)
@@ -93,6 +99,18 @@ func (a *App) HandleCatalog(w http.ResponseWriter, r *http.Request) {
 			Count: count,
 		})
 	}
+
+	for format, count := range formatCounts {
+		stats.Formats = append(stats.Formats, FormatStat{
+			Name:  format,
+			Count: count,
+		})
+	}
+
+	// Sort formats by count (descending)
+	sort.Slice(stats.Formats, func(i, j int) bool {
+		return stats.Formats[i].Count > stats.Formats[j].Count
+	})
 
 	pageData := PageData{
 		Records: records,
