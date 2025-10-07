@@ -86,6 +86,12 @@ type CatalogStats struct {
 	Countries     []CountryStat
 	Formats       []FormatStat
 	StatusCounts  map[string]int // Implementation status breakdown
+	Owners        []OwnerStat    // Ownership breakdown
+}
+
+type OwnerStat struct {
+	Name  string
+	Count int
 }
 
 type FormatStat struct {

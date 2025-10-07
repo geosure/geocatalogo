@@ -48,6 +48,7 @@ func (a *App) HandleCatalog(w http.ResponseWriter, r *http.Request) {
 	continentCounts := make(map[string]int)
 	countryCounts := make(map[string]int)
 	formatCounts := make(map[string]int)
+	ownerCounts := make(map[string]int)
 
 	for _, rec := range records {
 		switch rec.Properties.Collection {
@@ -84,6 +85,11 @@ func (a *App) HandleCatalog(w http.ResponseWriter, r *http.Request) {
 		if rec.Properties.GROMetadata.ImplementationStatus != "" {
 			stats.StatusCounts[rec.Properties.GROMetadata.ImplementationStatus]++
 		}
+
+		// Count owners
+		if rec.Properties.GROMetadata.Owner != "" {
+			ownerCounts[rec.Properties.GROMetadata.Owner]++
+		}
 	}
 
 	// Calculate DataRecords (everything except jobs)
@@ -118,6 +124,18 @@ func (a *App) HandleCatalog(w http.ResponseWriter, r *http.Request) {
 	// Sort formats by count (descending)
 	sort.Slice(stats.Formats, func(i, j int) bool {
 		return stats.Formats[i].Count > stats.Formats[j].Count
+	})
+
+	for owner, count := range ownerCounts {
+		stats.Owners = append(stats.Owners, OwnerStat{
+			Name:  owner,
+			Count: count,
+		})
+	}
+
+	// Sort owners by count (descending)
+	sort.Slice(stats.Owners, func(i, j int) bool {
+		return stats.Owners[i].Count > stats.Owners[j].Count
 	})
 
 	pageData := PageData{
@@ -700,6 +718,108 @@ func (a *App) HandleStatus(w http.ResponseWriter, r *http.Request) {
 	pageData := GeographyPageData{
 		Level:            "status",
 		Name:             statusName,
+		Jobs:             matchingRecords,
+		JobCount:         len(matchingRecords),
+		CollectionCounts: counts,
+	}
+
+	if err := a.tc.Render(w, "layout_geography", pageData); err != nil {
+		http.Error(w, "Template error", http.StatusInternalServerError)
+		log.Printf("Template error: %v", err)
+	}
+}
+
+func (a *App) HandleOwner(w http.ResponseWriter, r *http.Request) {
+	// Parse URL: /owner/{owner_name}
+	// Example: /owner/@data-platform, /owner/@clankr
+	ownerName := strings.TrimPrefix(r.URL.Path, "/owner/")
+
+	if ownerName == "" {
+		http.Error(w, "No owner specified", http.StatusBadRequest)
+		return
+	}
+
+	// Load all records and filter by owner
+	catalogPath := os.Getenv("CATALOG_JSON_PATH")
+	if catalogPath == "" {
+		catalogPath = "/Users/jjohnson/projects/geosure/catalog/data/geocatalogo_records.json"
+	}
+
+	data, err := os.ReadFile(catalogPath)
+	if err != nil {
+		http.Error(w, "Failed to load catalog", http.StatusInternalServerError)
+		log.Printf("Error loading catalog: %v", err)
+		return
+	}
+
+	var records []Record
+	if err := json.Unmarshal(data, &records); err != nil {
+		http.Error(w, "Failed to parse catalog", http.StatusInternalServerError)
+		log.Printf("Error parsing catalog: %v", err)
+		return
+	}
+
+	// Filter records by owner
+	var matchingRecords []Record
+	var counts CollectionCounts
+
+	for _, rec := range records {
+		if rec.Properties.GROMetadata.Owner == ownerName {
+			matchingRecords = append(matchingRecords, rec)
+
+			// Count by collection type
+			switch rec.Properties.Collection {
+			case "potential_v6":
+				counts.V6Jobs++
+			case "existing_db":
+				counts.Database++
+			case "existing_local":
+				counts.Files++
+			case "external_api":
+				counts.APIs++
+			case "external_news":
+				counts.News++
+			case "external_government":
+				counts.Government++
+			case "external_download":
+				counts.News++
+			case "ai_agent":
+				counts.AIAgents++
+			case "claude_projects":
+				counts.ClaudeProjects++
+			case "operational_service":
+				counts.OperationalServices++
+			case "data_inspection_bot":
+				counts.DataInspectionBots++
+			case "catalog_management_bot":
+				counts.CatalogManagementBots++
+			case "data_bot":
+				counts.DataBots++
+			case "scraper_bot":
+				counts.ScraperBots++
+			case "automation_bot":
+				counts.AutoBots++
+			case "historical_agent":
+				counts.HistoricalAgents++
+			case "verb_app":
+				counts.VerbApps++
+			case "internal_tool":
+				counts.InternalTools++
+			case "api_service":
+				counts.APIServices++
+			case "team_member":
+				counts.TeamMembers++
+			case "infrastructure":
+				counts.Infrastructure++
+			default:
+				counts.Other++
+			}
+		}
+	}
+
+	pageData := GeographyPageData{
+		Level:            "owner",
+		Name:             ownerName,
 		Jobs:             matchingRecords,
 		JobCount:         len(matchingRecords),
 		CollectionCounts: counts,

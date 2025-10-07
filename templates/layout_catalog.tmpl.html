@@ -106,6 +106,35 @@
     </div>
   </section>
 
+  <!-- Browse by Ownership -->
+  <section style="margin-bottom:40px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:20px">
+    <h2 style="font-size:16px;font-weight:600;color:#334155;margin:0 0 16px 0">
+      👥 Browse by Ownership ({{len .Stats.Owners}} owners)
+    </h2>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+      {{range $i, $owner := .Stats.Owners}}
+        {{if lt $i 4}}
+        <a href="/owner/{{$owner.Name}}" style="text-decoration:none">
+          <div style="background:#fff;border:1px solid #e2e8f0;border-left:3px solid #3b82f6;border-radius:6px;padding:12px;transition:all 0.2s"
+               onmouseover="this.style.borderLeftColor='#1d4ed8';this.style.transform='translateX(2px)'"
+               onmouseout="this.style.borderLeftColor='#3b82f6';this.style.transform='translateX(0)'">
+            <div style="font-size:20px;font-weight:600;color:#475569;margin-bottom:4px">{{$owner.Count}}</div>
+            <div style="font-size:11px;color:#64748b">{{$owner.Name}}</div>
+            <div style="font-size:10px;color:#94a3b8;margin-top:2px">{{if eq $owner.Count 1}}resource{{else}}{{printf "%.0f%%" (mul (div (float64 $owner.Count) (float64 $.Stats.Total)) 100)}} of catalog{{end}}</div>
+          </div>
+        </a>
+        {{end}}
+      {{end}}
+    </div>
+
+    {{if gt (len .Stats.Owners) 4}}
+    <div style="margin-top:12px;font-size:12px;color:#64748b">
+      <strong>+{{sub (len .Stats.Owners) 4}} more owners</strong> • View <a href="/stats" style="color:#3b82f6;text-decoration:none">full statistics</a> for complete ownership breakdown
+    </div>
+    {{end}}
+  </section>
+
   <!-- Browse by Collection -->
   <section style="margin-bottom:48px">
     <h2 style="font-size:24px;font-weight:600;color:#0f172a;margin:0 0 20px 0;text-align:center">
