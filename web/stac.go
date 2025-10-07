@@ -267,10 +267,25 @@ func STACItems(w http.ResponseWriter, r *http.Request, cat *geocatalogo.GeoCatal
 	}
 	fmt.Println(collections == nil)
 
+	// Extract property filters from query parameters
+	propertyFilters := make(map[string]string)
+	propertyKeys := []string{
+		"collection", "type", "title", "owner",
+		"continent", "country", "state", "state_province", "city", "admin2", "county",
+		"data_format", "implementation_status", "status", "geographic_scope",
+		"database_table", "v6_job_file", "v6_job_type", "s3_path",
+	}
+
+	for _, key := range propertyKeys {
+		if val, ok := kvp[key]; ok && len(val) > 0 {
+			propertyFilters[key] = val[0]
+		}
+	}
+
 	if len(ids) > 0 {
 		results = cat.Get(ids)
 	} else {
-		results = cat.Search(collections, filter, bbox, timeVal, from, limit)
+		results = cat.Search(collections, filter, bbox, timeVal, from, limit, propertyFilters)
 	}
 
 	stacFeatureCollection = STACFeatureCollection{}

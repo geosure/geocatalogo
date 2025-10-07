@@ -18,6 +18,6 @@ type Repository interface {
 	Insert(record metadata.Record) error
 	Update() bool
 	Delete() bool
-	Query(collections []string, term string, bbox []float64, timeVal []time.Time, from int, size int, sr *search.Results) error
+	Query(collections []string, term string, bbox []float64, timeVal []time.Time, from int, size int, propertyFilters map[string]string, sr *search.Results) error
 	Get(identifiers []string, sr *search.Results) error
 }

@@ -110,7 +110,7 @@ func (m *Memory) Get(identifiers []string, sr *search.Results) error {
 }
 
 // Query performs a search against the in-memory repository
-func (m *Memory) Query(collections []string, term string, bbox []float64, timeVal []time.Time, from int, size int, sr *search.Results) error {
+func (m *Memory) Query(collections []string, term string, bbox []float64, timeVal []time.Time, from int, size int, propertyFilters map[string]string, sr *search.Results) error {
 	sr.Records = []metadata.Record{}
 	matches := []metadata.Record{}
 
@@ -129,6 +129,81 @@ func (m *Memory) Query(collections []string, term string, bbox []float64, timeVa
 			}
 			if !collectionMatch {
 				match = false
+			}
+		}
+
+		// Property-level filters (NEW!)
+		if len(propertyFilters) > 0 && match {
+			for key, value := range propertyFilters {
+				valueLower := strings.ToLower(value)
+				propertyMatch := false
+
+				// Direct property matches
+				switch key {
+				case "collection":
+					propertyMatch = strings.ToLower(record.Properties.Collection) == valueLower
+				case "type":
+					propertyMatch = strings.ToLower(record.Properties.Type) == valueLower
+				case "title":
+					propertyMatch = strings.Contains(strings.ToLower(record.Properties.Title), valueLower)
+				case "owner":
+					propertyMatch = strings.Contains(strings.ToLower(record.Properties.Owner), valueLower)
+
+				// GRO Metadata fields
+				case "continent":
+					if record.Properties.GROMetadata != nil {
+						propertyMatch = strings.ToLower(record.Properties.GROMetadata.Continent) == valueLower
+					}
+				case "country":
+					if record.Properties.GROMetadata != nil {
+						propertyMatch = strings.ToLower(record.Properties.GROMetadata.Country) == valueLower
+					}
+				case "state", "state_province":
+					if record.Properties.GROMetadata != nil {
+						propertyMatch = strings.ToLower(record.Properties.GROMetadata.StateProvince) == valueLower
+					}
+				case "city":
+					if record.Properties.GROMetadata != nil {
+						propertyMatch = strings.ToLower(record.Properties.GROMetadata.City) == valueLower
+					}
+				case "admin2", "county":
+					if record.Properties.GROMetadata != nil {
+						propertyMatch = strings.ToLower(record.Properties.GROMetadata.Admin2) == valueLower
+					}
+				case "data_format":
+					if record.Properties.GROMetadata != nil {
+						propertyMatch = strings.ToLower(record.Properties.GROMetadata.DataFormat) == valueLower
+					}
+				case "implementation_status", "status":
+					if record.Properties.GROMetadata != nil {
+						propertyMatch = strings.ToLower(record.Properties.GROMetadata.ImplementationStatus) == valueLower
+					}
+				case "geographic_scope":
+					if record.Properties.GROMetadata != nil {
+						propertyMatch = strings.ToLower(record.Properties.GROMetadata.GeographicScope) == valueLower
+					}
+				case "database_table":
+					if record.Properties.GROMetadata != nil {
+						propertyMatch = strings.Contains(strings.ToLower(record.Properties.GROMetadata.DatabaseTable), valueLower)
+					}
+				case "v6_job_file":
+					if record.Properties.GROMetadata != nil {
+						propertyMatch = strings.Contains(strings.ToLower(record.Properties.GROMetadata.V6JobFile), valueLower)
+					}
+				case "v6_job_type":
+					if record.Properties.GROMetadata != nil {
+						propertyMatch = strings.Contains(strings.ToLower(record.Properties.GROMetadata.V6JobType), valueLower)
+					}
+				case "s3_path":
+					if record.Properties.GROMetadata != nil {
+						propertyMatch = strings.Contains(strings.ToLower(record.Properties.GROMetadata.S3Path), valueLower)
+					}
+				}
+
+				if !propertyMatch {
+					match = false
+					break
+				}
 			}
 		}
 

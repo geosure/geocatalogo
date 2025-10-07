@@ -75,10 +75,26 @@ func CSW3OpenSearchHandler(w http.ResponseWriter, r *http.Request, cat *geocatal
 		recordids = strings.Split(value[0], ",")
 	}
 
-	if q == "" && len(recordids) < 1 {
+	// Extract property filters from query parameters
+	propertyFilters := make(map[string]string)
+	propertyKeys := []string{
+		"collection", "type", "title", "owner",
+		"continent", "country", "state", "state_province", "city", "admin2", "county",
+		"data_format", "implementation_status", "status", "geographic_scope",
+		"database_table", "v6_job_file", "v6_job_type", "s3_path",
+	}
+
+	for _, key := range propertyKeys {
+		if val, ok := kvp[key]; ok && len(val) > 0 {
+			propertyFilters[key] = val[0]
+		}
+	}
+
+	// Allow property filters, q, or recordids as valid query methods
+	if q == "" && len(recordids) < 1 && len(propertyFilters) < 1 {
 		exception := search.Exception{
 			Code:        20001,
-			Description: "ERROR: one of q or recordids are required"}
+			Description: "ERROR: one of q, recordids, or property filters are required"}
 		EmitResponseNotOK(w, cat.Config.Server.MimeType, cat.Config.Server.PrettyPrint, &exception)
 		return
 	}
@@ -91,12 +107,11 @@ func CSW3OpenSearchHandler(w http.ResponseWriter, r *http.Request, cat *geocatal
 		return
 	}
 
-	if q != "" {
-		results = cat.Search(collections, q, bbox, timeVal, startPosition, maxRecords)
-	}
-
 	if len(recordids) > 0 {
 		results = cat.Get(recordids)
+	} else {
+		// Use Search for both q and property filters
+		results = cat.Search(collections, q, bbox, timeVal, startPosition, maxRecords, propertyFilters)
 	}
 
 	EmitResponseOK(w, cat.Config.Server.MimeType, cat.Config.Server.PrettyPrint, &results)

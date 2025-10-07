@@ -219,7 +219,8 @@ func main() {
 				timeVal = append(timeVal, timestep)
 			}
 		}
-		results := cat.Search(collections, *termFlag, bbox, timeVal, *fromFlag, *sizeFlag)
+		propertyFilters := make(map[string]string)
+		results := cat.Search(collections, *termFlag, bbox, timeVal, *fromFlag, *sizeFlag, propertyFilters)
 		fmt.Printf("Found %d records\n", results.Matches)
 		for _, result := range results.Records {
 			fmt.Printf("    %s - %s\n", result.Identifier, result.Properties.Title)

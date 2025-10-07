@@ -111,10 +111,10 @@ func (c *GeoCatalogue) UnIndex() bool {
 }
 
 // Search performs a search/query against the Index
-func (c *GeoCatalogue) Search(collections []string, term string, bbox []float64, timeVal []time.Time, from int, size int) search.Results {
+func (c *GeoCatalogue) Search(collections []string, term string, bbox []float64, timeVal []time.Time, from int, size int, propertyFilters map[string]string) search.Results {
 	sr := search.Results{}
 	log.Info("Searching index")
-	err := c.Repository.Query(collections, term, bbox, timeVal, from, size, &sr)
+	err := c.Repository.Query(collections, term, bbox, timeVal, from, size, propertyFilters, &sr)
 	if err != nil {
 		log.Warn(err)
 		return sr

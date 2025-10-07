@@ -186,7 +186,7 @@ func (r *Elasticsearch) Delete() bool {
 }
 
 // Query performs a search against the repository
-func (r *Elasticsearch) Query(collections []string, term string, bbox []float64, timeVal []time.Time, from int, size int, sr *search.Results) error {
+func (r *Elasticsearch) Query(collections []string, term string, bbox []float64, timeVal []time.Time, from int, size int, propertyFilters map[string]string, sr *search.Results) error {
 	var mr metadata.Record
 	//	var query elastic.Query
 	ctx := context.Background()
