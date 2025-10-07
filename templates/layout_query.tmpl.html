@@ -10,20 +10,34 @@
   </div>
 
   <h1>🎯 Interactive Query Builder</h1>
-  <p class="muted" style="margin-bottom:32px">
-    Build and test queries directly in your browser. Click "Run Query" to see live results.
+  <p class="muted" style="margin-bottom:24px">
+    Build and test queries using the <strong>GRO RESTful API (port 9000)</strong>. Navigate through 5 dimensions: Collections, Formats, Status, Ownership, and Geography.
   </p>
+
+  <!-- API Notice -->
+  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:12px;margin-bottom:20px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="font-size:20px">ℹ️</div>
+      <div style="flex:1">
+        <strong style="color:#475569;font-size:14px">Using GRO RESTful API (port 9000)</strong>
+        <span style="margin-left:8px;color:#64748b;font-size:12px">5-dimensional navigation</span>
+      </div>
+    </div>
+  </div>
 
   <!-- Interactive Query Builder -->
   <section class="card" style="background:#f8fafc;border:1px solid #cbd5e1">
     <div style="background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;padding:20px">
-      <!-- Query Type Selection -->
-      <div style="margin-bottom:20px">
-        <label style="display:block;margin-bottom:8px;font-weight:600;color:#1e293b">Query Type:</label>
-        <div style="display:flex;gap:12px;flex-wrap:wrap">
-          <button class="query-type-btn active" data-type="property" style="background:#e0e7ff;border:2px solid #818cf8;color:#3730a3;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600">Property Filters</button>
-          <button class="query-type-btn" data-type="text" style="background:#f3f4f6;border:2px solid #d1d5db;color:#374151;padding:8px 16px;border-radius:6px;cursor:pointer">Text Search</button>
-          <button class="query-type-btn" data-type="recordid" style="background:#f3f4f6;border:2px solid #d1d5db;color:#374151;padding:8px 16px;border-radius:6px;cursor:pointer">Record ID</button>
+      <!-- Query Dimension Selection -->
+      <div style="margin-bottom:16px">
+        <label style="display:block;margin-bottom:6px;font-weight:500;color:#475569;font-size:13px">Dimension:</label>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="query-type-btn active" data-type="unified" style="background:#f1f5f9;border:1px solid #94a3b8;color:#334155;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:13px">🔍 Unified</button>
+          <button class="query-type-btn" data-type="collection" style="background:#fff;border:1px solid #d1d5db;color:#64748b;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:13px">Collections</button>
+          <button class="query-type-btn" data-type="format" style="background:#fff;border:1px solid #d1d5db;color:#64748b;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:13px">Formats</button>
+          <button class="query-type-btn" data-type="status" style="background:#fff;border:1px solid #d1d5db;color:#64748b;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:13px">Status</button>
+          <button class="query-type-btn" data-type="owner" style="background:#fff;border:1px solid #d1d5db;color:#64748b;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:13px">Owner</button>
+          <button class="query-type-btn" data-type="geography" style="background:#fff;border:1px solid #d1d5db;color:#64748b;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:13px">Geography</button>
         </div>
       </div>
 
@@ -195,33 +209,51 @@
 
   <!-- How to Query the Catalog -->
   <section class="card" style="background:#f8fafc;border:1px solid #cbd5e1">
-    <h2 style="margin:0 0 16px;color:#334155">🎯 How to Query the Catalog (For Humans & Agents)</h2>
+    <h2 style="margin:0 0 16px;color:#334155">🎯 How to Query with GRO API (For Humans & Agents)</h2>
     <p style="margin:0 0 20px;color:#475569;font-size:15px;line-height:1.7">
-      The GeoCatalogo API provides a <strong>discovery layer</strong> for the entire GRO data universe.
-      All catalog metadata lives in <code style="background:#e2e8f0;padding:2px 6px;border-radius:3px">gro_metadata</code> properties.
+      The GRO RESTful API provides <strong>5-dimensional navigation</strong> for the entire GRO data universe.
+      All catalog metadata lives in <code style="background:#e2e8f0;padding:2px 6px;border-radius:3px">properties.gro_metadata</code>.
     </p>
 
     <div style="background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;padding:20px">
-      <h3 style="margin:0 0 16px;color:#334155">🔌 API Endpoint</h3>
+      <h3 style="margin:0 0 16px;color:#334155">🔌 API Base URL</h3>
       <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:12px;font-family:monospace;color:#475569;font-size:14px;margin-bottom:16px">
-        http://localhost:8000
+        http://localhost:9000/api/v1
       </div>
 
-      <h3 style="margin:20px 0 12px;color:#334155">📚 What You Can Query</h3>
-      <ul style="margin:0;padding-left:24px;color:#475569;line-height:2">
-        <li><strong>1,803 catalog entries</strong> across 21 collections</li>
-        <li><strong>7 AI agents</strong>, 47 database tables, 474 local files, 627 v6 jobs</li>
-        <li><strong>11 geographic regions</strong> (6 continents + 5 organizational)</li>
-        <li><strong>56 data formats</strong> (APIs, databases, files, AWS resources)</li>
-        <li><strong>12 implementation statuses</strong> (active, draft, implemented, etc.)</li>
-        <li><strong>32 owners</strong> (teams, platforms, systems)</li>
-      </ul>
+      <h3 style="margin:16px 0 10px;color:#475569;font-size:14px;font-weight:500">Five Dimensions</h3>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+        <div style="background:#fafafa;border:1px solid #e5e7eb;border-radius:4px;padding:8px 12px">
+          <div style="font-weight:500;color:#475569;font-size:13px">Collections <span style="color:#94a3b8">· 21</span></div>
+        </div>
+        <div style="background:#fafafa;border:1px solid #e5e7eb;border-radius:4px;padding:8px 12px">
+          <div style="font-weight:500;color:#475569;font-size:13px">Formats <span style="color:#94a3b8">· 56</span></div>
+        </div>
+        <div style="background:#fafafa;border:1px solid #e5e7eb;border-radius:4px;padding:8px 12px">
+          <div style="font-weight:500;color:#475569;font-size:13px">Status <span style="color:#94a3b8">· 12</span></div>
+        </div>
+        <div style="background:#fafafa;border:1px solid #e5e7eb;border-radius:4px;padding:8px 12px">
+          <div style="font-weight:500;color:#475569;font-size:13px">Ownership <span style="color:#94a3b8">· 32</span></div>
+        </div>
+        <div style="background:#fafafa;border:1px solid #e5e7eb;border-radius:4px;padding:8px 12px">
+          <div style="font-weight:500;color:#475569;font-size:13px">Geography <span style="color:#94a3b8">· 4 levels</span></div>
+        </div>
+      </div>
 
-      <h3 style="margin:20px 0 12px;color:#334155">💡 Key Concept: gro_metadata</h3>
-      <p style="margin:0;color:#475569;line-height:1.7">
-        All queryable properties are stored in <code style="background:#e2e8f0;padding:2px 6px;border-radius:3px">properties.gro_metadata.*</code>
-        in the GeoJSON response. Use the property filters above to query by continent, collection, owner, data_format, implementation_status, etc.
-      </p>
+      <h3 style="margin:20px 0 12px;color:#334155">💡 Example Queries</h3>
+      <div style="background:#f8fafc;border-radius:6px;padding:16px;font-family:monospace;font-size:12px;line-height:2">
+        <div><span style="color:#64748b"># List all collections</span></div>
+        <div>GET /api/v1/collections</div>
+        <br>
+        <div><span style="color:#64748b"># Get all AI agents</span></div>
+        <div>GET /api/v1/collections/ai_agent</div>
+        <br>
+        <div><span style="color:#64748b"># List all continents</span></div>
+        <div>GET /api/v1/geography/continents</div>
+        <br>
+        <div><span style="color:#64748b"># Unified search with filters</span></div>
+        <div>GET /api/v1/resources?collection=ai_agent&status=active</div>
+      </div>
     </div>
   </section>
 
@@ -229,11 +261,13 @@
   <section class="card" style="background:#f0fdf4;border:1px solid #bbf7d0">
     <h3 style="margin:0 0 12px;color:#15803d">💡 Quick Tips</h3>
     <ul style="margin:0;padding-left:20px;color:#166534;line-height:2">
-      <li>Use <strong>Property Filters</strong> for precise, structured queries (recommended for agents)</li>
-      <li>Use <strong>Text Search</strong> for fuzzy matching across titles and descriptions</li>
-      <li>Use <strong>Record ID</strong> to fetch specific catalog entries by ID</li>
-      <li>Combine multiple property filters for powerful queries (they work with AND logic)</li>
-      <li>Check the <a href="/api-docs" style="color:#15803d;font-weight:600">API Docs</a> for complete property filter reference</li>
+      <li>Use <strong>🔍 Unified Search</strong> to combine multiple filters across all dimensions</li>
+      <li>Use <strong>📚 Collections</strong> to browse by resource type (AI agents, databases, etc.)</li>
+      <li>Use <strong>📦 Formats</strong> to find resources by data format (CSV, API, Lambda, etc.)</li>
+      <li>Use <strong>🚦 Status</strong> to filter by deployment state (active, draft, implemented)</li>
+      <li>Use <strong>👥 Owner</strong> to see what each team owns</li>
+      <li>Use <strong>🌍 Geography</strong> to navigate the 4-level hierarchy (continent → country → state → city)</li>
+      <li>Check the <a href="/api-docs" style="color:#15803d;font-weight:600">API Docs</a> for complete endpoint reference</li>
     </ul>
   </section>
 {{end}}
@@ -243,26 +277,26 @@
 .result-card {
   background: #ffffff;
   border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 16px;
-  transition: all 0.2s;
+  border-radius: 4px;
+  padding: 12px;
+  margin-bottom: 10px;
+  transition: all 0.15s;
 }
 
 .result-card:hover {
-  border-color: #3b82f6;
-  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+  border-color: #cbd5e1;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .query-type-btn.active {
-  background: #e0e7ff !important;
-  border-color: #818cf8 !important;
-  color: #3730a3 !important;
+  background: #f1f5f9 !important;
+  border-color: #94a3b8 !important;
+  color: #334155 !important;
 }
 </style>
 
 <script>
-const API_BASE = 'http://localhost:8000';
+const API_BASE = 'http://localhost:9000/api/v1';
 const generatedUrl = document.getElementById('generated-url');
 const resultsSection = document.getElementById('results-section');
 const resultsContainer = document.getElementById('results-container');
@@ -270,7 +304,7 @@ const resultStats = document.getElementById('result-stats');
 const toggleAdvancedBtn = document.getElementById('toggle-advanced');
 const advancedFilters = document.getElementById('advanced-filters');
 
-// Query type switching
+// Query dimension switching
 document.querySelectorAll('.query-type-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     // Update button states
@@ -282,11 +316,8 @@ document.querySelectorAll('.query-type-btn').forEach(btn => {
     });
     btn.classList.add('active');
 
-    // Show/hide builders
-    const type = btn.dataset.type;
-    document.getElementById('property-builder').style.display = type === 'property' ? 'block' : 'none';
-    document.getElementById('text-builder').style.display = type === 'text' ? 'block' : 'none';
-    document.getElementById('recordid-builder').style.display = type === 'recordid' ? 'block' : 'none';
+    // All dimension types use the same property builder interface
+    document.getElementById('property-builder').style.display = 'block';
 
     updateGeneratedUrl();
   });
@@ -314,37 +345,59 @@ document.querySelectorAll('.filter-input, #text-query, #recordid-query, #max-rec
 function updateGeneratedUrl() {
   const activeType = document.querySelector('.query-type-btn.active').dataset.type;
   const params = new URLSearchParams();
+  let url = API_BASE;
 
-  if (activeType === 'property') {
-    // Add property filters
+  if (activeType === 'unified') {
+    // Unified search with multiple filters
     const filters = {
-      continent: document.getElementById('filter-continent').value,
-      country: document.getElementById('filter-country').value,
       collection: document.getElementById('filter-collection').value,
       status: document.getElementById('filter-status').value,
       data_format: document.getElementById('filter-data-format').value,
       owner: document.getElementById('filter-owner').value,
+      continent: document.getElementById('filter-continent').value,
+      country: document.getElementById('filter-country').value,
+      city: document.getElementById('filter-city').value,
       database_table: document.getElementById('filter-database-table').value,
       v6_job_type: document.getElementById('filter-v6-job-type').value,
-      city: document.getElementById('filter-city').value,
       geographic_scope: document.getElementById('filter-geographic-scope').value
     };
 
     Object.entries(filters).forEach(([key, value]) => {
       if (value) params.append(key, value);
     });
-  } else if (activeType === 'text') {
-    const query = document.getElementById('text-query').value;
-    if (query) params.append('q', query);
-  } else if (activeType === 'recordid') {
-    const recordids = document.getElementById('recordid-query').value;
-    if (recordids) params.append('recordids', recordids);
+
+    const maxRecords = document.getElementById('max-records').value;
+    if (maxRecords && maxRecords !== '10') params.append('size', maxRecords);
+
+    url = `${API_BASE}/resources${params.toString() ? '?' + params.toString() : ''}`;
+  } else if (activeType === 'collection') {
+    const collection = document.getElementById('filter-collection').value;
+    url = collection ? `${API_BASE}/collections/${collection}` : `${API_BASE}/collections`;
+  } else if (activeType === 'format') {
+    const format = document.getElementById('filter-data-format').value;
+    url = format ? `${API_BASE}/formats/${format}` : `${API_BASE}/formats`;
+  } else if (activeType === 'status') {
+    const status = document.getElementById('filter-status').value;
+    url = status ? `${API_BASE}/statuses/${status}` : `${API_BASE}/statuses`;
+  } else if (activeType === 'owner') {
+    const owner = document.getElementById('filter-owner').value;
+    url = owner ? `${API_BASE}/owners/${encodeURIComponent(owner)}` : `${API_BASE}/owners`;
+  } else if (activeType === 'geography') {
+    const continent = document.getElementById('filter-continent').value;
+    const country = document.getElementById('filter-country').value;
+    const city = document.getElementById('filter-city').value;
+
+    if (city && country && continent) {
+      url = `${API_BASE}/geography/continents/${continent}/countries/${country}/cities/${city}`;
+    } else if (country && continent) {
+      url = `${API_BASE}/geography/continents/${continent}/countries/${country}`;
+    } else if (continent) {
+      url = `${API_BASE}/geography/continents/${continent}`;
+    } else {
+      url = `${API_BASE}/geography/continents`;
+    }
   }
 
-  const maxRecords = document.getElementById('max-records').value;
-  if (maxRecords && maxRecords !== '10') params.append('maxrecords', maxRecords);
-
-  const url = params.toString() ? `${API_BASE}/?${params.toString()}` : API_BASE;
   generatedUrl.value = url;
 }
 
@@ -389,16 +442,17 @@ document.getElementById('clear-filters-btn').addEventListener('click', () => {
 
 // Load example query
 document.getElementById('example-btn').addEventListener('click', () => {
-  // Set to property filter mode
-  document.querySelector('[data-type="property"]').click();
+  // Set to unified search mode
+  document.querySelector('[data-type="unified"]').click();
 
-  // Set example filters
-  document.getElementById('filter-continent').value = 'clankr';
+  // Set example filters - Find active AI agents in clankr
   document.getElementById('filter-collection').value = 'ai_agent';
   document.getElementById('filter-status').value = 'active';
+  document.getElementById('filter-continent').value = 'clankr';
   document.getElementById('max-records').value = '10';
 
   updateGeneratedUrl();
+  autoRunQuery();
 });
 
 // Run query function (reusable)
@@ -416,47 +470,73 @@ async function runQueryRequest(url) {
     const response = await fetch(url);
     const data = await response.json();
 
-    // Update stats
-    resultStats.textContent = `Found ${data.Matches} matches, showing ${data.Returned}`;
+    // Update stats (handle both GRO and legacy API formats)
+    const matched = data.matched || data.Matches || 0;
+    const returned = data.returned || data.Returned || (data.records ? data.records.length : 0);
+    resultStats.textContent = `Found ${matched} matches, showing ${returned}`;
 
-    // Render results
-    if (data.Records && data.Records.length > 0) {
-      resultsContainer.innerHTML = data.Records.map(record => {
+    // Render results with beautiful cards
+    if (data.records && data.records.length > 0) {
+      resultsContainer.innerHTML = data.records.map(record => {
         const props = record.properties;
         const gro = props.gro_metadata || {};
 
+        // Collection emoji mapping
+        const collectionEmojis = {
+          'ai_agent': '🤖',
+          'existing_db': '🗄️',
+          'existing_local': '📁',
+          'potential_v6': '📋',
+          'external_api': '🌐',
+          'automation_bot': '⚙️',
+          'operational_service': '🔧',
+          'infrastructure': '🏗️'
+        };
+
+        // Status indicators (subtle)
+        const statusIndicators = {
+          'active': '✓',
+          'implemented': '✓',
+          'deployed': '↑',
+          'draft': '○',
+          'potential': '◇',
+          'archived': '□'
+        };
+
+        const statusIcon = statusIndicators[gro.implementation_status] || '·';
+
         return `
           <div class="result-card">
-            <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:12px">
-              <div>
-                <h3 style="margin:0 0 4px;color:#0f172a;font-size:16px">${props.title || record.id}</h3>
-                <div style="font-size:13px;color:#64748b;font-family:monospace">${record.id}</div>
-              </div>
-              <div style="display:flex;gap:6px;flex-wrap:wrap">
-                ${props.collection ? `<span style="background:#dbeafe;color:#1e40af;padding:4px 8px;border-radius:4px;font-size:11px;font-weight:600">${props.collection}</span>` : ''}
-                ${gro.implementation_status ? `<span style="background:#dcfce7;color:#15803d;padding:4px 8px;border-radius:4px;font-size:11px;font-weight:600">${gro.implementation_status}</span>` : ''}
+            <!-- Compact header -->
+            <div style="display:flex;justify-content:space-between;align-items:start;gap:12px;margin-bottom:8px">
+              <div style="flex:1;min-width:0">
+                <h3 style="margin:0 0 4px;color:#1e293b;font-size:15px;font-weight:600">${props.title || record.id}</h3>
+                <div style="font-size:11px;color:#94a3b8;font-family:monospace">${record.id}</div>
               </div>
             </div>
 
-            ${props.abstract ? `<p style="margin:0 0 12px;color:#475569;font-size:14px;line-height:1.5">${props.abstract.substring(0, 200)}${props.abstract.length > 200 ? '...' : ''}</p>` : ''}
-
-            <div style="display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:#64748b">
-              ${gro.continent ? `<span>🌍 ${gro.continent}</span>` : ''}
-              ${gro.country ? `<span>🏳️ ${gro.country}</span>` : ''}
-              ${gro.data_format ? `<span>📦 ${gro.data_format}</span>` : ''}
-              ${gro.owner ? `<span>👤 ${gro.owner}</span>` : ''}
+            <!-- Compact pills -->
+            <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px">
+              ${props.collection ? `<span style="background:#f1f5f9;color:#475569;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:500">${props.collection.replace(/_/g, ' ')}</span>` : ''}
+              ${gro.implementation_status ? `<span style="background:#f8fafc;color:#64748b;padding:2px 8px;border-radius:3px;font-size:11px">${statusIcon} ${gro.implementation_status}</span>` : ''}
+              ${gro.data_format ? `<span style="background:#fafaf9;color:#78716c;padding:2px 8px;border-radius:3px;font-size:11px">${gro.data_format}</span>` : ''}
             </div>
 
-            <div style="margin-top:12px">
-              <a href="${API_BASE}/?recordids=${record.id}" target="_blank" style="color:#0b63ce;text-decoration:none;font-size:13px;font-weight:500">
-                View Full Record →
-              </a>
+            <!-- Compact description -->
+            ${props.abstract ? `<p style="margin:0 0 8px;color:#64748b;font-size:13px;line-height:1.5">${props.abstract.substring(0, 180)}${props.abstract.length > 180 ? '...' : ''}</p>` : ''}
+
+            <!-- Compact metadata -->
+            <div style="display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:#94a3b8">
+              ${gro.continent ? `<span>${gro.continent.replace(/_/g, ' ')}</span>` : ''}
+              ${gro.country ? `<span>· ${gro.country}</span>` : ''}
+              ${gro.owner ? `<span>· ${gro.owner}</span>` : ''}
+              ${gro.database_table ? `<span>· <code style="font-size:11px">${gro.database_table}</code></span>` : ''}
             </div>
           </div>
         `;
       }).join('');
     } else {
-      resultsContainer.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b">No results found. Try adjusting your filters.</div>';
+      resultsContainer.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;font-size:16px">😔 No results found. Try adjusting your filters.</div>';
     }
 
   } catch (error) {
