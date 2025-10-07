@@ -42,54 +42,47 @@
   </section>
 
   <!-- Implementation Status -->
-  <section style="margin-bottom:48px;background:#fef3c7;border:1px solid #fbbf24;border-radius:12px;padding:24px">
-    <h2 style="font-size:24px;font-weight:600;color:#0f172a;margin:0 0 8px 0;text-align:center">
-      🚦 Implementation Status ({{len .Stats.StatusCounts}} states)
+  <section style="margin-bottom:40px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:20px">
+    <h2 style="font-size:16px;font-weight:600;color:#334155;margin:0 0 16px 0">
+      🚦 Implementation Status
     </h2>
-    <p style="font-size:14px;color:#78716c;margin:0 0 24px 0;text-align:center">
-      Track what's production-ready vs. planned vs. deprecated
-    </p>
 
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;margin-bottom:20px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:16px">
       {{if index .Stats.StatusCounts "implemented"}}
-      <div style="background:#fff;border:1px solid #d1fae5;border-radius:8px;padding:16px;text-align:center">
-        <div style="font-size:32px;font-weight:700;color:#059669">{{index .Stats.StatusCounts "implemented"}}</div>
-        <div style="font-size:12px;color:#065f46;font-weight:600">✅ Implemented</div>
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:12px;text-align:center">
+        <div style="font-size:24px;font-weight:600;color:#475569">{{index .Stats.StatusCounts "implemented"}}</div>
+        <div style="font-size:11px;color:#64748b">✅ Implemented</div>
       </div>
       {{end}}
       {{if index .Stats.StatusCounts "draft"}}
-      <div style="background:#fff;border:1px solid #fde68a;border-radius:8px;padding:16px;text-align:center">
-        <div style="font-size:32px;font-weight:700;color:#d97706">{{index .Stats.StatusCounts "draft"}}</div>
-        <div style="font-size:12px;color:#92400e;font-weight:600">📝 Draft</div>
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:12px;text-align:center">
+        <div style="font-size:24px;font-weight:600;color:#475569">{{index .Stats.StatusCounts "draft"}}</div>
+        <div style="font-size:11px;color:#64748b">📝 Draft</div>
       </div>
       {{end}}
       {{if index .Stats.StatusCounts "potential"}}
-      <div style="background:#fff;border:1px solid #fed7aa;border-radius:8px;padding:16px;text-align:center">
-        <div style="font-size:32px;font-weight:700;color:#ea580c">{{index .Stats.StatusCounts "potential"}}</div>
-        <div style="font-size:12px;color:#9a3412;font-weight:600">💡 Potential</div>
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:12px;text-align:center">
+        <div style="font-size:24px;font-weight:600;color:#475569">{{index .Stats.StatusCounts "potential"}}</div>
+        <div style="font-size:11px;color:#64748b">💡 Potential</div>
       </div>
       {{end}}
       {{if index .Stats.StatusCounts "active"}}
-      <div style="background:#fff;border:1px solid #bae6fd;border-radius:8px;padding:16px;text-align:center">
-        <div style="font-size:32px;font-weight:700;color:#0284c7">{{index .Stats.StatusCounts "active"}}</div>
-        <div style="font-size:12px;color:#075985;font-weight:600">✅ Active</div>
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:12px;text-align:center">
+        <div style="font-size:24px;font-weight:600;color:#475569">{{index .Stats.StatusCounts "active"}}</div>
+        <div style="font-size:11px;color:#64748b">✅ Active</div>
       </div>
       {{end}}
       {{if index .Stats.StatusCounts "archived"}}
-      <div style="background:#fff;border:1px solid #e7e5e4;border-radius:8px;padding:16px;text-align:center">
-        <div style="font-size:32px;font-weight:700;color:#78716c">{{index .Stats.StatusCounts "archived"}}</div>
-        <div style="font-size:12px;color:#57534e;font-weight:600">📦 Archived</div>
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:12px;text-align:center">
+        <div style="font-size:24px;font-weight:600;color:#475569">{{index .Stats.StatusCounts "archived"}}</div>
+        <div style="font-size:11px;color:#64748b">📦 Archived</div>
       </div>
       {{end}}
     </div>
 
-    <div style="background:#fffbeb;border:1px solid #fde047;border-radius:8px;padding:16px;font-size:13px;color:#78716c;line-height:1.6">
-      <div style="margin-bottom:8px">
-        <strong>Production-Ready:</strong> {{add (index .Stats.StatusCounts "implemented") (index .Stats.StatusCounts "active")}} entries (implemented + active)
-      </div>
-      <div>
-        <strong>In Development:</strong> {{add (index .Stats.StatusCounts "draft") (index .Stats.StatusCounts "potential")}} entries (draft + potential)
-      </div>
+    <div style="font-size:12px;color:#64748b;line-height:1.6">
+      <strong>Production-Ready:</strong> {{add (index .Stats.StatusCounts "implemented") (index .Stats.StatusCounts "active")}} entries •
+      <strong>In Development:</strong> {{add (index .Stats.StatusCounts "draft") (index .Stats.StatusCounts "potential")}} entries
     </div>
   </section>
 
