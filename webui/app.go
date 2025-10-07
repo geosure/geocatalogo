@@ -185,3 +185,13 @@ type GeographyPageData struct {
 	Country          string
 	Continent        string
 }
+
+type CollectionDetailPageData struct {
+	CollectionCode        string
+	CollectionName        string
+	CollectionEmoji       string
+	CollectionDescription string
+	TotalCount            int
+	Records               []Record
+	ByStatus              map[string][]Record // Grouped by implementation_status
+}

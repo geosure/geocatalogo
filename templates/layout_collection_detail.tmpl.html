@@ -1,0 +1,147 @@
+{{define "layout_collection_detail"}}{{template "layout" .}}{{end}}
+
+{{define "page_title"}}{{.CollectionName}} • Collections{{end}}
+
+{{define "page_content"}}
+<div style="max-width:1400px;margin:0 auto;padding:20px">
+  <!-- Header -->
+  <div style="margin-bottom:32px">
+    <div style="margin-bottom:12px">
+      <a href="/collections" style="font-size:14px;color:#64748b;text-decoration:none">
+        ← Back to all collections
+      </a>
+    </div>
+    <h1 style="font-size:42px;font-weight:700;color:#0f172a;margin:0 0 12px 0">
+      {{.CollectionEmoji}} {{.CollectionName}}
+    </h1>
+    <p style="font-size:18px;color:#64748b;margin:0 0 16px 0">
+      {{.CollectionDescription}}
+    </p>
+    <div style="font-size:14px;color:#94a3b8">
+      <strong style="font-size:24px;color:#475569">{{.TotalCount}}</strong> resources in this collection
+    </div>
+  </div>
+
+  {{if gt .TotalCount 0}}
+
+  <!-- Group by Implementation Status -->
+  {{if .ByStatus}}
+  <section style="margin-bottom:48px">
+    <h2 style="font-size:20px;font-weight:600;color:#0f172a;margin:0 0 20px 0">
+      By Implementation Status
+    </h2>
+    {{range $status, $records := .ByStatus}}
+    <details open style="margin-bottom:24px">
+      <summary style="cursor:pointer;padding:12px 16px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;font-weight:600;color:#334155;font-size:16px">
+        {{$status}} ({{len $records}})
+      </summary>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;margin-top:16px;padding:0 4px">
+        {{range $records}}
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#94a3b8';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
+
+          <!-- Title -->
+          <h3 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;line-height:1.4">
+            {{.Properties.Title}}
+          </h3>
+
+          <!-- Metadata Pills -->
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">
+            {{if .Properties.GROMetadata.DataFormat}}
+            <span style="display:inline-block;padding:4px 8px;background:#f1f5f9;color:#475569;border-radius:4px;font-size:11px;font-weight:500">
+              {{.Properties.GROMetadata.DataFormat}}
+            </span>
+            {{end}}
+            {{if .Properties.GROMetadata.Owner}}
+            <span style="display:inline-block;padding:4px 8px;background:#f1f5f9;color:#475569;border-radius:4px;font-size:11px;font-weight:500">
+              {{.Properties.GROMetadata.Owner}}
+            </span>
+            {{end}}
+            {{if .Properties.GROMetadata.Continent}}
+            <span style="display:inline-block;padding:4px 8px;background:#f1f5f9;color:#475569;border-radius:4px;font-size:11px;font-weight:500">
+              {{.Properties.GROMetadata.Continent}}
+            </span>
+            {{end}}
+          </div>
+
+          <!-- Description -->
+          {{if .Properties.Abstract}}
+          <p style="font-size:13px;color:#64748b;margin:0 0 12px 0;line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">
+            {{.Properties.Abstract}}
+          </p>
+          {{end}}
+
+          <!-- View Details Link -->
+          <a href="/dataset/{{.ID}}" style="font-size:13px;color:#0b63ce;text-decoration:none;font-weight:500">
+            View details →
+          </a>
+        </div>
+        {{end}}
+      </div>
+    </details>
+    {{end}}
+  </section>
+  {{end}}
+
+  <!-- All Resources (if no grouping) -->
+  {{if not .ByStatus}}
+  <section>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px">
+      {{range .Records}}
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s"
+           onmouseover="this.style.borderColor='#94a3b8';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+           onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
+
+        <!-- Title -->
+        <h3 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;line-height:1.4">
+          {{.Properties.Title}}
+        </h3>
+
+        <!-- Metadata Pills -->
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">
+          {{if .Properties.GROMetadata.DataFormat}}
+          <span style="display:inline-block;padding:4px 8px;background:#f1f5f9;color:#475569;border-radius:4px;font-size:11px;font-weight:500">
+            {{.Properties.GROMetadata.DataFormat}}
+          </span>
+          {{end}}
+          {{if .Properties.GROMetadata.Owner}}
+          <span style="display:inline-block;padding:4px 8px;background:#f1f5f9;color:#475569;border-radius:4px;font-size:11px;font-weight:500">
+            {{.Properties.GROMetadata.Owner}}
+          </span>
+          {{end}}
+          {{if .Properties.GROMetadata.ImplementationStatus}}
+          <span style="display:inline-block;padding:4px 8px;background:#f1f5f9;color:#475569;border-radius:4px;font-size:11px;font-weight:500">
+            {{.Properties.GROMetadata.ImplementationStatus}}
+          </span>
+          {{end}}
+        </div>
+
+        <!-- Description -->
+        {{if .Properties.Abstract}}
+        <p style="font-size:13px;color:#64748b;margin:0 0 12px 0;line-height:1.6;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden">
+          {{.Properties.Abstract}}
+        </p>
+        {{end}}
+
+        <!-- View Details Link -->
+        <a href="/dataset/{{.ID}}" style="font-size:13px;color:#0b63ce;text-decoration:none;font-weight:500">
+          View details →
+        </a>
+      </div>
+      {{end}}
+    </div>
+  </section>
+  {{end}}
+
+  {{else}}
+  <!-- Empty State -->
+  <div style="text-align:center;padding:80px 20px">
+    <div style="font-size:48px;margin-bottom:16px">📭</div>
+    <h2 style="font-size:24px;font-weight:600;color:#0f172a;margin:0 0 8px 0">No resources yet</h2>
+    <p style="font-size:16px;color:#64748b">This collection doesn't have any resources yet.</p>
+  </div>
+  {{end}}
+
+</div>
+{{end}}

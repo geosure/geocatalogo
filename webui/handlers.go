@@ -14,6 +14,12 @@ import (
 )
 
 func (a *App) HandleCatalog(w http.ResponseWriter, r *http.Request) {
+	// Only handle exact "/" path - let other handlers handle their routes
+	if r.URL.Path != "/" {
+		http.NotFound(w, r)
+		return
+	}
+
 	// Load all records from JSON
 	catalogPath := os.Getenv("CATALOG_JSON_PATH")
 	if catalogPath == "" {
@@ -543,5 +549,116 @@ func (a *App) HandleAPIDocs(w http.ResponseWriter, r *http.Request) {
 	if err := a.tc.Render(w, "layout_api_docs", nil); err != nil {
 		http.Error(w, "Template error", http.StatusInternalServerError)
 		log.Printf("Template error: %v", err)
+	}
+}
+
+func (a *App) HandleCollections(w http.ResponseWriter, r *http.Request) {
+	log.Printf("HandleCollections called for path: %s", r.URL.Path)
+	if err := a.tc.Render(w, "layout_collections", nil); err != nil {
+		http.Error(w, "Template error", http.StatusInternalServerError)
+		log.Printf("❌ Collections template error: %v", err)
+	} else {
+		log.Printf("✅ Collections page rendered successfully")
+	}
+}
+
+func (a *App) HandleCollectionDetail(w http.ResponseWriter, r *http.Request) {
+	// Extract collection name from URL: /collection/{name}
+	path := r.URL.Path
+	collectionName := path[len("/collection/"):]
+	if collectionName == "" {
+		http.Redirect(w, r, "/collections", http.StatusTemporaryRedirect)
+		return
+	}
+
+	log.Printf("HandleCollectionDetail called for collection: %s", collectionName)
+
+	// Load all records
+	catalogPath := os.Getenv("CATALOG_JSON_PATH")
+	if catalogPath == "" {
+		catalogPath = "/Users/jjohnson/projects/geosure/catalog/data/geocatalogo_records.json"
+	}
+
+	data, err := os.ReadFile(catalogPath)
+	if err != nil {
+		http.Error(w, "Failed to load catalog", http.StatusInternalServerError)
+		log.Printf("Error loading catalog: %v", err)
+		return
+	}
+
+	var allRecords []Record
+	if err := json.Unmarshal(data, &allRecords); err != nil {
+		http.Error(w, "Failed to parse catalog", http.StatusInternalServerError)
+		log.Printf("Error parsing catalog: %v", err)
+		return
+	}
+
+	// Filter records by collection
+	var records []Record
+	for _, rec := range allRecords {
+		if rec.Properties.Collection == collectionName {
+			records = append(records, rec)
+		}
+	}
+
+	// Group by implementation status
+	byStatus := make(map[string][]Record)
+	for _, rec := range records {
+		status := rec.Properties.GROMetadata.ImplementationStatus
+		if status == "" {
+			status = "unspecified"
+		}
+		byStatus[status] = append(byStatus[status], rec)
+	}
+
+	// Collection metadata
+	collectionMetadata := map[string]struct {
+		Name        string
+		Emoji       string
+		Description string
+	}{
+		"ai_agent":                {"AI Agents", "🤖", "Autonomous AI agents managing different parts of the GRO ecosystem"},
+		"existing_db":             {"Database Tables", "🗄️", "PostgreSQL + PostGIS tables in the production database"},
+		"existing_local":          {"Local Files", "📁", "Data files stored locally (CSV, Parquet, Shapefile, GeoJSON, etc.)"},
+		"potential_v6":            {"v6 Job Definitions", "⚙️", "YAML job definitions for the future automation pipeline"},
+		"external_api":            {"External APIs", "🔌", "Third-party API endpoints we integrate with"},
+		"external_government":     {"Government Data", "🏛️", "Government open data portals and official statistics"},
+		"external_news":           {"News & Media", "📰", "News APIs, RSS feeds, and media monitoring sources"},
+		"external_academic":       {"Academic Data", "🎓", "Academic datasets and research institution data"},
+		"external_download":       {"Downloadable Datasets", "⬇️", "Datasets available for direct download"},
+		"external_other":          {"Other External Sources", "🌐", "Other external data sources"},
+		"infrastructure":          {"Infrastructure", "⚙️", "AWS infrastructure components (Lambda, RDS, S3, etc.)"},
+		"internal_tool":           {"Internal Tools", "🛠️", "Internal tools and utilities for development"},
+		"verb_app":                {"Verb Applications", "🔤", "Verb-based applications (explore, curate, chronicle, etc.)"},
+		"team_member":             {"Team Members", "👥", "Team members and their roles"},
+		"claude_projects":         {"Claude Projects", "💬", "Claude Projects used in development"},
+		"historical_agent":        {"Historical Agents", "📦", "Agents that are no longer active but kept for reference"},
+		"automation_bot":          {"Automation Bots", "🔧", "Bots that automate repetitive tasks and workflows"},
+		"data_inspection_bot":     {"Data Inspection Bots", "🔍", "Bots that introspect and validate data quality"},
+		"catalog_management_bot":  {"Catalog Management Bots", "📋", "Bots that maintain and update the catalog"},
+		"operational_service":     {"Operational Services", "⚡", "Running services powering the GRO platform"},
+		"api_service":             {"API Services", "🔌", "API endpoints for data access and integration"},
+	}
+
+	meta := collectionMetadata[collectionName]
+	if meta.Name == "" {
+		meta.Name = collectionName
+		meta.Emoji = "📦"
+		meta.Description = "Resources in this collection"
+	}
+
+	pageData := CollectionDetailPageData{
+		CollectionCode:        collectionName,
+		CollectionName:        meta.Name,
+		CollectionEmoji:       meta.Emoji,
+		CollectionDescription: meta.Description,
+		TotalCount:            len(records),
+		Records:               records,
+		ByStatus:              byStatus,
+	}
+
+	if err := a.tc.Render(w, "layout_collection_detail", pageData); err != nil {
+		http.Error(w, "Template error", http.StatusInternalServerError)
+		log.Printf("❌ Collection detail template error: %v", err)
 	}
 }

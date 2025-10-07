@@ -1,0 +1,368 @@
+{{define "layout_collections"}}{{template "layout" .}}{{end}}
+
+{{define "page_title"}}Collections • GRO{{end}}
+
+{{define "page_content"}}
+<div style="max-width:1400px;margin:0 auto;padding:20px">
+  <!-- Header -->
+  <div style="text-align:center;margin-bottom:40px">
+    <h1 style="font-size:42px;font-weight:700;color:#0f172a;margin:0 0 12px 0">
+      📚 Collections
+    </h1>
+    <p style="font-size:18px;color:#64748b;margin:0">
+      All 21 catalog collections organized by purpose
+    </p>
+  </div>
+
+  <!-- Core Operations -->
+  <section style="margin-bottom:40px">
+    <h2 style="font-size:24px;font-weight:600;color:#0f172a;margin:0 0 20px 0;padding-bottom:12px;border-bottom:2px solid #e5e7eb">
+      Core Operations
+    </h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+      <a href="/collection/ai_agent" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
+          <div style="font-size:28px;margin-bottom:12px">🤖</div>
+          <h3 style="font-size:18px;font-weight:600;color:#0f172a;margin:0 0 8px 0">AI Agents</h3>
+          <div style="font-size:14px;color:#64748b;margin-bottom:8px">7 agents</div>
+          <div style="font-size:13px;color:#64748b;line-height:1.6">
+            Autonomous AI agents managing different parts of the GRO ecosystem
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#94a3b8;font-family:monospace">collection=ai_agent</div>
+        </div>
+      </a>
+
+      <a href="/collection/operational_service" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
+          <div style="font-size:28px;margin-bottom:12px">⚡</div>
+          <h3 style="font-size:18px;font-weight:600;color:#0f172a;margin:0 0 8px 0">Operational Services</h3>
+          <div style="font-size:14px;color:#64748b;margin-bottom:8px">Production services</div>
+          <div style="font-size:13px;color:#64748b;line-height:1.6">
+            Running services powering the GRO platform
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#94a3b8;font-family:monospace">collection=operational_service</div>
+        </div>
+      </a>
+
+      <a href="/collection/api_service" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
+          <div style="font-size:28px;margin-bottom:12px">🔌</div>
+          <h3 style="font-size:18px;font-weight:600;color:#0f172a;margin:0 0 8px 0">API Services</h3>
+          <div style="font-size:14px;color:#64748b;margin-bottom:8px">HTTP/REST APIs</div>
+          <div style="font-size:13px;color:#64748b;line-height:1.6">
+            API endpoints for data access and integration
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#94a3b8;font-family:monospace">collection=api_service</div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Data Assets -->
+  <section style="margin-bottom:40px">
+    <h2 style="font-size:24px;font-weight:600;color:#0f172a;margin:0 0 20px 0;padding-bottom:12px;border-bottom:2px solid #e5e7eb">
+      Data Assets
+    </h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+      <a href="/collection/existing_db" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
+          <div style="font-size:28px;margin-bottom:12px">🗄️</div>
+          <h3 style="font-size:18px;font-weight:600;color:#0f172a;margin:0 0 8px 0">Database Tables</h3>
+          <div style="font-size:14px;color:#64748b;margin-bottom:8px">47 tables</div>
+          <div style="font-size:13px;color:#64748b;line-height:1.6">
+            PostgreSQL + PostGIS tables in production database
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#94a3b8;font-family:monospace">collection=existing_db</div>
+        </div>
+      </a>
+
+      <a href="/collection/existing_local" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
+          <div style="font-size:28px;margin-bottom:12px">📁</div>
+          <h3 style="font-size:18px;font-weight:600;color:#0f172a;margin:0 0 8px 0">Local Files</h3>
+          <div style="font-size:14px;color:#64748b;margin-bottom:8px">474 files</div>
+          <div style="font-size:13px;color:#64748b;line-height:1.6">
+            Data files stored locally (CSV, Parquet, Shapefile, etc.)
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#94a3b8;font-family:monospace">collection=existing_local</div>
+        </div>
+      </a>
+
+      <a href="/collection/potential_v6" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
+          <div style="font-size:28px;margin-bottom:12px">⚙️</div>
+          <h3 style="font-size:18px;font-weight:600;color:#0f172a;margin:0 0 8px 0">v6 Job Definitions</h3>
+          <div style="font-size:14px;color:#64748b;margin-bottom:8px">627 jobs</div>
+          <div style="font-size:13px;color:#64748b;line-height:1.6">
+            YAML job definitions for future automation (bootstrap, collectors, run)
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#94a3b8;font-family:monospace">collection=potential_v6</div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Automation -->
+  <section style="margin-bottom:40px">
+    <h2 style="font-size:24px;font-weight:600;color:#0f172a;margin:0 0 20px 0;padding-bottom:12px;border-bottom:2px solid #e5e7eb">
+      Automation
+    </h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+      <a href="/collection/automation_bot" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
+          <div style="font-size:28px;margin-bottom:12px">🔧</div>
+          <h3 style="font-size:18px;font-weight:600;color:#0f172a;margin:0 0 8px 0">Automation Bots</h3>
+          <div style="font-size:14px;color:#64748b;margin-bottom:8px">Automated tasks</div>
+          <div style="font-size:13px;color:#64748b;line-height:1.6">
+            Bots that automate repetitive tasks and workflows
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#94a3b8;font-family:monospace">collection=automation_bot</div>
+        </div>
+      </a>
+
+      <a href="/collection/data_inspection_bot" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
+          <div style="font-size:28px;margin-bottom:12px">🔍</div>
+          <h3 style="font-size:18px;font-weight:600;color:#0f172a;margin:0 0 8px 0">Data Inspection Bots</h3>
+          <div style="font-size:14px;color:#64748b;margin-bottom:8px">Data quality checks</div>
+          <div style="font-size:13px;color:#64748b;line-height:1.6">
+            Bots that introspect and validate data quality
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#94a3b8;font-family:monospace">collection=data_inspection_bot</div>
+        </div>
+      </a>
+
+      <a href="/collection/catalog_management_bot" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
+          <div style="font-size:28px;margin-bottom:12px">📋</div>
+          <h3 style="font-size:18px;font-weight:600;color:#0f172a;margin:0 0 8px 0">Catalog Management Bots</h3>
+          <div style="font-size:14px;color:#64748b;margin-bottom:8px">Catalog automation</div>
+          <div style="font-size:13px;color:#64748b;line-height:1.6">
+            Bots that maintain and update the catalog itself
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#94a3b8;font-family:monospace">collection=catalog_management_bot</div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- External Sources -->
+  <section style="margin-bottom:40px">
+    <h2 style="font-size:24px;font-weight:600;color:#0f172a;margin:0 0 20px 0;padding-bottom:12px;border-bottom:2px solid #e5e7eb">
+      External Sources
+    </h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+      <a href="/collection/external_api" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
+          <div style="font-size:28px;margin-bottom:12px">🔌</div>
+          <h3 style="font-size:18px;font-weight:600;color:#0f172a;margin:0 0 8px 0">External APIs</h3>
+          <div style="font-size:14px;color:#64748b;margin-bottom:8px">Third-party APIs</div>
+          <div style="font-size:13px;color:#64748b;line-height:1.6">
+            External API endpoints we integrate with
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#94a3b8;font-family:monospace">collection=external_api</div>
+        </div>
+      </a>
+
+      <a href="/collection/external_government" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
+          <div style="font-size:28px;margin-bottom:12px">🏛️</div>
+          <h3 style="font-size:18px;font-weight:600;color:#0f172a;margin:0 0 8px 0">Government Data Portals</h3>
+          <div style="font-size:14px;color:#64748b;margin-bottom:8px">Official government sources</div>
+          <div style="font-size:13px;color:#64748b;line-height:1.6">
+            Government open data portals and official statistics
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#94a3b8;font-family:monospace">collection=external_government</div>
+        </div>
+      </a>
+
+      <a href="/collection/external_news" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
+          <div style="font-size:28px;margin-bottom:12px">📰</div>
+          <h3 style="font-size:18px;font-weight:600;color:#0f172a;margin:0 0 8px 0">News & Media Feeds</h3>
+          <div style="font-size:14px;color:#64748b;margin-bottom:8px">News sources</div>
+          <div style="font-size:13px;color:#64748b;line-height:1.6">
+            News APIs, RSS feeds, and media monitoring sources
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#94a3b8;font-family:monospace">collection=external_news</div>
+        </div>
+      </a>
+
+      <a href="/collection/external_academic" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
+          <div style="font-size:28px;margin-bottom:12px">🎓</div>
+          <h3 style="font-size:18px;font-weight:600;color:#0f172a;margin:0 0 8px 0">Academic Data</h3>
+          <div style="font-size:14px;color:#64748b;margin-bottom:8px">Research institutions</div>
+          <div style="font-size:13px;color:#64748b;line-height:1.6">
+            Academic datasets and research institution data
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#94a3b8;font-family:monospace">collection=external_academic</div>
+        </div>
+      </a>
+
+      <a href="/collection/external_download" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
+          <div style="font-size:28px;margin-bottom:12px">⬇️</div>
+          <h3 style="font-size:18px;font-weight:600;color:#0f172a;margin:0 0 8px 0">Downloadable Datasets</h3>
+          <div style="font-size:14px;color:#64748b;margin-bottom:8px">Bulk downloads</div>
+          <div style="font-size:13px;color:#64748b;line-height:1.6">
+            Datasets available for direct download (often large files)
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#94a3b8;font-family:monospace">collection=external_download</div>
+        </div>
+      </a>
+
+      <a href="/collection/external_other" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
+          <div style="font-size:28px;margin-bottom:12px">🌐</div>
+          <h3 style="font-size:18px;font-weight:600;color:#0f172a;margin:0 0 8px 0">Other External Sources</h3>
+          <div style="font-size:14px;color:#64748b;margin-bottom:8px">Miscellaneous</div>
+          <div style="font-size:13px;color:#64748b;line-height:1.6">
+            Other external data sources not fitting above categories
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#94a3b8;font-family:monospace">collection=external_other</div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Infrastructure -->
+  <section style="margin-bottom:40px">
+    <h2 style="font-size:24px;font-weight:600;color:#0f172a;margin:0 0 20px 0;padding-bottom:12px;border-bottom:2px solid #e5e7eb">
+      Infrastructure
+    </h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+      <a href="/collection/infrastructure" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
+          <div style="font-size:28px;margin-bottom:12px">⚙️</div>
+          <h3 style="font-size:18px;font-weight:600;color:#0f172a;margin:0 0 8px 0">Infrastructure Components</h3>
+          <div style="font-size:14px;color:#64748b;margin-bottom:8px">AWS resources</div>
+          <div style="font-size:13px;color:#64748b;line-height:1.6">
+            Infrastructure components (Lambda, RDS, S3, etc.)
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#94a3b8;font-family:monospace">collection=infrastructure</div>
+        </div>
+      </a>
+
+      <a href="/collection/internal_tool" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
+          <div style="font-size:28px;margin-bottom:12px">🛠️</div>
+          <h3 style="font-size:18px;font-weight:600;color:#0f172a;margin:0 0 8px 0">Internal Tools</h3>
+          <div style="font-size:14px;color:#64748b;margin-bottom:8px">Development tooling</div>
+          <div style="font-size:13px;color:#64748b;line-height:1.6">
+            Internal tools and utilities for development
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#94a3b8;font-family:monospace">collection=internal_tool</div>
+        </div>
+      </a>
+
+      <a href="/collection/verb_app" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
+          <div style="font-size:28px;margin-bottom:12px">🔤</div>
+          <h3 style="font-size:18px;font-weight:600;color:#0f172a;margin:0 0 8px 0">Verb Applications</h3>
+          <div style="font-size:14px;color:#64748b;margin-bottom:8px">Verb app components</div>
+          <div style="font-size:13px;color:#64748b;line-height:1.6">
+            Components of verb-based applications (explore, curate, etc.)
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#94a3b8;font-family:monospace">collection=verb_app</div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- People & Projects -->
+  <section style="margin-bottom:40px">
+    <h2 style="font-size:24px;font-weight:600;color:#0f172a;margin:0 0 20px 0;padding-bottom:12px;border-bottom:2px solid #e5e7eb">
+      People & Projects
+    </h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+      <a href="/collection/team_member" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
+          <div style="font-size:28px;margin-bottom:12px">👥</div>
+          <h3 style="font-size:18px;font-weight:600;color:#0f172a;margin:0 0 8px 0">Team Members</h3>
+          <div style="font-size:14px;color:#64748b;margin-bottom:8px">People</div>
+          <div style="font-size:13px;color:#64748b;line-height:1.6">
+            Team members and their roles
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#94a3b8;font-family:monospace">collection=team_member</div>
+        </div>
+      </a>
+
+      <a href="/collection/claude_projects" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
+          <div style="font-size:28px;margin-bottom:12px">💬</div>
+          <h3 style="font-size:18px;font-weight:600;color:#0f172a;margin:0 0 8px 0">Claude Projects</h3>
+          <div style="font-size:14px;color:#64748b;margin-bottom:8px">AI assistant projects</div>
+          <div style="font-size:13px;color:#64748b;line-height:1.6">
+            Claude Projects used in development
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#94a3b8;font-family:monospace">collection=claude_projects</div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Historical / Deprecated -->
+  <section style="margin-bottom:40px">
+    <h2 style="font-size:24px;font-weight:600;color:#0f172a;margin:0 0 20px 0;padding-bottom:12px;border-bottom:2px solid #e5e7eb">
+      Historical / Deprecated
+    </h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+      <a href="/collection/historical_agent" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
+          <div style="font-size:28px;margin-bottom:12px">📦</div>
+          <h3 style="font-size:18px;font-weight:600;color:#0f172a;margin:0 0 8px 0">Historical Agents</h3>
+          <div style="font-size:14px;color:#64748b;margin-bottom:8px">Deprecated agents</div>
+          <div style="font-size:13px;color:#64748b;line-height:1.6">
+            Agents that are no longer active but kept for reference
+          </div>
+          <div style="margin-top:12px;font-size:12px;color:#94a3b8;font-family:monospace">collection=historical_agent</div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+</div>
+{{end}}
