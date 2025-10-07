@@ -337,15 +337,15 @@
     </div>
   </section>
 
-  <!-- Top Countries -->
-  <section style="margin-top:48px" id="topCountries">
+  <!-- Browse by Country -->
+  <section style="margin-top:48px" id="browseByCountry">
     <h2 style="font-size:24px;font-weight:600;color:#0f172a;margin:0 0 24px 0;text-align:center">
-      Popular Countries
+      Browse by Country
     </h2>
 
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px">
       {{range $index, $country := .Stats.Countries}}
-        {{if lt $index 12}}
+        {{if lt $index 20}}
         <a href="/geography/?country={{$country.Code}}" style="text-decoration:none">
           <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:16px;transition:all 0.2s"
                onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)'"
