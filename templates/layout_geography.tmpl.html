@@ -304,8 +304,29 @@
     </div>
   </div>
 
-  <!-- Layout: Full width if no README, otherwise two columns -->
-  <div style="display:grid;{{if .README}}grid-template-columns:1fr 500px{{else}}grid-template-columns:1fr{{end}};gap:32px;align-items:start">
+  <!-- Layout: README first if it exists and is substantial, otherwise jobs first -->
+  {{if .README}}
+  <!-- README-first layout for comprehensive documentation -->
+  <div style="margin-bottom:32px">
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:32px;box-shadow:0 1px 3px rgba(0,0,0,0.05)">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid #e5e7eb">
+        <span style="font-size:32px">📚</span>
+        <h2 style="font-size:24px;font-weight:600;color:#0f172a;margin:0">
+          Geographic Context & Data Sources
+        </h2>
+      </div>
+
+      <!-- Markdown content rendered by marked.js -->
+      <div id="readme-content" class="markdown-content" style="max-width:900px"></div>
+
+      <!-- Hidden raw markdown -->
+      <script id="readme-markdown" type="text/plain">{{.README.Content}}</script>
+    </div>
+  </div>
+  {{end}}
+
+  <!-- Jobs section -->
+  <div style="display:grid;grid-template-columns:1fr;gap:32px;align-items:start">
 
     <!-- MAIN COLUMN: All Datasets (Grouped by Collection) -->
     <div>
@@ -607,23 +628,6 @@
       </div>
       {{end}}
     </div>
-
-    <!-- RIGHT COLUMN: README (only if exists) -->
-    {{if .README}}
-    <div style="position:sticky;top:20px">
-      <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.05)">
-        <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 16px 0;display:flex;align-items:center;gap:6px">
-          📚 Geographic Context
-        </h2>
-
-        <!-- Markdown content rendered by marked.js -->
-        <div id="readme-content" class="markdown-content"></div>
-
-        <!-- Hidden raw markdown -->
-        <script id="readme-markdown" type="text/plain">{{.README.Content}}</script>
-      </div>
-    </div>
-    {{end}}
 
   </div>
 </div>

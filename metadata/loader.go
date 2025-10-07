@@ -449,12 +449,35 @@ func (s *MetadataStore) FindREADMEForGeography(city, county, state, country, con
 		}
 	}
 
-	// Try country
+	// Try country (exact level match first)
 	if country != "" {
 		for i := range s.V6READMEs {
 			geo := s.V6READMEs[i].Geography
 			if geoCountry, ok := geo["country"].(string); ok && geoCountry == country {
 				if level, ok := geo["level"].(string); ok && level == "country" {
+					return &s.V6READMEs[i]
+				}
+			}
+		}
+
+		// Fallback: Try subdirectory READMEs (e.g., europe/eu/bootstrap/README.md)
+		// Prefer "bootstrap" subdirectory as it typically has comprehensive docs
+		for i := range s.V6READMEs {
+			geo := s.V6READMEs[i].Geography
+			if geoCountry, ok := geo["country"].(string); ok && geoCountry == country {
+				if level, ok := geo["level"].(string); ok && level == "subdirectory" {
+					if subdir, ok := geo["subdir"].(string); ok && subdir == "bootstrap" {
+						return &s.V6READMEs[i]
+					}
+				}
+			}
+		}
+
+		// Final fallback: Any subdirectory README for this country
+		for i := range s.V6READMEs {
+			geo := s.V6READMEs[i].Geography
+			if geoCountry, ok := geo["country"].(string); ok && geoCountry == country {
+				if level, ok := geo["level"].(string); ok && level == "subdirectory" {
 					return &s.V6READMEs[i]
 				}
 			}
