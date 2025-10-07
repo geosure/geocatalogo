@@ -47,71 +47,221 @@
       Browse by Collection
     </h2>
 
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+      <!-- Core Operations -->
       <a href="/collection/ai_agent" style="text-decoration:none">
-        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:16px;transition:all 0.2s"
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:14px;transition:all 0.2s"
              onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
              onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
-          <div style="font-size:24px;margin-bottom:8px">🤖</div>
-          <div style="font-size:16px;font-weight:600;color:#0f172a;margin-bottom:4px">AI Agents</div>
-          <div style="font-size:13px;color:#64748b">7 agents</div>
+          <div style="font-size:20px;margin-bottom:6px">🤖</div>
+          <div style="font-size:14px;font-weight:600;color:#0f172a;margin-bottom:2px">AI Agents</div>
+          <div style="font-size:12px;color:#64748b">7 agents</div>
         </div>
       </a>
 
-      <a href="/collection/existing_db" style="text-decoration:none">
-        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:16px;transition:all 0.2s"
+      <a href="/collection/operational_service" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:14px;transition:all 0.2s"
              onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
              onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
-          <div style="font-size:24px;margin-bottom:8px">🗄️</div>
-          <div style="font-size:16px;font-weight:600;color:#0f172a;margin-bottom:4px">Database Tables</div>
-          <div style="font-size:13px;color:#64748b">47 tables</div>
+          <div style="font-size:20px;margin-bottom:6px">⚡</div>
+          <div style="font-size:14px;font-weight:600;color:#0f172a;margin-bottom:2px">Operational Services</div>
+          <div style="font-size:12px;color:#64748b">Browse</div>
+        </div>
+      </a>
+
+      <a href="/collection/api_service" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:14px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
+          <div style="font-size:20px;margin-bottom:6px">🔌</div>
+          <div style="font-size:14px;font-weight:600;color:#0f172a;margin-bottom:2px">API Services</div>
+          <div style="font-size:12px;color:#64748b">Browse</div>
+        </div>
+      </a>
+
+      <!-- Data Assets -->
+      <a href="/collection/existing_db" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:14px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
+          <div style="font-size:20px;margin-bottom:6px">🗄️</div>
+          <div style="font-size:14px;font-weight:600;color:#0f172a;margin-bottom:2px">Database Tables</div>
+          <div style="font-size:12px;color:#64748b">47 tables</div>
         </div>
       </a>
 
       <a href="/collection/existing_local" style="text-decoration:none">
-        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:16px;transition:all 0.2s"
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:14px;transition:all 0.2s"
              onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
              onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
-          <div style="font-size:24px;margin-bottom:8px">📁</div>
-          <div style="font-size:16px;font-weight:600;color:#0f172a;margin-bottom:4px">Local Files</div>
-          <div style="font-size:13px;color:#64748b">474 files</div>
+          <div style="font-size:20px;margin-bottom:6px">📁</div>
+          <div style="font-size:14px;font-weight:600;color:#0f172a;margin-bottom:2px">Local Files</div>
+          <div style="font-size:12px;color:#64748b">474 files</div>
         </div>
       </a>
 
       <a href="/collection/potential_v6" style="text-decoration:none">
-        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:16px;transition:all 0.2s"
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:14px;transition:all 0.2s"
              onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
              onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
-          <div style="font-size:24px;margin-bottom:8px">⚙️</div>
-          <div style="font-size:16px;font-weight:600;color:#0f172a;margin-bottom:4px">v6 Jobs</div>
-          <div style="font-size:13px;color:#64748b">627 jobs</div>
+          <div style="font-size:20px;margin-bottom:6px">⚙️</div>
+          <div style="font-size:14px;font-weight:600;color:#0f172a;margin-bottom:2px">v6 Jobs</div>
+          <div style="font-size:12px;color:#64748b">627 jobs</div>
         </div>
       </a>
 
-      <a href="/collection/external_api" style="text-decoration:none">
-        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:16px;transition:all 0.2s"
+      <!-- Automation -->
+      <a href="/collection/automation_bot" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:14px;transition:all 0.2s"
              onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
              onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
-          <div style="font-size:24px;margin-bottom:8px">🔌</div>
-          <div style="font-size:16px;font-weight:600;color:#0f172a;margin-bottom:4px">External APIs</div>
-          <div style="font-size:13px;color:#64748b">Browse collection</div>
+          <div style="font-size:20px;margin-bottom:6px">🔧</div>
+          <div style="font-size:14px;font-weight:600;color:#0f172a;margin-bottom:2px">Automation Bots</div>
+          <div style="font-size:12px;color:#64748b">Browse</div>
+        </div>
+      </a>
+
+      <a href="/collection/data_inspection_bot" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:14px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
+          <div style="font-size:20px;margin-bottom:6px">🔍</div>
+          <div style="font-size:14px;font-weight:600;color:#0f172a;margin-bottom:2px">Data Inspection Bots</div>
+          <div style="font-size:12px;color:#64748b">Browse</div>
+        </div>
+      </a>
+
+      <a href="/collection/catalog_management_bot" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:14px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
+          <div style="font-size:20px;margin-bottom:6px">📋</div>
+          <div style="font-size:14px;font-weight:600;color:#0f172a;margin-bottom:2px">Catalog Bots</div>
+          <div style="font-size:12px;color:#64748b">Browse</div>
+        </div>
+      </a>
+
+      <!-- External Sources -->
+      <a href="/collection/external_api" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:14px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
+          <div style="font-size:20px;margin-bottom:6px">🔌</div>
+          <div style="font-size:14px;font-weight:600;color:#0f172a;margin-bottom:2px">External APIs</div>
+          <div style="font-size:12px;color:#64748b">Browse</div>
         </div>
       </a>
 
       <a href="/collection/external_government" style="text-decoration:none">
-        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:16px;transition:all 0.2s"
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:14px;transition:all 0.2s"
              onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
              onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
-          <div style="font-size:24px;margin-bottom:8px">🏛️</div>
-          <div style="font-size:16px;font-weight:600;color:#0f172a;margin-bottom:4px">Government Data</div>
-          <div style="font-size:13px;color:#64748b">Browse collection</div>
+          <div style="font-size:20px;margin-bottom:6px">🏛️</div>
+          <div style="font-size:14px;font-weight:600;color:#0f172a;margin-bottom:2px">Government Data</div>
+          <div style="font-size:12px;color:#64748b">Browse</div>
         </div>
       </a>
-    </div>
 
-    <div style="text-align:center;margin-top:16px">
-      <a href="/collections" style="font-size:13px;color:#475569;text-decoration:none;font-weight:500">
-        View all 21 collections →
+      <a href="/collection/external_news" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:14px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
+          <div style="font-size:20px;margin-bottom:6px">📰</div>
+          <div style="font-size:14px;font-weight:600;color:#0f172a;margin-bottom:2px">News & Media</div>
+          <div style="font-size:12px;color:#64748b">Browse</div>
+        </div>
+      </a>
+
+      <a href="/collection/external_academic" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:14px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
+          <div style="font-size:20px;margin-bottom:6px">🎓</div>
+          <div style="font-size:14px;font-weight:600;color:#0f172a;margin-bottom:2px">Academic Data</div>
+          <div style="font-size:12px;color:#64748b">Browse</div>
+        </div>
+      </a>
+
+      <a href="/collection/external_download" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:14px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
+          <div style="font-size:20px;margin-bottom:6px">⬇️</div>
+          <div style="font-size:14px;font-weight:600;color:#0f172a;margin-bottom:2px">Downloadable Datasets</div>
+          <div style="font-size:12px;color:#64748b">Browse</div>
+        </div>
+      </a>
+
+      <a href="/collection/external_other" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:14px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
+          <div style="font-size:20px;margin-bottom:6px">🌐</div>
+          <div style="font-size:14px;font-weight:600;color:#0f172a;margin-bottom:2px">Other External</div>
+          <div style="font-size:12px;color:#64748b">Browse</div>
+        </div>
+      </a>
+
+      <!-- Infrastructure & Tools -->
+      <a href="/collection/infrastructure" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:14px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
+          <div style="font-size:20px;margin-bottom:6px">⚙️</div>
+          <div style="font-size:14px;font-weight:600;color:#0f172a;margin-bottom:2px">Infrastructure</div>
+          <div style="font-size:12px;color:#64748b">Browse</div>
+        </div>
+      </a>
+
+      <a href="/collection/internal_tool" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:14px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
+          <div style="font-size:20px;margin-bottom:6px">🛠️</div>
+          <div style="font-size:14px;font-weight:600;color:#0f172a;margin-bottom:2px">Internal Tools</div>
+          <div style="font-size:12px;color:#64748b">Browse</div>
+        </div>
+      </a>
+
+      <a href="/collection/verb_app" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:14px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
+          <div style="font-size:20px;margin-bottom:6px">🔤</div>
+          <div style="font-size:14px;font-weight:600;color:#0f172a;margin-bottom:2px">Verb Applications</div>
+          <div style="font-size:12px;color:#64748b">Browse</div>
+        </div>
+      </a>
+
+      <!-- People & History -->
+      <a href="/collection/team_member" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:14px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
+          <div style="font-size:20px;margin-bottom:6px">👥</div>
+          <div style="font-size:14px;font-weight:600;color:#0f172a;margin-bottom:2px">Team Members</div>
+          <div style="font-size:12px;color:#64748b">Browse</div>
+        </div>
+      </a>
+
+      <a href="/collection/claude_projects" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:14px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
+          <div style="font-size:20px;margin-bottom:6px">💬</div>
+          <div style="font-size:14px;font-weight:600;color:#0f172a;margin-bottom:2px">Claude Projects</div>
+          <div style="font-size:12px;color:#64748b">Browse</div>
+        </div>
+      </a>
+
+      <a href="/collection/historical_agent" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:14px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
+          <div style="font-size:20px;margin-bottom:6px">📦</div>
+          <div style="font-size:14px;font-weight:600;color:#0f172a;margin-bottom:2px">Historical Agents</div>
+          <div style="font-size:12px;color:#64748b">Browse</div>
+        </div>
       </a>
     </div>
   </section>
