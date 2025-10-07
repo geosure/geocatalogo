@@ -312,10 +312,10 @@
       Browse by Geographic Region
     </h2>
 
-    <!-- Actual Continents Only -->
+    <!-- Actual Continents + Global -->
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
       {{range .Stats.Continents}}
-      {{if or (eq .Code "africa") (eq .Code "asia") (eq .Code "europe") (eq .Code "north_america") (eq .Code "south_america") (eq .Code "oceania")}}
+      {{if or (eq .Code "africa") (eq .Code "asia") (eq .Code "europe") (eq .Code "north_america") (eq .Code "south_america") (eq .Code "oceania") (eq .Code "global")}}
       <a href="/geography/?continent={{.Code}}" style="text-decoration:none">
         <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s;cursor:pointer"
              onmouseover="this.style.borderColor='#64748b';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
