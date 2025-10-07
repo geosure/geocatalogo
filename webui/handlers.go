@@ -577,38 +577,14 @@ func (a *App) HandleFormat(w http.ResponseWriter, r *http.Request) {
 				counts.News++
 			case "external_government":
 				counts.Government++
-			case "external_download":
-				counts.News++ // Group external downloads with news sources
 			case "ai_agent":
 				counts.AIAgents++
-			case "claude_projects":
-				counts.ClaudeProjects++
-			case "operational_service":
-				counts.OperationalServices++
 			case "data_inspection_bot":
 				counts.DataInspectionBots++
-			case "catalog_management_bot":
-				counts.CatalogManagementBots++
-			case "data_bot":
-				counts.DataBots++
 			case "scraper_bot":
 				counts.ScraperBots++
 			case "automation_bot":
 				counts.AutoBots++
-			case "historical_agent":
-				counts.HistoricalAgents++
-			case "verb_app":
-				counts.VerbApps++
-			case "internal_tool":
-				counts.InternalTools++
-			case "api_service":
-				counts.APIServices++
-			case "team_member":
-				counts.TeamMembers++
-			case "infrastructure":
-				counts.Infrastructure++
-			default:
-				counts.Other++
 			}
 		}
 	}
