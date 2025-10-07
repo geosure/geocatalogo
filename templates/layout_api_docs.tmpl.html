@@ -528,10 +528,16 @@ toggleAdvancedBtn.addEventListener('click', () => {
   toggleAdvancedBtn.textContent = isVisible ? '+ Show Advanced Filters' : '- Hide Advanced Filters';
 });
 
-// Update URL as filters change
+// Update URL as filters change AND auto-run query
 document.querySelectorAll('.filter-input, #text-query, #recordid-query, #max-records').forEach(input => {
-  input.addEventListener('input', updateGeneratedUrl);
-  input.addEventListener('change', updateGeneratedUrl);
+  input.addEventListener('input', () => {
+    updateGeneratedUrl();
+    autoRunQuery();
+  });
+  input.addEventListener('change', () => {
+    updateGeneratedUrl();
+    autoRunQuery();
+  });
 });
 
 function updateGeneratedUrl() {
@@ -569,6 +575,18 @@ function updateGeneratedUrl() {
 
   const url = params.toString() ? `${API_BASE}/?${params.toString()}` : API_BASE;
   generatedUrl.value = url;
+}
+
+// Auto-run query when filters change (debounced)
+let autoQueryTimeout;
+function autoRunQuery() {
+  clearTimeout(autoQueryTimeout);
+  autoQueryTimeout = setTimeout(() => {
+    const url = generatedUrl.value;
+    if (url && url !== API_BASE) {
+      runQueryRequest(url);
+    }
+  }, 500); // 500ms debounce
 }
 
 // Copy URL to clipboard
@@ -612,12 +630,9 @@ document.getElementById('example-btn').addEventListener('click', () => {
   updateGeneratedUrl();
 });
 
-// Run query
-document.getElementById('run-query-btn').addEventListener('click', async () => {
-  const url = generatedUrl.value;
-
+// Run query function (reusable)
+async function runQueryRequest(url) {
   if (!url || url === API_BASE) {
-    alert('Please configure at least one filter, search term, or record ID');
     return;
   }
 
@@ -678,6 +693,16 @@ document.getElementById('run-query-btn').addEventListener('click', async () => {
       <strong>Error:</strong> ${error.message}
     </div>`;
   }
+}
+
+// Run query button
+document.getElementById('run-query-btn').addEventListener('click', () => {
+  const url = generatedUrl.value;
+  if (!url || url === API_BASE) {
+    alert('Please configure at least one filter, search term, or record ID');
+    return;
+  }
+  runQueryRequest(url);
 });
 
 // Initialize
