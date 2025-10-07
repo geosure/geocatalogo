@@ -3,6 +3,7 @@
 {{define "page_title"}}{{.Record.Properties.Title}} • GRO Catalog{{end}}
 
 {{define "page_content"}}
+  <div style="background:orange;padding:20px;margin:20px 0;color:white;font-weight:bold">DEBUG: PAGE_CONTENT BLOCK IS RENDERING!</div>
   <!-- Breadcrumbs -->
   <div class="muted" style="margin-bottom:16px;font-size:13px">
     <a href="/" style="color:var(--link)">Catalog</a>
@@ -231,8 +232,134 @@
       </div>
     </section>
 
+    <div style="background:magenta;color:white;padding:30px;font-size:24px;margin:20px 0">🚨 AFTER GRO METADATA SECTION 🚨</div>
+
+    <!-- DEBUG: About to call agent introspection partial -->
     <!-- Agent Introspection (if this is an agent) -->
+    <div style="background:red;color:white;padding:10px">BEFORE PARTIAL CALL</div>
     {{template "partials/agent_introspection" .}}
+    <div style="background:green;color:white;padding:10px">AFTER PARTIAL CALL</div>
+
+    <!-- Operational Metadata (for bots and services) -->
+    <!-- DEBUG: Operational value type: {{ printf "%T" .Record.Properties.Operational }} -->
+    <!-- DEBUG: Operational length: {{ len .Record.Properties.Operational }} -->
+    {{if .Record.Properties.Operational}}
+    <!-- DEBUG: Rendering Operational Details section -->
+    <section class="card card-compact">
+      <h2 style="margin:0 0 16px;font-size:18px;font-weight:700;color:#0f172a">⚙️ Operational Details</h2>
+
+      <table style="width:100%;border-collapse:collapse">
+        <tbody>
+          {{if index .Record.Properties.Operational "function"}}
+          <tr style="border-bottom:1px solid #f1f5f9">
+            <td style="padding:12px 12px 12px 0;color:#64748b;font-weight:500;width:180px;vertical-align:top">Function</td>
+            <td style="padding:12px 0;color:#334155">{{index .Record.Properties.Operational "function"}}</td>
+          </tr>
+          {{end}}
+
+          {{if index .Record.Properties.Operational "runtime"}}
+          <tr style="border-bottom:1px solid #f1f5f9">
+            <td style="padding:12px 12px 12px 0;color:#64748b;font-weight:500;vertical-align:top">Runtime</td>
+            <td style="padding:12px 0;color:#334155;font-family:monospace;font-size:13px">{{index .Record.Properties.Operational "runtime"}}</td>
+          </tr>
+          {{end}}
+
+          {{if index .Record.Properties.Operational "model"}}
+          <tr style="border-bottom:1px solid #f1f5f9">
+            <td style="padding:12px 12px 12px 0;color:#64748b;font-weight:500;vertical-align:top">Model</td>
+            <td style="padding:12px 0;color:#334155">{{index .Record.Properties.Operational "model"}}</td>
+          </tr>
+          {{end}}
+
+          {{if index .Record.Properties.Operational "output"}}
+          <tr style="border-bottom:1px solid #f1f5f9">
+            <td style="padding:12px 12px 12px 0;color:#64748b;font-weight:500;vertical-align:top">Output</td>
+            <td style="padding:12px 0;color:#334155">{{index .Record.Properties.Operational "output"}}</td>
+          </tr>
+          {{end}}
+
+          {{if index .Record.Properties.Operational "processed"}}
+          <tr style="border-bottom:1px solid #f1f5f9">
+            <td style="padding:12px 12px 12px 0;color:#64748b;font-weight:500;vertical-align:top">Processed</td>
+            <td style="padding:12px 0;color:#16a34a;font-weight:600">{{index .Record.Properties.Operational "processed"}}</td>
+          </tr>
+          {{end}}
+
+          {{if index .Record.Properties.Operational "location"}}
+          <tr style="border-bottom:1px solid #f1f5f9">
+            <td style="padding:12px 12px 12px 0;color:#64748b;font-weight:500;vertical-align:top">Location</td>
+            <td style="padding:12px 0;color:#334155;font-family:monospace;font-size:12px;word-break:break-all">{{index .Record.Properties.Operational "location"}}</td>
+          </tr>
+          {{end}}
+
+          {{if index .Record.Properties.Operational "script_name"}}
+          <tr style="border-bottom:1px solid #f1f5f9">
+            <td style="padding:12px 12px 12px 0;color:#64748b;font-weight:500;vertical-align:top">Script</td>
+            <td style="padding:12px 0;color:#334155;font-family:monospace">{{index .Record.Properties.Operational "script_name"}}</td>
+          </tr>
+          {{end}}
+
+          {{if index .Record.Properties.Operational "reports_to"}}
+          <tr style="border-bottom:1px solid #f1f5f9">
+            <td style="padding:12px 12px 12px 0;color:#64748b;font-weight:500;vertical-align:top">Reports To</td>
+            <td style="padding:12px 0;color:#334155">{{index .Record.Properties.Operational "reports_to"}}</td>
+          </tr>
+          {{end}}
+
+          {{if index .Record.Properties.Operational "managed_by"}}
+          <tr>
+            <td style="padding:12px 12px 12px 0;color:#64748b;font-weight:500;vertical-align:top">Managed By</td>
+            <td style="padding:12px 0;color:#334155">{{index .Record.Properties.Operational "managed_by"}}</td>
+          </tr>
+          {{end}}
+        </tbody>
+      </table>
+    </section>
+    {{end}}
+
+    <!-- Database Metadata (enriched from API) -->
+    {{if .Record.Properties.Database}}
+    <section class="card card-compact">
+      <h2 style="margin:0 0 16px;font-size:18px;font-weight:700;color:#0f172a">🗄️ Database Schema</h2>
+
+      <div class="chips" style="gap:8px;margin-bottom:16px">
+        {{if index .Record.Properties.Database "schema"}}
+        <span class="chip" style="background:#f0f9ff;color:#075985">Schema: {{index .Record.Properties.Database "schema"}}</span>
+        {{end}}
+        {{if index .Record.Properties.Database "column_count"}}
+        <span class="chip" style="background:#f0fdf4;color:#15803d">Columns: {{index .Record.Properties.Database "column_count"}}</span>
+        {{end}}
+        {{if index .Record.Properties.Database "index_count"}}
+        <span class="chip" style="background:#fef3c7;color:#92400e">Indexes: {{index .Record.Properties.Database "index_count"}}</span>
+        {{end}}
+        {{if index .Record.Properties.Database "row_count"}}
+        <span class="chip" style="background:#ede9fe;color:#6b21a8">Rows: {{index .Record.Properties.Database "row_count"}}</span>
+        {{end}}
+      </div>
+    </section>
+    {{end}}
+
+    <!-- File Metadata (enriched from API) -->
+    {{if .Record.Properties.FileMetadata}}
+    <section class="card card-compact">
+      <h2 style="margin:0 0 16px;font-size:18px;font-weight:700;color:#0f172a">📄 File Details</h2>
+
+      <div class="chips" style="gap:8px;margin-bottom:16px;flex-wrap:wrap">
+        {{if index .Record.Properties.FileMetadata "row_count"}}
+        <span class="chip" style="background:#f0fdf4;color:#15803d">Rows: {{index .Record.Properties.FileMetadata "row_count"}}</span>
+        {{end}}
+        {{if index .Record.Properties.FileMetadata "column_count"}}
+        <span class="chip" style="background:#f0f9ff;color:#075985">Columns: {{index .Record.Properties.FileMetadata "column_count"}}</span>
+        {{end}}
+        {{if index .Record.Properties.FileMetadata "geometry_type"}}
+        <span class="chip" style="background:#fef3c7;color:#92400e">Geometry: {{index .Record.Properties.FileMetadata "geometry_type"}}</span>
+        {{end}}
+        {{if index .Record.Properties.FileMetadata "file_size_bytes"}}
+        <span class="chip" style="background:#ede9fe;color:#6b21a8">Size: {{index .Record.Properties.FileMetadata "file_size_bytes"}} bytes</span>
+        {{end}}
+      </div>
+    </section>
+    {{end}}
 
     <!-- YAML Definition (if loaded) -->
     {{if .V6Job}}

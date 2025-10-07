@@ -1,0 +1,201 @@
+{{define "layout_stats"}}{{template "layout" .}}{{end}}
+
+{{define "page_title"}}Catalog Statistics • GRO Catalog{{end}}
+
+{{define "page_content"}}
+  <div class="muted" style="margin-bottom:16px;font-size:13px">
+    <a href="/" style="color:var(--link)">Catalog</a>
+    <span class="sep">→</span>
+    <span>Statistics</span>
+  </div>
+
+  <h1>📊 GRO Catalog Statistics</h1>
+  <p class="muted" style="margin-bottom:32px">Complete overview of the GRO data universe - as understood by our agents</p>
+
+  <!-- Total Records -->
+  <section class="card">
+    <h2 style="font-size:48px;font-weight:800;color:#0b63ce;margin:0">{{.TotalRecords}}</h2>
+    <p style="color:#6b7280;margin:8px 0 0;font-size:16px">Total Catalog Records</p>
+  </section>
+
+  <!-- Entity Breakdown -->
+  <section class="card">
+    <h2 style="margin:0 0 24px">🗂️ Entity Breakdown</h2>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px">
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px">
+        <div style="font-size:32px;font-weight:700;color:#475569">{{.AgentCount}}</div>
+        <div style="color:#64748b;font-size:14px;margin-top:4px">🤖 AI Agents</div>
+      </div>
+
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px">
+        <div style="font-size:32px;font-weight:700;color:#475569">{{.BotCount}}</div>
+        <div style="color:#64748b;font-size:14px;margin-top:4px">🔧 Bots</div>
+      </div>
+
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px">
+        <div style="font-size:32px;font-weight:700;color:#475569">{{.ServiceCount}}</div>
+        <div style="color:#64748b;font-size:14px;margin-top:4px">⚡ Services</div>
+      </div>
+
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px">
+        <div style="font-size:32px;font-weight:700;color:#475569">{{.DatabaseTableCount}}</div>
+        <div style="color:#64748b;font-size:14px;margin-top:4px">🗄️ Database Tables</div>
+      </div>
+
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px">
+        <div style="font-size:32px;font-weight:700;color:#475569">{{.FileCount}}</div>
+        <div style="color:#64748b;font-size:14px;margin-top:4px">📄 Local Files</div>
+      </div>
+
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px">
+        <div style="font-size:32px;font-weight:700;color:#475569">{{.V6JobCount}}</div>
+        <div style="color:#64748b;font-size:14px;margin-top:4px">📋 v6 Jobs</div>
+      </div>
+
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px">
+        <div style="font-size:32px;font-weight:700;color:#475569">{{.ExternalSourceCount}}</div>
+        <div style="color:#64748b;font-size:14px;margin-top:4px">🌐 External Sources</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Introspection Deep Dive -->
+  <section class="card">
+    <h2 style="margin:0 0 16px">🔍 Introspection Metadata</h2>
+    <p class="muted" style="margin:0 0 24px;font-size:14px">
+      Rich metadata captured by Catalog Agent's introspection bots
+    </p>
+
+    <table style="width:100%;border-collapse:collapse">
+      <thead>
+        <tr style="border-bottom:2px solid #e5e7eb">
+          <th style="text-align:left;padding:12px 0;color:#6b7280;font-weight:600">Introspection File</th>
+          <th style="text-align:right;padding:12px 0;color:#6b7280;font-weight:600">Count</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #f3f4f6">
+          <td style="padding:12px 0">
+            <span style="font-family:monospace;font-size:13px">database_schema_latest.json</span>
+          </td>
+          <td style="text-align:right;padding:12px 0;font-weight:600">
+            {{.IntrospectionStats.DatabaseTables}} tables
+          </td>
+        </tr>
+        <tr style="border-bottom:1px solid #f3f4f6">
+          <td style="padding:12px 0">
+            <span style="font-family:monospace;font-size:13px">v6_job_metadata.json</span>
+          </td>
+          <td style="text-align:right;padding:12px 0;font-weight:600">
+            {{.IntrospectionStats.V6Jobs}} jobs
+          </td>
+        </tr>
+        <tr style="border-bottom:1px solid #f3f4f6">
+          <td style="padding:12px 0">
+            <span style="font-family:monospace;font-size:13px">csv_introspection.json</span>
+          </td>
+          <td style="text-align:right;padding:12px 0;font-weight:600">
+            {{.IntrospectionStats.CSVFiles}} files
+          </td>
+        </tr>
+        <tr style="border-bottom:1px solid #f3f4f6">
+          <td style="padding:12px 0">
+            <span style="font-family:monospace;font-size:13px">parquet_introspection.json</span>
+          </td>
+          <td style="text-align:right;padding:12px 0;font-weight:600">
+            {{.IntrospectionStats.ParquetFiles}} files
+          </td>
+        </tr>
+        <tr style="border-bottom:1px solid #f3f4f6">
+          <td style="padding:12px 0">
+            <span style="font-family:monospace;font-size:13px">shapefile_introspection.json</span>
+          </td>
+          <td style="text-align:right;padding:12px 0;font-weight:600">
+            {{.IntrospectionStats.Shapefiles}} files
+          </td>
+        </tr>
+        <tr style="border-bottom:1px solid #f3f4f6">
+          <td style="padding:12px 0">
+            <span style="font-family:monospace;font-size:13px">pdf_introspection.json</span>
+          </td>
+          <td style="text-align:right;padding:12px 0;font-weight:600">
+            {{.IntrospectionStats.PDFs}} files
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:12px 0">
+            <span style="font-family:monospace;font-size:13px">agents_introspection.json</span>
+          </td>
+          <td style="text-align:right;padding:12px 0;font-weight:600">
+            {{.IntrospectionStats.Agents}} agents
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Agent Understanding -->
+  <section class="card" style="background:#f1f5f9;border:1px solid #cbd5e1">
+    <h2 style="margin:0 0 16px;color:#334155">🧠 Agent Intelligence Layer</h2>
+    <p style="margin:0 0 24px;color:#475569;line-height:1.6">
+      This catalog enables <strong>{{.AgentCount}} AI agents</strong> to discover capabilities,
+      understand organizational relationships, and coordinate autonomously across
+      <strong>{{.TotalRecords}} cataloged entities</strong> - without asking humans.
+    </p>
+
+    <div style="background:#e2e8f0;border-radius:8px;padding:16px">
+      <div style="font-size:13px;color:#475569;line-height:1.8">
+        <strong>✅ What agents can discover:</strong><br>
+        • What data exists and where it lives<br>
+        • How to execute services and run queries<br>
+        • Who manages each component<br>
+        • Organizational relationships and reporting structure<br>
+        • Complete schemas, dependencies, and capabilities
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Links -->
+  <section class="card">
+    <h2 style="margin:0 0 16px">🔗 Explore the Catalog</h2>
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <a href="/" class="btn btn-primary">Browse All Records</a>
+      <a href="http://localhost:8000/" target="_blank" class="btn btn-secondary">API Endpoint</a>
+      <a href="/geography/?continent=clankr" class="btn btn-secondary">View Agents</a>
+    </div>
+  </section>
+
+  <p class="muted" style="text-align:center;margin-top:48px;font-size:13px">
+    Last updated: {{.IntrospectionStats.DatabaseTables}} database tables introspected
+  </p>
+
+{{end}}
+
+<style>
+.btn {
+  display:inline-block;
+  padding:10px 20px;
+  border-radius:6px;
+  text-decoration:none;
+  font-weight:500;
+  transition:all 0.2s;
+}
+.btn-primary {
+  background:#0b63ce;
+  color:white;
+}
+.btn-primary:hover {
+  background:#0952a5;
+  transform:translateY(-2px);
+}
+.btn-secondary {
+  background:#f3f4f6;
+  color:#374151;
+  border:1px solid #d1d5db;
+}
+.btn-secondary:hover {
+  background:#e5e7eb;
+  transform:translateY(-2px);
+}
+</style>

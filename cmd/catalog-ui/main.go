@@ -30,6 +30,7 @@ func main() {
 		if meta.Database != nil {
 			log.Printf("   - Database: %d tables", len(meta.Database.Tables))
 		}
+		log.Printf("   - Agents: %d agents", len(meta.Agents))
 		log.Printf("   - CSV/TSV: %d files", len(meta.CSVFiles))
 		log.Printf("   - Parquet: %d files", len(meta.Parquet))
 		log.Printf("   - Shapefile: %d files", len(meta.Shapefile))

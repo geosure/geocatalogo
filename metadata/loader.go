@@ -108,11 +108,26 @@ func LoadAll(basePath string) (*MetadataStore, error) {
 	return store, nil
 }
 
+// Helper function to get agent IDs for debugging
+func getAgentIDs(agents map[string]*Agent) []string {
+	ids := make([]string, 0, len(agents))
+	for id := range agents {
+		ids = append(ids, id)
+	}
+	return ids
+}
+
 // Lookup finds metadata for a given dataset by catalog ID or path
 func (s *MetadataStore) Lookup(catalogID string, s3Path string, databaseTable string, dataFormat string, v6JobFile string) interface{} {
 	// Agent lookup by catalog ID
 	if agent, ok := s.Agents[catalogID]; ok {
+		fmt.Printf("DEBUG: Found agent '%s' in Agents map\n", catalogID)
 		return agent
+	} else {
+		// Debug: print available agent IDs if this is likely an agent lookup
+		if catalogID != "" && (dataFormat == "llm_agent" || dataFormat == "lambda_service" || s3Path == "" && databaseTable == "" && v6JobFile == "") {
+			fmt.Printf("DEBUG: Agent '%s' NOT found. Available agents: %v\n", catalogID, getAgentIDs(s.Agents))
+		}
 	}
 
 	// V6 job lookup

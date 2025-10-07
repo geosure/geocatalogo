@@ -86,22 +86,53 @@ type geocatalogo struct {
 	Typename string    `json:"type,omitempty"`
 }
 
+// GROMetadata holds GRO-specific metadata fields
+type GROMetadata struct {
+	ImplementationStatus string `json:"implementation_status,omitempty"`
+	DataFormat           string `json:"data_format,omitempty"`
+	GeographicScope      string `json:"geographic_scope,omitempty"`
+	Owner                string `json:"owner,omitempty"`
+	UpdateFrequency      string `json:"update_frequency,omitempty"`
+	Continent            string `json:"continent,omitempty"`
+	Country              string `json:"country,omitempty"`
+	StateProvince        string `json:"state_province,omitempty"`
+	Admin2               string `json:"admin2,omitempty"`
+	City                 string `json:"city,omitempty"`
+	FilePath             string `json:"file_path,omitempty"`
+	S3Path               string `json:"s3_path,omitempty"`
+	DatabaseTable        string `json:"database_table,omitempty"`
+	V6JobFile            string `json:"v6_job_file,omitempty"`
+	V6JobType            string `json:"v6_job_type,omitempty"`
+	FileSizeMB           string `json:"file_size_mb,omitempty"`
+}
+
 type Properties struct {
-	Title          string       `json:"title,omitempty"`
-	Type           string       `json:"type,omitempty"`
-	Created        *time.Time   `json:"created,omitempty"`
-	Modified       *time.Time   `json:"modified,omitempty"`
-	Abstract       string       `json:"abstract,omitempty"`
-	KeywordsSets   []keywords   `json:"keywords,omitempty"`
-	Contacts       []Contact    `json:"contact,omitempty"`
-	Dates          []date       `json:"dates,omitempty"`
-	License        string       `json:"license,omitempty"`
-	Language       string       `json:"language,omitempty"`
-	TemporalExtent *Temporal    `json:"temporal_extent,omitempty"`
-	ProductInfo    *ProductInfo `json:"product_info,omitempty"`
-	Geocatalogo    geocatalogo  `json:"_geocatalogo,omitempty"`
-	Datetime       *time.Time   `json:"datetime,omitempty"`
-	Collection     string       `json:"collection,omitempty"`
+	Title                  string               `json:"title,omitempty"`
+	Type                   string               `json:"type,omitempty"`
+	Created                *time.Time           `json:"created,omitempty"`
+	Modified               *time.Time           `json:"modified,omitempty"`
+	Abstract               string               `json:"abstract,omitempty"`
+	Description            string               `json:"description,omitempty"`
+	KeywordsSets           []keywords           `json:"keywords,omitempty"`
+	Contacts               []Contact            `json:"contact,omitempty"`
+	Dates                  []date               `json:"dates,omitempty"`
+	License                string               `json:"license,omitempty"`
+	Language               string               `json:"language,omitempty"`
+	TemporalExtent         *Temporal            `json:"temporal_extent,omitempty"`
+	ProductInfo            *ProductInfo         `json:"product_info,omitempty"`
+	Geocatalogo            geocatalogo          `json:"_geocatalogo,omitempty"`
+	Datetime               *time.Time           `json:"datetime,omitempty"`
+	Collection             string               `json:"collection,omitempty"`
+	GROMetadata            *GROMetadata         `json:"gro_metadata,omitempty"`
+	Execution              map[string]interface{} `json:"execution,omitempty"`
+	OrganizationalContext  map[string]interface{} `json:"organizational_context,omitempty"`
+	Capabilities           map[string]interface{} `json:"capabilities,omitempty"`
+	Playbook               map[string]interface{} `json:"playbook,omitempty"`
+	Operational            map[string]interface{} `json:"operational,omitempty"`
+	Database               map[string]interface{} `json:"database,omitempty"`
+	FileMetadata           map[string]interface{} `json:"file_metadata,omitempty"`
+	JobMetadata            map[string]interface{} `json:"job_metadata,omitempty"`
+	Owner                  string               `json:"owner,omitempty"`
 }
 
 // Record describes a generic metadata record

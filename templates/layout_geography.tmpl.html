@@ -257,15 +257,63 @@
         </section>
         {{end}}
 
-        <!-- Data Processing Bots Section (for Clankr continent!) -->
-        {{if .CollectionCounts.DataBots}}
+        <!-- Claude Projects Section (for Leadership agents) -->
+        {{if .CollectionCounts.ClaudeProjects}}
         <section style="margin-bottom:24px">
-          <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #06b6d4;padding-bottom:6px">
-            📊 Data Processing Bots <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.DataBots}})</span>
+          <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #a855f7;padding-bottom:6px">
+            ☁️ Claude Projects <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.ClaudeProjects}})</span>
           </h2>
           <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
             {{range .Jobs}}
-              {{if eq .Properties.Collection "data_bot"}}
+              {{if eq .Properties.Collection "claude_projects"}}
+                {{template "dataset_card" .}}
+              {{end}}
+            {{end}}
+          </div>
+        </section>
+        {{end}}
+
+        <!-- Operational Services Section (Lambda functions) -->
+        {{if .CollectionCounts.OperationalServices}}
+        <section style="margin-bottom:24px">
+          <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #10b981;padding-bottom:6px">
+            ⚙️ Operational Services <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.OperationalServices}})</span>
+          </h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
+            {{range .Jobs}}
+              {{if eq .Properties.Collection "operational_service"}}
+                {{template "dataset_card" .}}
+              {{end}}
+            {{end}}
+          </div>
+        </section>
+        {{end}}
+
+        <!-- Data Inspection Bots Section -->
+        {{if .CollectionCounts.DataInspectionBots}}
+        <section style="margin-bottom:24px">
+          <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #06b6d4;padding-bottom:6px">
+            🔍 Data Inspection Bots <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.DataInspectionBots}})</span>
+          </h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
+            {{range .Jobs}}
+              {{if eq .Properties.Collection "data_inspection_bot"}}
+                {{template "dataset_card" .}}
+              {{end}}
+            {{end}}
+          </div>
+        </section>
+        {{end}}
+
+        <!-- Catalog Management Bots Section -->
+        {{if .CollectionCounts.CatalogManagementBots}}
+        <section style="margin-bottom:24px">
+          <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #0891b2;padding-bottom:6px">
+            📦 Catalog Management Bots <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.CatalogManagementBots}})</span>
+          </h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
+            {{range .Jobs}}
+              {{if eq .Properties.Collection "catalog_management_bot"}}
                 {{template "dataset_card" .}}
               {{end}}
             {{end}}

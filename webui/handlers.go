@@ -141,6 +141,13 @@ func (a *App) HandleDataset(w http.ResponseWriter, r *http.Request) {
 		Record: *record,
 	}
 
+	// DEBUG: Log what we loaded
+	if record.Properties.Operational != nil {
+		log.Printf("DEBUG: Operational data loaded for %s: %v", record.ID, record.Properties.Operational)
+	} else {
+		log.Printf("DEBUG: No operational data for %s", record.ID)
+	}
+
 	// Convert record to JSON for display
 	recordJSON, err := json.MarshalIndent(record, "", "  ")
 	if err == nil {
@@ -324,6 +331,14 @@ func (a *App) HandleGeography(w http.ResponseWriter, r *http.Request) {
 				counts.Government++
 			case "ai_agent":
 				counts.AIAgents++
+			case "claude_projects":
+				counts.ClaudeProjects++
+			case "operational_service":
+				counts.OperationalServices++
+			case "data_inspection_bot":
+				counts.DataInspectionBots++
+			case "catalog_management_bot":
+				counts.CatalogManagementBots++
 			case "data_bot":
 				counts.DataBots++
 			case "scraper_bot":
@@ -440,6 +455,93 @@ func (a *App) HandleGeography(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) HandleStats(w http.ResponseWriter, r *http.Request) {
-	// TODO: Render statistics page
-	w.Write([]byte("Statistics page - coming soon!"))
+	// Load all records from JSON
+	catalogPath := os.Getenv("CATALOG_JSON_PATH")
+	if catalogPath == "" {
+		catalogPath = "/Users/jjohnson/projects/geosure/catalog/data/geocatalogo_records.json"
+	}
+
+	data, err := os.ReadFile(catalogPath)
+	if err != nil {
+		http.Error(w, "Failed to load catalog", http.StatusInternalServerError)
+		log.Printf("Error loading catalog: %v", err)
+		return
+	}
+
+	var records []Record
+	if err := json.Unmarshal(data, &records); err != nil {
+		http.Error(w, "Failed to parse catalog", http.StatusInternalServerError)
+		log.Printf("Error parsing catalog: %v", err)
+		return
+	}
+
+	// Build comprehensive statistics
+	stats := buildDetailedStats(records, a.meta)
+
+	if err := a.tc.Render(w, "layout_stats", stats); err != nil {
+		http.Error(w, "Template error", http.StatusInternalServerError)
+		log.Printf("Template error: %v", err)
+	}
+}
+
+func buildDetailedStats(records []Record, meta *metadata.MetadataStore) StatsPageData {
+	stats := StatsPageData{
+		TotalRecords: len(records),
+	}
+
+	// Count by collection type
+	collectionCounts := make(map[string]int)
+	agentCount := 0
+	botCount := 0
+	serviceCount := 0
+	dbTableCount := 0
+	fileCount := 0
+
+	for _, rec := range records {
+		collectionCounts[rec.Properties.Collection]++
+
+		// Count specific types
+		switch rec.Properties.Collection {
+		case "ai_agent":
+			agentCount++
+		case "operational_service":
+			serviceCount++
+		case "data_inspection_bot", "catalog_management_bot", "automation_bot", "scraper_bot", "data_bot":
+			botCount++
+		case "existing_db":
+			dbTableCount++
+		case "existing_local":
+			fileCount++
+		}
+	}
+
+	stats.AgentCount = agentCount
+	stats.BotCount = botCount
+	stats.ServiceCount = serviceCount
+	stats.DatabaseTableCount = dbTableCount
+	stats.FileCount = fileCount
+	stats.V6JobCount = collectionCounts["potential_v6"]
+	stats.ExternalSourceCount = collectionCounts["external_api"] + collectionCounts["external_news"] + collectionCounts["external_government"] + collectionCounts["external_other"]
+
+	// Get metadata counts from introspection
+	if meta != nil {
+		if meta.Database != nil {
+			stats.IntrospectionStats.DatabaseTables = len(meta.Database.Tables)
+		}
+		stats.IntrospectionStats.Agents = len(meta.Agents)
+		stats.IntrospectionStats.CSVFiles = len(meta.CSVFiles)
+		stats.IntrospectionStats.ParquetFiles = len(meta.Parquet)
+		stats.IntrospectionStats.Shapefiles = len(meta.Shapefile)
+		stats.IntrospectionStats.PDFs = len(meta.PDF)
+		stats.IntrospectionStats.V6Jobs = len(meta.V6Jobs)
+	}
+
+	return stats
+}
+
+func (a *App) HandleAPIDocs(w http.ResponseWriter, r *http.Request) {
+	if err := a.tc.Render(w, "layout_api_docs", nil); err != nil {
+		http.Error(w, "Template error", http.StatusInternalServerError)
+		log.Printf("Template error: %v", err)
+	}
 }

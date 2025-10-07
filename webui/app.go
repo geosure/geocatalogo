@@ -35,11 +35,17 @@ type Link struct {
 }
 
 type Properties struct {
-	Title         string            `json:"title"`
-	Abstract      string            `json:"abstract,omitempty"`
-	Collection    string            `json:"collection"`
-	GROMetadata   GROMetadata       `json:"gro_metadata"`
-	GeoCatalogo   GeoCatalogoMeta   `json:"_geocatalogo"`
+	Title                  string                 `json:"title"`
+	Abstract               string                 `json:"abstract,omitempty"`
+	Collection             string                 `json:"collection"`
+	GROMetadata            GROMetadata            `json:"gro_metadata"`
+	GeoCatalogo            GeoCatalogoMeta        `json:"_geocatalogo"`
+	Operational            map[string]interface{} `json:"operational,omitempty"`
+	Database               map[string]interface{} `json:"database,omitempty"`
+	FileMetadata           map[string]interface{} `json:"file_metadata,omitempty"`
+	Execution              map[string]interface{} `json:"execution,omitempty"`
+	OrganizationalContext  map[string]interface{} `json:"organizational_context,omitempty"`
+	Capabilities           map[string]interface{} `json:"capabilities,omitempty"`
 }
 
 type GeoCatalogoMeta struct {
@@ -94,6 +100,28 @@ type CountryStat struct {
 	Count int
 }
 
+type StatsPageData struct {
+	TotalRecords         int
+	AgentCount           int
+	BotCount             int
+	ServiceCount         int
+	DatabaseTableCount   int
+	FileCount            int
+	V6JobCount           int
+	ExternalSourceCount  int
+	IntrospectionStats   IntrospectionStats
+}
+
+type IntrospectionStats struct {
+	DatabaseTables  int
+	Agents          int
+	CSVFiles        int
+	ParquetFiles    int
+	Shapefiles      int
+	PDFs            int
+	V6Jobs          int
+}
+
 type DatasetPageData struct {
 	Record         Record
 	RecordJSON     string
@@ -112,23 +140,27 @@ type DatasetPageData struct {
 }
 
 type CollectionCounts struct {
-	V6Jobs          int
-	Database        int
-	Files           int
-	APIs            int
-	News            int
-	Government      int
-	AIAgents        int // Claude, GPT, Gemini, etc.
-	DataBots        int // CSV inspector, Parquet analyzer, etc.
-	ScraperBots     int // News scraper, ACLED harvester, etc.
-	AutoBots        int // Catalog updater, S3 sync, job scheduler, etc.
-	HistoricalAgents int // Way Barrios' archived prompt engineering examples
-	VerbApps        int // User-facing verb applications
-	InternalTools   int // Internal tools (introspect, validate)
-	APIServices     int // API services (tile, search, catalog)
-	TeamMembers     int // GRO team members
-	Infrastructure  int // AWS infrastructure components
-	Other           int
+	V6Jobs               int
+	Database             int
+	Files                int
+	APIs                 int
+	News                 int
+	Government           int
+	AIAgents             int // Claude, GPT, Gemini, etc.
+	ClaudeProjects       int // Claude Projects (cloud-based agents)
+	OperationalServices  int // Lambda functions (news-ingestor, location-matcher, etc.)
+	DataInspectionBots   int // CSV inspector, Parquet analyzer, Database inspector, etc.
+	CatalogManagementBots int // Catalog updater, converter, rebuilder, etc.
+	DataBots             int // Legacy/generic data processing bots
+	ScraperBots          int // News scraper, ACLED harvester, etc.
+	AutoBots             int // Automation bots (orchestrators, job schedulers, etc.)
+	HistoricalAgents     int // Way Barrios' archived prompt engineering examples
+	VerbApps             int // User-facing verb applications
+	InternalTools        int // Internal tools (introspect, validate)
+	APIServices          int // API services (tile, search, catalog)
+	TeamMembers          int // GRO team members
+	Infrastructure       int // AWS infrastructure components
+	Other                int
 }
 
 type SubGeography struct {

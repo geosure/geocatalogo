@@ -1,8 +1,13 @@
 {{ define "partials/agent_introspection" }}
-{{ if .Agent }}
+<!-- Render agent introspection from EITHER .Agent (separate file) OR .Record.Properties (enriched API data) -->
+<div style="background:yellow;padding:10px;margin:10px 0">
+  DEBUG PARTIAL CALLED - Agent: {{ if .Agent }}YES{{ else }}NO{{ end }} | Execution: {{ if .Record.Properties.Execution }}YES{{ else }}NO{{ end }}
+</div>
+{{ if or .Agent .Record.Properties.Execution }}
 <div class="agent-introspection mt-4">
 
-  <!-- Agent Type Badge -->
+  {{ if .Agent }}
+  <!-- Agent Type Badge (from separate introspection file) -->
   <div class="card mb-3">
     <div class="card-body">
       <div class="d-flex align-items-center gap-3">
@@ -19,8 +24,9 @@
       </div>
     </div>
   </div>
+  {{ end }}
 
-  {{ if .Agent.Execution }}
+  {{ if or .Agent.Execution .Record.Properties.Execution }}
   <!-- Execution Context -->
   <div class="card mb-3">
     <div class="card-header bg-primary text-white">
@@ -29,75 +35,144 @@
     <div class="card-body">
       <div class="row">
         <div class="col-md-6">
-          {{ if .Agent.Execution.Platform }}
-          <div class="mb-2">
-            <strong>Platform:</strong><br>
-            <code class="text-primary">{{ .Agent.Execution.Platform }}</code>
-          </div>
-          {{ end }}
-          {{ if .Agent.Execution.Runtime }}
-          <div class="mb-2">
-            <strong>Runtime:</strong><br>
-            <span class="text-muted">{{ .Agent.Execution.Runtime }}</span>
-          </div>
-          {{ end }}
-          {{ if .Agent.Execution.Model }}
-          <div class="mb-2">
-            <strong>Model:</strong> <span class="badge bg-dark">{{ .Agent.Execution.Model }}</span>
-          </div>
-          {{ end }}
-          {{ if .Agent.Execution.ContextSize }}
-          <div class="mb-2">
-            <strong>Context:</strong> {{ .Agent.Execution.ContextSize }}
-          </div>
+          {{ if .Record.Properties.Execution }}
+            {{ if index .Record.Properties.Execution "platform" }}
+            <div class="mb-2">
+              <strong>Platform:</strong><br>
+              <code class="text-primary">{{ index .Record.Properties.Execution "platform" }}</code>
+            </div>
+            {{ end }}
+            {{ if index .Record.Properties.Execution "runtime" }}
+            <div class="mb-2">
+              <strong>Runtime:</strong><br>
+              <span class="text-muted">{{ index .Record.Properties.Execution "runtime" }}</span>
+            </div>
+            {{ end }}
+            {{ if index .Record.Properties.Execution "model" }}
+            <div class="mb-2">
+              <strong>Model:</strong> <span class="badge bg-dark">{{ index .Record.Properties.Execution "model" }}</span>
+            </div>
+            {{ end }}
+            {{ if index .Record.Properties.Execution "context_size" }}
+            <div class="mb-2">
+              <strong>Context:</strong> {{ index .Record.Properties.Execution "context_size" }}
+            </div>
+            {{ end }}
+          {{ else if .Agent.Execution }}
+            {{ if .Agent.Execution.Platform }}
+            <div class="mb-2">
+              <strong>Platform:</strong><br>
+              <code class="text-primary">{{ .Agent.Execution.Platform }}</code>
+            </div>
+            {{ end }}
+            {{ if .Agent.Execution.Runtime }}
+            <div class="mb-2">
+              <strong>Runtime:</strong><br>
+              <span class="text-muted">{{ .Agent.Execution.Runtime }}</span>
+            </div>
+            {{ end }}
+            {{ if .Agent.Execution.Model }}
+            <div class="mb-2">
+              <strong>Model:</strong> <span class="badge bg-dark">{{ .Agent.Execution.Model }}</span>
+            </div>
+            {{ end }}
+            {{ if .Agent.Execution.ContextSize }}
+            <div class="mb-2">
+              <strong>Context:</strong> {{ .Agent.Execution.ContextSize }}
+            </div>
+            {{ end }}
           {{ end }}
         </div>
         <div class="col-md-6">
-          {{ if .Agent.Execution.HowToRun }}
-          <div class="mb-2">
-            <strong>How to Run:</strong><br>
-            <code class="bg-light p-2 d-block rounded">{{ .Agent.Execution.HowToRun }}</code>
-          </div>
-          {{ end }}
-          {{ if .Agent.Execution.WorkingDirectory }}
-          <div class="mb-2">
-            <strong>Working Directory:</strong><br>
-            <code class="text-muted">{{ .Agent.Execution.WorkingDirectory }}</code>
-          </div>
-          {{ end }}
-        </div>
-      </div>
-      {{ if .Agent.Execution.GitHubRepo }}
-      <div class="mt-3 pt-3 border-top">
-        <strong>GitHub Repository:</strong>
-        <a href="{{ .Agent.Execution.GitHubRepo }}" target="_blank" class="btn btn-sm btn-outline-dark">
-          <svg width="16" height="16" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
-            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-          </svg>
-          {{ .Agent.Execution.RepoPath }}
-        </a>
-      </div>
-      {{ end }}
-      {{ if .Agent.Execution.Dependencies }}
-      <div class="mt-3 pt-3 border-top">
-        <strong>Dependencies:</strong>
-        <div class="d-flex flex-wrap gap-2 mt-2">
-          {{ range .Agent.Execution.Dependencies }}
-          <span class="badge bg-light text-dark border">{{ . }}</span>
+          {{ if .Record.Properties.Execution }}
+            {{ if index .Record.Properties.Execution "how_to_run" }}
+            <div class="mb-2">
+              <strong>How to Run:</strong><br>
+              <code class="bg-light p-2 d-block rounded">{{ index .Record.Properties.Execution "how_to_run" }}</code>
+            </div>
+            {{ end }}
+            {{ if index .Record.Properties.Execution "working_directory" }}
+            <div class="mb-2">
+              <strong>Working Directory:</strong><br>
+              <code class="text-muted">{{ index .Record.Properties.Execution "working_directory" }}</code>
+            </div>
+            {{ end }}
+          {{ else if .Agent.Execution }}
+            {{ if .Agent.Execution.HowToRun }}
+            <div class="mb-2">
+              <strong>How to Run:</strong><br>
+              <code class="bg-light p-2 d-block rounded">{{ .Agent.Execution.HowToRun }}</code>
+            </div>
+            {{ end }}
+            {{ if .Agent.Execution.WorkingDirectory }}
+            <div class="mb-2">
+              <strong>Working Directory:</strong><br>
+              <code class="text-muted">{{ .Agent.Execution.WorkingDirectory }}</code>
+            </div>
+            {{ end }}
           {{ end }}
         </div>
       </div>
-      {{ end }}
-      {{ if .Agent.Execution.MaintenanceScript }}
-      <div class="mt-3 pt-3 border-top">
-        <strong>Maintenance Script:</strong> <code>{{ .Agent.Execution.MaintenanceScript }}</code>
-      </div>
+      {{ if .Record.Properties.Execution }}
+        {{ if index .Record.Properties.Execution "github_repo" }}
+        <div class="mt-3 pt-3 border-top">
+          <strong>GitHub Repository:</strong>
+          <a href="{{ index .Record.Properties.Execution "github_repo" }}" target="_blank" class="btn btn-sm btn-outline-dark">
+            <svg width="16" height="16" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
+              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+            </svg>
+            {{ if index .Record.Properties.Execution "repo_path" }}{{ index .Record.Properties.Execution "repo_path" }}{{ end }}
+          </a>
+        </div>
+        {{ end }}
+        {{ if index .Record.Properties.Execution "dependencies" }}
+        <div class="mt-3 pt-3 border-top">
+          <strong>Dependencies:</strong>
+          <div class="d-flex flex-wrap gap-2 mt-2">
+            {{ range index .Record.Properties.Execution "dependencies" }}
+            <span class="badge bg-light text-dark border">{{ . }}</span>
+            {{ end }}
+          </div>
+        </div>
+        {{ end }}
+        {{ if index .Record.Properties.Execution "maintenance_script" }}
+        <div class="mt-3 pt-3 border-top">
+          <strong>Maintenance Script:</strong> <code>{{ index .Record.Properties.Execution "maintenance_script" }}</code>
+        </div>
+        {{ end }}
+      {{ else if .Agent.Execution }}
+        {{ if .Agent.Execution.GitHubRepo }}
+        <div class="mt-3 pt-3 border-top">
+          <strong>GitHub Repository:</strong>
+          <a href="{{ .Agent.Execution.GitHubRepo }}" target="_blank" class="btn btn-sm btn-outline-dark">
+            <svg width="16" height="16" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
+              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+            </svg>
+            {{ .Agent.Execution.RepoPath }}
+          </a>
+        </div>
+        {{ end }}
+        {{ if .Agent.Execution.Dependencies }}
+        <div class="mt-3 pt-3 border-top">
+          <strong>Dependencies:</strong>
+          <div class="d-flex flex-wrap gap-2 mt-2">
+            {{ range .Agent.Execution.Dependencies }}
+            <span class="badge bg-light text-dark border">{{ . }}</span>
+            {{ end }}
+          </div>
+        </div>
+        {{ end }}
+        {{ if .Agent.Execution.MaintenanceScript }}
+        <div class="mt-3 pt-3 border-top">
+          <strong>Maintenance Script:</strong> <code>{{ .Agent.Execution.MaintenanceScript }}</code>
+        </div>
+        {{ end }}
       {{ end }}
     </div>
   </div>
   {{ end }}
 
-  {{ if .Agent.OrgContext }}
+  {{ if or .Agent.OrgContext .Record.Properties.OrganizationalContext }}
   <!-- Organizational Context -->
   <div class="card mb-3">
     <div class="card-header bg-success text-white">
@@ -106,125 +181,242 @@
     <div class="card-body">
       <div class="row">
         <div class="col-md-6">
-          {{ if .Agent.OrgContext.CreatedBy }}
-          <div class="mb-2">
-            <strong>Created By:</strong> <span class="text-primary">{{ .Agent.OrgContext.CreatedBy }}</span>
-          </div>
-          {{ end }}
-          {{ if .Agent.OrgContext.CreationDate }}
-          <div class="mb-2">
-            <strong>Created:</strong> {{ .Agent.OrgContext.CreationDate }}
-          </div>
-          {{ end }}
-          {{ if .Agent.OrgContext.CurrentBoss }}
-          <div class="mb-2">
-            <strong>Current Boss:</strong> <span class="badge bg-warning text-dark fs-6">{{ .Agent.OrgContext.CurrentBoss }}</span>
-          </div>
-          {{ end }}
-          {{ if .Agent.OrgContext.CurrentUsers }}
-          <div class="mb-2">
-            <strong>Current Users:</strong>
-            <ul class="mb-0">
-              {{ range .Agent.OrgContext.CurrentUsers }}
-              <li>{{ . }}</li>
-              {{ end }}
-            </ul>
-          </div>
+          {{ if .Record.Properties.OrganizationalContext }}
+            {{ if index .Record.Properties.OrganizationalContext "created_by" }}
+            <div class="mb-2">
+              <strong>Created By:</strong> <span class="text-primary">{{ index .Record.Properties.OrganizationalContext "created_by" }}</span>
+            </div>
+            {{ end }}
+            {{ if index .Record.Properties.OrganizationalContext "creation_date" }}
+            <div class="mb-2">
+              <strong>Created:</strong> {{ index .Record.Properties.OrganizationalContext "creation_date" }}
+            </div>
+            {{ end }}
+            {{ if index .Record.Properties.OrganizationalContext "current_boss" }}
+            <div class="mb-2">
+              <strong>Current Boss:</strong> <span class="badge bg-warning text-dark fs-6">{{ index .Record.Properties.OrganizationalContext "current_boss" }}</span>
+            </div>
+            {{ end }}
+            {{ if index .Record.Properties.OrganizationalContext "current_users" }}
+            <div class="mb-2">
+              <strong>Current Users:</strong>
+              <ul class="mb-0">
+                {{ range index .Record.Properties.OrganizationalContext "current_users" }}
+                <li>{{ . }}</li>
+                {{ end }}
+              </ul>
+            </div>
+            {{ end }}
+          {{ else if .Agent.OrgContext }}
+            {{ if .Agent.OrgContext.CreatedBy }}
+            <div class="mb-2">
+              <strong>Created By:</strong> <span class="text-primary">{{ .Agent.OrgContext.CreatedBy }}</span>
+            </div>
+            {{ end }}
+            {{ if .Agent.OrgContext.CreationDate }}
+            <div class="mb-2">
+              <strong>Created:</strong> {{ .Agent.OrgContext.CreationDate }}
+            </div>
+            {{ end }}
+            {{ if .Agent.OrgContext.CurrentBoss }}
+            <div class="mb-2">
+              <strong>Current Boss:</strong> <span class="badge bg-warning text-dark fs-6">{{ .Agent.OrgContext.CurrentBoss }}</span>
+            </div>
+            {{ end }}
+            {{ if .Agent.OrgContext.CurrentUsers }}
+            <div class="mb-2">
+              <strong>Current Users:</strong>
+              <ul class="mb-0">
+                {{ range .Agent.OrgContext.CurrentUsers }}
+                <li>{{ . }}</li>
+                {{ end }}
+              </ul>
+            </div>
+            {{ end }}
           {{ end }}
         </div>
         <div class="col-md-6">
-          {{ if .Agent.OrgContext.ReportsTo }}
-          <div class="mb-2">
-            <strong>Reports To:</strong>
-            <ul class="mb-0">
-              {{ range .Agent.OrgContext.ReportsTo }}
-              <li>{{ . }}</li>
-              {{ end }}
-            </ul>
+          {{ if .Record.Properties.OrganizationalContext }}
+            {{ if index .Record.Properties.OrganizationalContext "reports_to" }}
+            <div class="mb-2">
+              <strong>Reports To:</strong>
+              <ul class="mb-0">
+                {{ range index .Record.Properties.OrganizationalContext "reports_to" }}
+                <li>{{ . }}</li>
+                {{ end }}
+              </ul>
+            </div>
+            {{ end }}
+          {{ else if .Agent.OrgContext }}
+            {{ if .Agent.OrgContext.ReportsTo }}
+            <div class="mb-2">
+              <strong>Reports To:</strong>
+              <ul class="mb-0">
+                {{ range .Agent.OrgContext.ReportsTo }}
+                <li>{{ . }}</li>
+                {{ end }}
+              </ul>
+            </div>
+            {{ end }}
+          {{ end }}
+        </div>
+      </div>
+      {{ if .Record.Properties.OrganizationalContext }}
+        {{ if index .Record.Properties.OrganizationalContext "coordinates_with" }}
+        <div class="mt-3 pt-3 border-top">
+          <strong>Coordinates With:</strong>
+          <div class="d-flex flex-wrap gap-2 mt-2">
+            {{ range index .Record.Properties.OrganizationalContext "coordinates_with" }}
+            <span class="badge bg-info">{{ . }}</span>
+            {{ end }}
           </div>
-          {{ end }}
         </div>
-      </div>
-      {{ if .Agent.OrgContext.CoordinatesWith }}
-      <div class="mt-3 pt-3 border-top">
-        <strong>Coordinates With:</strong>
-        <div class="d-flex flex-wrap gap-2 mt-2">
-          {{ range .Agent.OrgContext.CoordinatesWith }}
-          <span class="badge bg-info">{{ . }}</span>
-          {{ end }}
+        {{ end }}
+        {{ if index .Record.Properties.OrganizationalContext "manages" }}
+        <div class="mt-3 pt-3 border-top">
+          <strong>Manages:</strong>
+          <ul class="mt-2">
+            {{ range index .Record.Properties.OrganizationalContext "manages" }}
+            <li>{{ . }}</li>
+            {{ end }}
+          </ul>
         </div>
-      </div>
-      {{ end }}
-      {{ if .Agent.OrgContext.Manages }}
-      <div class="mt-3 pt-3 border-top">
-        <strong>Manages:</strong>
-        <ul class="mt-2">
-          {{ range .Agent.OrgContext.Manages }}
-          <li>{{ . }}</li>
-          {{ end }}
-        </ul>
-      </div>
-      {{ end }}
-      {{ if .Agent.OrgContext.Purpose }}
-      <div class="mt-3 pt-3 border-top">
-        <strong>Purpose:</strong>
-        <p class="text-muted mb-0 mt-2">{{ .Agent.OrgContext.Purpose }}</p>
-      </div>
+        {{ end }}
+        {{ if index .Record.Properties.OrganizationalContext "purpose" }}
+        <div class="mt-3 pt-3 border-top">
+          <strong>Purpose:</strong>
+          <p class="text-muted mb-0 mt-2">{{ index .Record.Properties.OrganizationalContext "purpose" }}</p>
+        </div>
+        {{ end }}
+      {{ else if .Agent.OrgContext }}
+        {{ if .Agent.OrgContext.CoordinatesWith }}
+        <div class="mt-3 pt-3 border-top">
+          <strong>Coordinates With:</strong>
+          <div class="d-flex flex-wrap gap-2 mt-2">
+            {{ range .Agent.OrgContext.CoordinatesWith }}
+            <span class="badge bg-info">{{ . }}</span>
+            {{ end }}
+          </div>
+        </div>
+        {{ end }}
+        {{ if .Agent.OrgContext.Manages }}
+        <div class="mt-3 pt-3 border-top">
+          <strong>Manages:</strong>
+          <ul class="mt-2">
+            {{ range .Agent.OrgContext.Manages }}
+            <li>{{ . }}</li>
+            {{ end }}
+          </ul>
+        </div>
+        {{ end }}
+        {{ if .Agent.OrgContext.Purpose }}
+        <div class="mt-3 pt-3 border-top">
+          <strong>Purpose:</strong>
+          <p class="text-muted mb-0 mt-2">{{ .Agent.OrgContext.Purpose }}</p>
+        </div>
+        {{ end }}
       {{ end }}
     </div>
   </div>
   {{ end }}
 
-  {{ if .Agent.Capabilities }}
+  {{ if or .Agent.Capabilities .Record.Properties.Capabilities }}
   <!-- Capabilities -->
   <div class="card mb-3">
     <div class="card-header bg-info text-white">
       <h5 class="mb-0">⚡ Capabilities</h5>
     </div>
     <div class="card-body">
-      {{ if .Agent.Capabilities.Primary }}
-      <h6 class="text-primary mt-2">Primary Capabilities</h6>
-      <ul class="list-group list-group-flush">
-        {{ range .Agent.Capabilities.Primary }}
-        <li class="list-group-item">{{ . }}</li>
+      {{ if .Record.Properties.Capabilities }}
+        {{ if index .Record.Properties.Capabilities "primary" }}
+        <h6 class="text-primary mt-2">Primary Capabilities</h6>
+        <ul class="list-group list-group-flush">
+          {{ range index .Record.Properties.Capabilities "primary" }}
+          <li class="list-group-item">{{ . }}</li>
+          {{ end }}
+        </ul>
         {{ end }}
-      </ul>
-      {{ end }}
 
-      {{ if .Agent.Capabilities.Secondary }}
-      <h6 class="text-secondary mt-4">Secondary Capabilities</h6>
-      <ul class="list-group list-group-flush">
-        {{ range .Agent.Capabilities.Secondary }}
-        <li class="list-group-item">{{ . }}</li>
+        {{ if index .Record.Properties.Capabilities "secondary" }}
+        <h6 class="text-secondary mt-4">Secondary Capabilities</h6>
+        <ul class="list-group list-group-flush">
+          {{ range index .Record.Properties.Capabilities "secondary" }}
+          <li class="list-group-item">{{ . }}</li>
+          {{ end }}
+        </ul>
         {{ end }}
-      </ul>
-      {{ end }}
 
-      {{ if .Agent.Capabilities.Integrations }}
-      <h6 class="text-dark mt-4">Integrations</h6>
-      <div class="d-flex flex-wrap gap-2 mt-2">
-        {{ range .Agent.Capabilities.Integrations }}
-        <span class="badge bg-secondary">{{ . }}</span>
+        {{ if index .Record.Properties.Capabilities "integrations" }}
+        <h6 class="text-dark mt-4">Integrations</h6>
+        <div class="d-flex flex-wrap gap-2 mt-2">
+          {{ range index .Record.Properties.Capabilities "integrations" }}
+          <span class="badge bg-secondary">{{ . }}</span>
+          {{ end }}
+        </div>
         {{ end }}
-      </div>
-      {{ end }}
 
-      {{ if .Agent.Capabilities.DataSources }}
-      <h6 class="text-dark mt-4">Data Sources</h6>
-      <div class="mt-2">
-        {{ range .Agent.Capabilities.DataSources }}
-        <span class="badge bg-light text-dark border me-2 mb-2">📊 {{ . }}</span>
+        {{ if index .Record.Properties.Capabilities "data_sources" }}
+        <h6 class="text-dark mt-4">Data Sources</h6>
+        <div class="mt-2">
+          {{ range index .Record.Properties.Capabilities "data_sources" }}
+          <span class="badge bg-light text-dark border me-2 mb-2">📊 {{ . }}</span>
+          {{ end }}
+        </div>
         {{ end }}
-      </div>
-      {{ end }}
 
-      {{ if .Agent.Capabilities.Outputs }}
-      <h6 class="text-dark mt-4">Outputs</h6>
-      <div class="mt-2">
-        {{ range .Agent.Capabilities.Outputs }}
-        <span class="badge bg-light text-dark border me-2 mb-2">📤 {{ . }}</span>
+        {{ if index .Record.Properties.Capabilities "outputs" }}
+        <h6 class="text-dark mt-4">Outputs</h6>
+        <div class="mt-2">
+          {{ range index .Record.Properties.Capabilities "outputs" }}
+          <span class="badge bg-light text-dark border me-2 mb-2">📤 {{ . }}</span>
+          {{ end }}
+        </div>
         {{ end }}
-      </div>
+      {{ else if .Agent.Capabilities }}
+        {{ if .Agent.Capabilities.Primary }}
+        <h6 class="text-primary mt-2">Primary Capabilities</h6>
+        <ul class="list-group list-group-flush">
+          {{ range .Agent.Capabilities.Primary }}
+          <li class="list-group-item">{{ . }}</li>
+          {{ end }}
+        </ul>
+        {{ end }}
+
+        {{ if .Agent.Capabilities.Secondary }}
+        <h6 class="text-secondary mt-4">Secondary Capabilities</h6>
+        <ul class="list-group list-group-flush">
+          {{ range .Agent.Capabilities.Secondary }}
+          <li class="list-group-item">{{ . }}</li>
+          {{ end }}
+        </ul>
+        {{ end }}
+
+        {{ if .Agent.Capabilities.Integrations }}
+        <h6 class="text-dark mt-4">Integrations</h6>
+        <div class="d-flex flex-wrap gap-2 mt-2">
+          {{ range .Agent.Capabilities.Integrations }}
+          <span class="badge bg-secondary">{{ . }}</span>
+          {{ end }}
+        </div>
+        {{ end }}
+
+        {{ if .Agent.Capabilities.DataSources }}
+        <h6 class="text-dark mt-4">Data Sources</h6>
+        <div class="mt-2">
+          {{ range .Agent.Capabilities.DataSources }}
+          <span class="badge bg-light text-dark border me-2 mb-2">📊 {{ . }}</span>
+          {{ end }}
+        </div>
+        {{ end }}
+
+        {{ if .Agent.Capabilities.Outputs }}
+        <h6 class="text-dark mt-4">Outputs</h6>
+        <div class="mt-2">
+          {{ range .Agent.Capabilities.Outputs }}
+          <span class="badge bg-light text-dark border me-2 mb-2">📤 {{ . }}</span>
+          {{ end }}
+        </div>
+        {{ end }}
       {{ end }}
     </div>
   </div>
@@ -284,5 +476,7 @@
   </div>
 
 </div>
+{{ else }}
+<!-- DEBUG: Agent object is NIL - skipping introspection -->
 {{ end }}
 {{ end }}

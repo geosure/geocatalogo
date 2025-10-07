@@ -1,0 +1,368 @@
+{{define "layout_api_docs"}}{{template "layout" .}}{{end}}
+
+{{define "page_title"}}API Documentation • GRO Catalog{{end}}
+
+{{define "page_content"}}
+  <div class="muted" style="margin-bottom:16px;font-size:13px">
+    <a href="/" style="color:var(--link)">Catalog</a>
+    <span class="sep">→</span>
+    <span>API Docs</span>
+  </div>
+
+  <h1>🔌 GeoCatalogo API Documentation</h1>
+  <p class="muted" style="margin-bottom:32px">
+    Complete guide to querying the GRO data universe - for humans and AI agents
+  </p>
+
+  <!-- Quick Start -->
+  <section class="card" style="background:#f0f9ff;border:1px solid #bae6fd">
+    <h2 style="margin:0 0 16px;color:#075985">🚀 Quick Start</h2>
+    <div style="background:#fff;border-radius:6px;padding:16px;font-family:monospace;font-size:13px">
+      <div style="color:#64748b;margin-bottom:8px"># API Base URL</div>
+      <div style="color:#0b63ce;font-weight:600">http://localhost:8000</div>
+
+      <div style="color:#64748b;margin:16px 0 8px"># Get a specific record</div>
+      <div>curl 'http://localhost:8000/?recordids=clankr_catalog_agent'</div>
+
+      <div style="color:#64748b;margin:16px 0 8px"># Search by keyword</div>
+      <div>curl 'http://localhost:8000/?q=database'</div>
+
+      <div style="color:#64748b;margin:16px 0 8px"># Get multiple records</div>
+      <div>curl 'http://localhost:8000/?recordids=clankr_agent,clankr_infra_agent'</div>
+    </div>
+  </section>
+
+  <!-- API Endpoints -->
+  <section class="card">
+    <h2 style="margin:0 0 24px">📋 API Endpoints</h2>
+
+    <div style="margin-bottom:32px">
+      <h3 style="margin:0 0 12px;color:#334155;font-size:18px">GET /?recordids={id}</h3>
+      <p style="color:#64748b;margin:0 0 16px">Retrieve specific catalog records by ID</p>
+
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:16px">
+        <strong>Parameters:</strong>
+        <table style="width:100%;margin-top:12px;font-size:14px">
+          <tr style="border-bottom:1px solid #e2e8f0">
+            <td style="padding:8px 12px 8px 0;font-family:monospace;color:#0b63ce">recordids</td>
+            <td style="padding:8px 0">Comma-separated list of record IDs</td>
+          </tr>
+        </table>
+
+        <div style="margin-top:16px">
+          <strong>Example:</strong>
+          <div style="background:#fff;border-radius:4px;padding:12px;margin-top:8px;font-family:monospace;font-size:13px">
+            curl 'http://localhost:8000/?recordids=clankr_catalog_agent'
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:32px">
+      <h3 style="margin:0 0 12px;color:#334155;font-size:18px">GET /?q={query}</h3>
+      <p style="color:#64748b;margin:0 0 16px">Full-text search across all catalog records</p>
+
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:16px">
+        <strong>Parameters:</strong>
+        <table style="width:100%;margin-top:12px;font-size:14px">
+          <tr style="border-bottom:1px solid #e2e8f0">
+            <td style="padding:8px 12px 8px 0;font-family:monospace;color:#0b63ce">q</td>
+            <td style="padding:8px 0">Search query (keywords, natural language)</td>
+          </tr>
+          <tr style="border-bottom:1px solid #e2e8f0">
+            <td style="padding:8px 12px 8px 0;font-family:monospace;color:#0b63ce">maxrecords</td>
+            <td style="padding:8px 0">Maximum results to return (default: 100)</td>
+          </tr>
+        </table>
+
+        <div style="margin-top:16px">
+          <strong>Examples:</strong>
+          <div style="background:#fff;border-radius:4px;padding:12px;margin-top:8px;font-family:monospace;font-size:13px">
+            # Search for database tables<br>
+            curl 'http://localhost:8000/?q=database'<br><br>
+
+            # Find AWS infrastructure<br>
+            curl 'http://localhost:8000/?q=Lambda+deployment'<br><br>
+
+            # Search with limit<br>
+            curl 'http://localhost:8000/?q=agent&maxrecords=10'
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Response Format -->
+  <section class="card">
+    <h2 style="margin:0 0 16px">📦 Response Format</h2>
+    <p class="muted" style="margin:0 0 16px">All responses are in GeoJSON format (STAC-compatible)</p>
+
+    <div style="background:#1e293b;color:#e2e8f0;border-radius:6px;padding:16px;font-family:monospace;font-size:12px;overflow-x:auto">
+<pre style="margin:0">{
+  "Matches": 1,
+  "Returned": 1,
+  "Records": [{
+    "id": "clankr_catalog_agent",
+    "type": "Feature",
+    "properties": {
+      "title": "Catalog Management Agent",
+      "abstract": "Your guide to GRO's complete data universe...",
+      "collection": "ai_agent",
+      "gro_metadata": {
+        "implementation_status": "active",
+        "data_format": "lambda_service",
+        "owner": "@clankr"
+      },
+      "execution": {
+        "model": "claude-sonnet-4-5",
+        "runtime": "Claude Code CLI",
+        "working_directory": "/Users/jjohnson/projects/geosure/catalog"
+      },
+      "organizational_context": {
+        "reports_to": ["clankr_agent (COO)"],
+        "manages": ["50+ introspection bots", "GeoCatalogo API server"]
+      },
+      "capabilities": {
+        "primary": ["Catalog management", "Agent discovery", "Database introspection"]
+      }
+    }
+  }]
+}</pre>
+    </div>
+  </section>
+
+  <!-- Common Query Patterns -->
+  <section class="card">
+    <h2 style="margin:0 0 24px">💡 Common Query Patterns</h2>
+
+    <div style="display:grid;gap:16px">
+      <!-- Agent Discovery -->
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px">
+        <h3 style="margin:0 0 12px;color:#475569;font-size:16px">🤖 Agent Discovery</h3>
+        <div style="font-family:monospace;font-size:13px">
+          <div style="color:#64748b;margin-bottom:4px"># Get all AI agents</div>
+          <div>curl 'http://localhost:8000/?q=ai_agent'</div>
+
+          <div style="color:#64748b;margin:16px 0 4px"># Find agent by capability</div>
+          <div>curl 'http://localhost:8000/?q=geocoding'</div>
+
+          <div style="color:#64748b;margin:16px 0 4px"># Get specific agent</div>
+          <div>curl 'http://localhost:8000/?recordids=clankr_infra_agent'</div>
+        </div>
+      </div>
+
+      <!-- Database Discovery -->
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px">
+        <h3 style="margin:0 0 12px;color:#475569;font-size:16px">🗄️ Database Discovery</h3>
+        <div style="font-family:monospace;font-size:13px">
+          <div style="color:#64748b;margin-bottom:4px"># List all database tables</div>
+          <div>curl 'http://localhost:8000/?q=existing_db'</div>
+
+          <div style="color:#64748b;margin:16px 0 4px"># Find specific table</div>
+          <div>curl 'http://localhost:8000/?recordids=db_geosure_news'</div>
+
+          <div style="color:#64748b;margin:16px 0 4px"># Search by table content</div>
+          <div>curl 'http://localhost:8000/?q=news+articles'</div>
+        </div>
+      </div>
+
+      <!-- File Discovery -->
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px">
+        <h3 style="margin:0 0 12px;color:#475569;font-size:16px">📄 File Discovery</h3>
+        <div style="font-family:monospace;font-size:13px">
+          <div style="color:#64748b;margin-bottom:4px"># Find CSV files</div>
+          <div>curl 'http://localhost:8000/?q=csv'</div>
+
+          <div style="color:#64748b;margin:16px 0 4px"># Find Parquet files</div>
+          <div>curl 'http://localhost:8000/?q=parquet'</div>
+
+          <div style="color:#64748b;margin:16px 0 4px"># Search by location</div>
+          <div>curl 'http://localhost:8000/?q=s3://geosure-data'</div>
+        </div>
+      </div>
+
+      <!-- v6 Job Discovery -->
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px">
+        <h3 style="margin:0 0 12px;color:#475569;font-size:16px">📋 v6 Job Discovery</h3>
+        <div style="font-family:monospace;font-size:13px">
+          <div style="color:#64748b;margin-bottom:4px"># List all v6 jobs</div>
+          <div>curl 'http://localhost:8000/?q=potential_v6'</div>
+
+          <div style="color:#64748b;margin:16px 0 4px"># Find jobs by location</div>
+          <div>curl 'http://localhost:8000/?q=dar+es+salaam'</div>
+
+          <div style="color:#64748b;margin:16px 0 4px"># Find jobs by type</div>
+          <div>curl 'http://localhost:8000/?q=ingest'</div>
+        </div>
+      </div>
+
+      <!-- External Source Discovery -->
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px">
+        <h3 style="margin:0 0 12px;color:#475569;font-size:16px">🌐 External Source Discovery</h3>
+        <div style="font-family:monospace;font-size:13px">
+          <div style="color:#64748b;margin-bottom:4px"># Find news APIs</div>
+          <div>curl 'http://localhost:8000/?q=external_news'</div>
+
+          <div style="color:#64748b;margin:16px 0 4px"># Find government data</div>
+          <div>curl 'http://localhost:8000/?q=external_government'</div>
+
+          <div style="color:#64748b;margin:16px 0 4px"># Search by country</div>
+          <div>curl 'http://localhost:8000/?q=Nigeria'</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- For AI Agents -->
+  <section class="card" style="background:#f1f5f9;border:1px solid #cbd5e1">
+    <h2 style="margin:0 0 16px;color:#334155">🧠 For AI Agents</h2>
+    <p style="color:#475569;margin:0 0 24px;line-height:1.6">
+      This catalog enables autonomous agent coordination and discovery without human intervention.
+    </p>
+
+    <div style="background:#e2e8f0;border-radius:8px;padding:16px;margin-bottom:16px">
+      <h3 style="margin:0 0 12px;color:#334155;font-size:16px">On Bootstrap</h3>
+      <div style="font-family:monospace;font-size:13px">
+        <div style="color:#64748b;margin-bottom:4px"># Discover all agents in ecosystem</div>
+        <div>curl 'http://localhost:8000/?q=ai_agent' | jq '.Records[]'</div>
+
+        <div style="color:#64748b;margin:16px 0 4px"># Build operational map</div>
+        <div>curl 'http://localhost:8000/?recordids=clankr_agent,clankr_infra_agent,clankr_catalog_agent'</div>
+      </div>
+    </div>
+
+    <div style="background:#e2e8f0;border-radius:8px;padding:16px;margin-bottom:16px">
+      <h3 style="margin:0 0 12px;color:#334155;font-size:16px">Task Delegation</h3>
+      <div style="font-family:monospace;font-size:13px">
+        <div style="color:#64748b;margin-bottom:4px"># "Who can deploy Lambda functions?"</div>
+        <div>curl 'http://localhost:8000/?q=Lambda+deployment'</div>
+        <div style="color:#64748b;margin-top:4px"># → Returns: clankr_infra_agent</div>
+
+        <div style="color:#64748b;margin:16px 0 4px"># "Who manages the job registry?"</div>
+        <div>curl 'http://localhost:8000/?q=v6+jobs'</div>
+        <div style="color:#64748b;margin-top:4px"># → Returns: clankr_v6_scaffolder</div>
+      </div>
+    </div>
+
+    <div style="background:#e2e8f0;border-radius:8px;padding:16px">
+      <h3 style="margin:0 0 12px;color:#334155;font-size:16px">Continuous Discovery</h3>
+      <div style="font-family:monospace;font-size:13px">
+        <div style="color:#64748b;margin-bottom:4px"># Daily check for new agents</div>
+        <div>curl 'http://localhost:8000/?q=agent+status:active'</div>
+
+        <div style="color:#64748b;margin:16px 0 4px"># Get catalog statistics</div>
+        <div>curl 'http://localhost:8000/' | jq '{total: .Matches, returned: .Returned}'</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Response Fields -->
+  <section class="card">
+    <h2 style="margin:0 0 16px">📝 Enriched Metadata Fields</h2>
+    <p class="muted" style="margin:0 0 16px">
+      Beyond basic metadata, records include rich introspection data
+    </p>
+
+    <table style="width:100%;border-collapse:collapse;font-size:14px">
+      <thead>
+        <tr style="border-bottom:2px solid #e5e7eb">
+          <th style="text-align:left;padding:12px 12px 12px 0;color:#6b7280;font-weight:600">Field</th>
+          <th style="text-align:left;padding:12px 0;color:#6b7280;font-weight:600">Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #f3f4f6">
+          <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">execution</td>
+          <td style="padding:12px 0">Runtime, model, working directory, dependencies</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f3f4f6">
+          <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">organizational_context</td>
+          <td style="padding:12px 0">Reports to, manages, coordinates with, purpose</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f3f4f6">
+          <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">capabilities</td>
+          <td style="padding:12px 0">Primary/secondary capabilities, integrations, outputs</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f3f4f6">
+          <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">operational</td>
+          <td style="padding:12px 0">Function, runtime, model, processed stats (for bots/services)</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f3f4f6">
+          <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">database</td>
+          <td style="padding:12px 0">Schema, columns, indexes, row count (for tables)</td>
+        </tr>
+        <tr>
+          <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">file_metadata</td>
+          <td style="padding:12px 0">Row count, columns, geometry type (for files)</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Technical Details -->
+  <section class="card">
+    <h2 style="margin:0 0 16px">⚙️ Technical Details</h2>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px">
+      <div>
+        <strong style="color:#475569">Format:</strong>
+        <div style="color:#64748b;margin-top:4px">GeoJSON (STAC-compatible)</div>
+      </div>
+
+      <div>
+        <strong style="color:#475569">Authentication:</strong>
+        <div style="color:#64748b;margin-top:4px">None (local development)</div>
+      </div>
+
+      <div>
+        <strong style="color:#475569">Response Time:</strong>
+        <div style="color:#64748b;margin-top:4px">&lt;50ms (in-memory)</div>
+      </div>
+
+      <div>
+        <strong style="color:#475569">Records Indexed:</strong>
+        <div style="color:#64748b;margin-top:4px">1,803 entities</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Links -->
+  <section class="card">
+    <h2 style="margin:0 0 16px">🔗 Try It Now</h2>
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <a href="http://localhost:8000/" target="_blank" class="btn btn-primary">Open API</a>
+      <a href="http://localhost:8000/?recordids=clankr_catalog_agent" target="_blank" class="btn btn-secondary">Example Record</a>
+      <a href="http://localhost:8000/?q=agent" target="_blank" class="btn btn-secondary">Example Search</a>
+      <a href="/stats" class="btn btn-secondary">View Statistics</a>
+    </div>
+  </section>
+
+{{end}}
+
+<style>
+.btn {
+  display:inline-block;
+  padding:10px 20px;
+  border-radius:6px;
+  text-decoration:none;
+  font-weight:500;
+  transition:all 0.2s;
+}
+.btn-primary {
+  background:#0b63ce;
+  color:white;
+}
+.btn-primary:hover {
+  background:#0952a5;
+  transform:translateY(-2px);
+}
+.btn-secondary {
+  background:#f3f4f6;
+  color:#374151;
+  border:1px solid #d1d5db;
+}
+.btn-secondary:hover {
+  background:#e5e7eb;
+  transform:translateY(-2px);
+}
+</style>
