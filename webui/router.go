@@ -9,6 +9,7 @@ func NewMux(app *App) *http.ServeMux {
 	mux.HandleFunc("/dataset/", app.HandleDataset) // Legacy URL support
 	mux.HandleFunc("/geography/", app.HandleGeography)
 	mux.HandleFunc("/format/", app.HandleFormat)
+	mux.HandleFunc("/status/", app.HandleStatus)
 	mux.HandleFunc("/collection/", app.HandleCollectionDetail)
 	mux.HandleFunc("GET /collections", app.HandleCollections) // Go 1.22+ exact match syntax
 	mux.HandleFunc("GET /query", app.HandleQuery)             // Go 1.22+ exact match syntax

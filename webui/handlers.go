@@ -609,6 +609,108 @@ func (a *App) HandleFormat(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (a *App) HandleStatus(w http.ResponseWriter, r *http.Request) {
+	// Parse URL: /status/{status_name}
+	// Example: /status/implemented, /status/draft
+	statusName := strings.TrimPrefix(r.URL.Path, "/status/")
+
+	if statusName == "" {
+		http.Error(w, "No status specified", http.StatusBadRequest)
+		return
+	}
+
+	// Load all records and filter by implementation status
+	catalogPath := os.Getenv("CATALOG_JSON_PATH")
+	if catalogPath == "" {
+		catalogPath = "/Users/jjohnson/projects/geosure/catalog/data/geocatalogo_records.json"
+	}
+
+	data, err := os.ReadFile(catalogPath)
+	if err != nil {
+		http.Error(w, "Failed to load catalog", http.StatusInternalServerError)
+		log.Printf("Error loading catalog: %v", err)
+		return
+	}
+
+	var records []Record
+	if err := json.Unmarshal(data, &records); err != nil {
+		http.Error(w, "Failed to parse catalog", http.StatusInternalServerError)
+		log.Printf("Error parsing catalog: %v", err)
+		return
+	}
+
+	// Filter records by implementation status
+	var matchingRecords []Record
+	var counts CollectionCounts
+
+	for _, rec := range records {
+		if rec.Properties.GROMetadata.ImplementationStatus == statusName {
+			matchingRecords = append(matchingRecords, rec)
+
+			// Count by collection type (same logic as HandleFormat)
+			switch rec.Properties.Collection {
+			case "potential_v6":
+				counts.V6Jobs++
+			case "existing_db":
+				counts.Database++
+			case "existing_local":
+				counts.Files++
+			case "external_api":
+				counts.APIs++
+			case "external_news":
+				counts.News++
+			case "external_government":
+				counts.Government++
+			case "external_download":
+				counts.News++
+			case "ai_agent":
+				counts.AIAgents++
+			case "claude_projects":
+				counts.ClaudeProjects++
+			case "operational_service":
+				counts.OperationalServices++
+			case "data_inspection_bot":
+				counts.DataInspectionBots++
+			case "catalog_management_bot":
+				counts.CatalogManagementBots++
+			case "data_bot":
+				counts.DataBots++
+			case "scraper_bot":
+				counts.ScraperBots++
+			case "automation_bot":
+				counts.AutoBots++
+			case "historical_agent":
+				counts.HistoricalAgents++
+			case "verb_app":
+				counts.VerbApps++
+			case "internal_tool":
+				counts.InternalTools++
+			case "api_service":
+				counts.APIServices++
+			case "team_member":
+				counts.TeamMembers++
+			case "infrastructure":
+				counts.Infrastructure++
+			default:
+				counts.Other++
+			}
+		}
+	}
+
+	pageData := GeographyPageData{
+		Level:            "status",
+		Name:             statusName,
+		Jobs:             matchingRecords,
+		JobCount:         len(matchingRecords),
+		CollectionCounts: counts,
+	}
+
+	if err := a.tc.Render(w, "layout_geography", pageData); err != nil {
+		http.Error(w, "Template error", http.StatusInternalServerError)
+		log.Printf("Template error: %v", err)
+	}
+}
+
 func (a *App) HandleStats(w http.ResponseWriter, r *http.Request) {
 	// Load all records from JSON
 	catalogPath := os.Getenv("CATALOG_JSON_PATH")
