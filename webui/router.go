@@ -35,6 +35,7 @@ func NewMux(app *App) *http.ServeMux {
 	mux.HandleFunc("/external_api/", app.HandleDataset)
 	mux.HandleFunc("/external_news/", app.HandleDataset)
 	mux.HandleFunc("/external_government/", app.HandleDataset)
+	mux.HandleFunc("/external_download/", app.HandleDataset)
 
 	// Redirect /api to existing GeoCatalogo STAC API
 	mux.HandleFunc("/api", func(w http.ResponseWriter, r *http.Request) {
