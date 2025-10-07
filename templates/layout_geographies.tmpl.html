@@ -1,0 +1,54 @@
+{{define "layout_geographies"}}{{template "layout" .}}{{end}}
+
+{{define "page_title"}}Geography • GRO Catalog{{end}}
+
+{{define "page_content"}}
+<div style="max-width:1400px;margin:0 auto;padding:20px">
+  <!-- Header -->
+  <div style="margin-bottom:24px">
+    <h1 style="font-size:32px;font-weight:700;color:#0f172a;margin:0 0 8px 0">
+      🌍 GRO Catalog Geography
+    </h1>
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <div style="font-size:20px;font-weight:700;color:#3b82f6">{{.TotalContinents}}</div>
+      <div style="font-size:14px;color:#64748b">
+        continents with geographic coverage
+      </div>
+    </div>
+  </div>
+
+  <!-- All Continents Grid -->
+  <section>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px">
+      {{range $continent := .Continents}}
+      <a href="/geography/continent/{{$continent.Code}}" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-left:3px solid #3b82f6;border-radius:8px;padding:20px;transition:all 0.2s"
+             onmouseover="this.style.borderLeftColor='#1d4ed8';this.style.transform='translateX(4px)';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+             onmouseout="this.style.borderLeftColor='#3b82f6';this.style.transform='translateX(0)';this.style.boxShadow='none'">
+
+          <div style="font-size:48px;margin-bottom:12px">
+            {{$continent.Emoji}}
+          </div>
+
+          <div style="font-size:42px;font-weight:700;color:#475569;margin-bottom:8px">
+            {{$continent.Count}}
+          </div>
+
+          <div style="font-size:16px;color:#0f172a;font-weight:600;margin-bottom:4px">
+            {{$continent.Name}}
+          </div>
+
+          <div style="font-size:12px;color:#94a3b8">
+            {{if eq $continent.Count 1}}
+              1 resource
+            {{else}}
+              {{$continent.Count}} resources
+            {{end}}
+          </div>
+        </div>
+      </a>
+      {{end}}
+    </div>
+  </section>
+</div>
+{{end}}

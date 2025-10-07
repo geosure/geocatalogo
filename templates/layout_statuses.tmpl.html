@@ -1,0 +1,50 @@
+{{define "layout_statuses"}}{{template "layout" .}}{{end}}
+
+{{define "page_title"}}Implementation Status • GRO Catalog{{end}}
+
+{{define "page_content"}}
+<div style="max-width:1400px;margin:0 auto;padding:20px">
+  <!-- Header -->
+  <div style="margin-bottom:24px">
+    <h1 style="font-size:32px;font-weight:700;color:#0f172a;margin:0 0 8px 0">
+      🔄 GRO Catalog Implementation Status
+    </h1>
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <div style="font-size:20px;font-weight:700;color:#3b82f6">{{.TotalStatuses}}</div>
+      <div style="font-size:14px;color:#64748b">
+        implementation statuses across {{.TotalRecords}} resources
+      </div>
+    </div>
+  </div>
+
+  <!-- All Statuses Grid -->
+  <section>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px">
+      {{range $status := .Statuses}}
+      <a href="/status/{{$status.Name}}" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-left:3px solid {{if eq $status.Name "implemented"}}#10b981{{else if eq $status.Name "active"}}#10b981{{else if eq $status.Name "draft"}}#f59e0b{{else if eq $status.Name "potential"}}#6366f1{{else if eq $status.Name "archived"}}#94a3b8{{else}}#3b82f6{{end}};border-radius:8px;padding:20px;transition:all 0.2s"
+             onmouseover="this.style.borderLeftColor='#1d4ed8';this.style.transform='translateX(4px)';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+             onmouseout="this.style.borderLeftColor='{{if eq $status.Name "implemented"}}#10b981{{else if eq $status.Name "active"}}#10b981{{else if eq $status.Name "draft"}}#f59e0b{{else if eq $status.Name "potential"}}#6366f1{{else if eq $status.Name "archived"}}#94a3b8{{else}}#3b82f6{{end}}';this.style.transform='translateX(0)';this.style.boxShadow='none'">
+
+          <div style="font-size:42px;font-weight:700;color:#475569;margin-bottom:8px">
+            {{$status.Count}}
+          </div>
+
+          <div style="font-size:16px;color:#0f172a;font-weight:600;margin-bottom:4px;text-transform:capitalize">
+            {{if eq $status.Name "implemented"}}✅{{else if eq $status.Name "active"}}✅{{else if eq $status.Name "draft"}}📝{{else if eq $status.Name "potential"}}💡{{else if eq $status.Name "archived"}}📦{{else}}🔄{{end}} {{$status.Name}}
+          </div>
+
+          <div style="font-size:12px;color:#94a3b8">
+            {{if eq $status.Count 1}}
+              1 resource
+            {{else}}
+              {{$status.Count}} resources
+            {{end}}
+          </div>
+        </div>
+      </a>
+      {{end}}
+    </div>
+  </section>
+</div>
+{{end}}

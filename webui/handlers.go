@@ -966,6 +966,131 @@ func (a *App) HandleOwners(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (a *App) HandleStatuses(w http.ResponseWriter, r *http.Request) {
+	// Load all records to count statuses
+	catalogPath := os.Getenv("CATALOG_JSON_PATH")
+	if catalogPath == "" {
+		catalogPath = "/Users/jjohnson/projects/geosure/catalog/data/geocatalogo_records.json"
+	}
+
+	data, err := os.ReadFile(catalogPath)
+	if err != nil {
+		http.Error(w, "Failed to load catalog", http.StatusInternalServerError)
+		return
+	}
+
+	var records []Record
+	if err := json.Unmarshal(data, &records); err != nil {
+		http.Error(w, "Failed to parse catalog", http.StatusInternalServerError)
+		return
+	}
+
+	// Count statuses
+	statusCounts := make(map[string]int)
+	for _, rec := range records {
+		if rec.Properties.GROMetadata.ImplementationStatus != "" {
+			statusCounts[rec.Properties.GROMetadata.ImplementationStatus]++
+		}
+	}
+
+	// Convert to sorted slice with proper ordering
+	statusOrder := []string{"implemented", "draft", "potential", "active", "archived"}
+	var statuses []StatusStat
+
+	// Add statuses in the defined order
+	for _, status := range statusOrder {
+		if count, ok := statusCounts[status]; ok {
+			statuses = append(statuses, StatusStat{
+				Name:  status,
+				Count: count,
+			})
+			delete(statusCounts, status)
+		}
+	}
+
+	// Add any remaining statuses not in the predefined order
+	for status, count := range statusCounts {
+		statuses = append(statuses, StatusStat{
+			Name:  status,
+			Count: count,
+		})
+	}
+
+	pageData := struct {
+		Statuses      []StatusStat
+		TotalStatuses int
+		TotalRecords  int
+	}{
+		Statuses:      statuses,
+		TotalStatuses: len(statuses),
+		TotalRecords:  len(records),
+	}
+
+	if err := a.tc.Render(w, "layout_statuses", pageData); err != nil {
+		http.Error(w, "Template error", http.StatusInternalServerError)
+		log.Printf("Template error: %v", err)
+	}
+}
+
+func (a *App) HandleGeographies(w http.ResponseWriter, r *http.Request) {
+	// Load all records to count continents
+	catalogPath := os.Getenv("CATALOG_JSON_PATH")
+	if catalogPath == "" {
+		catalogPath = "/Users/jjohnson/projects/geosure/catalog/data/geocatalogo_records.json"
+	}
+
+	data, err := os.ReadFile(catalogPath)
+	if err != nil {
+		http.Error(w, "Failed to load catalog", http.StatusInternalServerError)
+		return
+	}
+
+	var records []Record
+	if err := json.Unmarshal(data, &records); err != nil {
+		http.Error(w, "Failed to parse catalog", http.StatusInternalServerError)
+		return
+	}
+
+	// Count continents
+	continentCounts := make(map[string]int)
+	for _, rec := range records {
+		if rec.Properties.GROMetadata.Continent != "" {
+			continentCounts[rec.Properties.GROMetadata.Continent]++
+		}
+	}
+
+	// Convert to sorted slice
+	var continents []ContinentStat
+	for code, count := range continentCounts {
+		continents = append(continents, ContinentStat{
+			Code:  code,
+			Name:  helpers.ContinentToName(code),
+			Emoji: helpers.ContinentToEmoji(code),
+			Count: count,
+		})
+	}
+
+	// Sort by count descending
+	sort.Slice(continents, func(i, j int) bool {
+		return continents[i].Count > continents[j].Count
+	})
+
+	pageData := struct {
+		Continents      []ContinentStat
+		TotalContinents int
+		TotalRecords    int
+	}{
+		Continents:      continents,
+		TotalContinents: len(continents),
+		TotalRecords:    len(records),
+	}
+
+	if err := a.tc.Render(w, "layout_geographies", pageData); err != nil {
+		http.Error(w, "Template error", http.StatusInternalServerError)
+		log.Printf("Template error: %v", err)
+	}
+}
+
 func (a *App) HandleCollectionDetail(w http.ResponseWriter, r *http.Request) {
 	// Extract collection name from URL: /collection/{name}
 	path := r.URL.Path

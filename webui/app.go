@@ -99,6 +99,11 @@ type FormatStat struct {
 	Count int
 }
 
+type StatusStat struct {
+	Name  string
+	Count int
+}
+
 type ContinentStat struct {
 	Code  string
 	Name  string

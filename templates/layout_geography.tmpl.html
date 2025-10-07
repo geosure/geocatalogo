@@ -165,7 +165,7 @@
   <!-- Page Header -->
   <div style="margin-bottom:24px">
     <h1 style="font-size:32px;font-weight:700;color:#0f172a;margin:0 0 8px 0">
-      📍 {{.Name}}
+      {{if eq .Level "format"}}📦{{else if eq .Level "status"}}🔄{{else if eq .Level "owner"}}👥{{else if eq .Level "collection"}}📚{{else}}🌍{{end}} {{.Name}}
     </h1>
     <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
       <div style="font-size:20px;font-weight:700;color:#3b82f6">{{.JobCount}}</div>
