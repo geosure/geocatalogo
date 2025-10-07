@@ -106,7 +106,25 @@ func (a *App) HandleCatalog(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) HandleDataset(w http.ResponseWriter, r *http.Request) {
-	id := r.URL.Path[len("/dataset/"):]
+	// Extract ID from URL - supports both /dataset/id and /collection/id formats
+	var id string
+	path := r.URL.Path
+
+	if strings.HasPrefix(path, "/dataset/") {
+		id = path[len("/dataset/"):]
+	} else {
+		// Collection-based URL: /ai_agent/clankr_catalog_agent
+		// Strip leading slash and split on first /
+		parts := strings.SplitN(strings.TrimPrefix(path, "/"), "/", 2)
+		if len(parts) == 2 {
+			id = parts[1]
+		}
+	}
+
+	if id == "" {
+		http.Error(w, "Invalid dataset URL", http.StatusBadRequest)
+		return
+	}
 
 	// Load all records from JSON
 	catalogPath := os.Getenv("CATALOG_JSON_PATH")
