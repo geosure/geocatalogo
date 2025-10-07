@@ -1171,6 +1171,7 @@ func (a *App) HandleCollectionDetail(w http.ResponseWriter, r *http.Request) {
 		"external_api":            {"External APIs", "🔌", "Third-party API endpoints we integrate with"},
 		"external_government":     {"Government Data", "🏛️", "Government open data portals and official statistics"},
 		"external_news":           {"News & Media", "📰", "News APIs, RSS feeds, and media monitoring sources"},
+		"external_news_active":    {"Active News Sources", "📡", "News sources actively collected via GNews API"},
 		"external_academic":       {"Academic Data", "🎓", "Academic datasets and research institution data"},
 		"external_download":       {"Downloadable Datasets", "⬇️", "Datasets available for direct download"},
 		"external_other":          {"Other External Sources", "🌐", "Other external data sources"},
