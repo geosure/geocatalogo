@@ -662,3 +662,11 @@ func (a *App) HandleCollectionDetail(w http.ResponseWriter, r *http.Request) {
 		log.Printf("❌ Collection detail template error: %v", err)
 	}
 }
+
+
+func (a *App) HandleQuery(w http.ResponseWriter, r *http.Request) {
+	if err := a.tc.Render(w, "layout_query", nil); err != nil {
+		http.Error(w, "Template error", http.StatusInternalServerError)
+		log.Printf("❌ Query page template error: %v", err)
+	}
+}

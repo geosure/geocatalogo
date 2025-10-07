@@ -12,6 +12,7 @@ func NewMux(app *App) *http.ServeMux {
 	mux.HandleFunc("GET /collections", app.HandleCollections) // Go 1.22+ exact match syntax
 	mux.HandleFunc("/stats", app.HandleStats)
 	mux.HandleFunc("/api-docs", app.HandleAPIDocs)
+	mux.HandleFunc("/query", app.HandleQuery)
 
 	// Redirect /api to existing GeoCatalogo STAC API
 	mux.HandleFunc("/api", func(w http.ResponseWriter, r *http.Request) {
