@@ -315,7 +315,7 @@
     <!-- Actual Continents Only -->
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
       {{range .Stats.Continents}}
-      {{if or (eq .Code "africa") (eq .Code "asia") (eq .Code "europe") (eq .Code "north-america") (eq .Code "south-america") (eq .Code "oceania")}}
+      {{if or (eq .Code "africa") (eq .Code "asia") (eq .Code "europe") (eq .Code "north_america") (eq .Code "south_america") (eq .Code "oceania")}}
       <a href="/geography/?continent={{.Code}}" style="text-decoration:none">
         <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s;cursor:pointer"
              onmouseover="this.style.borderColor='#64748b';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
@@ -330,29 +330,6 @@
             <span style="font-size:24px;font-weight:700;color:#475569">{{.Count}}</span>
             <span style="font-size:13px;color:#64748b">resources</span>
           </div>
-        </div>
-      </a>
-      {{end}}
-      {{end}}
-    </div>
-  </section>
-
-  <!-- Organizational Regions -->
-  <section style="margin-bottom:32px">
-    <h2 style="font-size:20px;font-weight:600;color:#0f172a;margin:0 0 16px 0;text-align:center">
-      System & Organizational
-    </h2>
-
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;max-width:900px;margin:0 auto">
-      {{range .Stats.Continents}}
-      {{if or (eq .Code "clankr") (eq .Code "global") (eq .Code "infra") (eq .Code "team") (eq .Code "verbs")}}
-      <a href="/geography/?continent={{.Code}}" style="text-decoration:none">
-        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:14px;transition:all 0.2s"
-             onmouseover="this.style.borderColor='#64748b'"
-             onmouseout="this.style.borderColor='#e2e8f0'">
-          <div style="font-size:20px;margin-bottom:6px">{{.Emoji}}</div>
-          <div style="font-size:14px;font-weight:600;color:#0f172a;margin-bottom:2px">{{.Name}}</div>
-          <div style="font-size:12px;color:#64748b">{{.Count}} resources</div>
         </div>
       </a>
       {{end}}
