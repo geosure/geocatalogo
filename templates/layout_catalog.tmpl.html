@@ -340,21 +340,76 @@
   <!-- Browse by Resource Type/Format -->
   <section style="margin-top:48px" id="browseByFormat">
     <h2 style="font-size:24px;font-weight:600;color:#0f172a;margin:0 0 12px 0;text-align:center">
-      📁 Browse by Resource Type/Format
+      📁 Data Formats (56 types)
     </h2>
-    <p style="font-size:14px;color:#64748b;margin:0 0 24px 0;text-align:center">
+    <p style="font-size:14px;color:#64748b;margin:0 0 32px 0;text-align:center">
       Catalog tracks everything from databases to APIs to Lambda functions
     </p>
 
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px">
-      {{range $format := .Stats.Formats}}
-        <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:12px;text-align:center">
-          <div style="font-size:13px;font-weight:600;color:#0f172a;margin-bottom:4px">{{$format.Name}}</div>
-          <div style="font-size:11px;color:#64748b">
-            <span style="font-weight:600;color:#3b82f6">{{$format.Count}}</span>
-          </div>
-        </div>
-      {{end}}
+    <!-- Top 10 Formats -->
+    <div style="margin-bottom:32px">
+      <h3 style="font-size:16px;font-weight:600;color:#065f46;margin:0 0 12px 0">
+        Top 10 Formats
+      </h3>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px">
+        {{range $i, $format := .Stats.Formats}}
+          {{if lt $i 10}}
+            <a href="/format/{{$format.Name}}" style="text-decoration:none">
+              <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:12px;text-align:center;transition:all 0.2s"
+                   onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)'"
+                   onmouseout="this.style.borderColor='#e5e7eb';this.style.transform='translateY(0)'">
+                <div style="font-size:11px;color:#94a3b8;margin-bottom:2px">{{add $i 1}}.</div>
+                <div style="font-size:13px;font-weight:600;color:#0f172a;margin-bottom:4px">{{$format.Name}}</div>
+                <div style="font-size:11px;color:#64748b">
+                  <span style="font-weight:600;color:#3b82f6">{{$format.Count}}</span>
+                </div>
+              </div>
+            </a>
+          {{end}}
+        {{end}}
+      </div>
+    </div>
+
+    <!-- File Formats -->
+    <div style="margin-bottom:32px">
+      <h3 style="font-size:16px;font-weight:600;color:#92400e;margin:0 0 12px 0">
+        File Formats
+      </h3>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;font-size:13px;color:#64748b">
+        {{range $format := .Stats.Formats}}
+          {{if or (eq $format.Name "csv") (eq $format.Name "parquet") (eq $format.Name "xlsx") (eq $format.Name "pdf") (eq $format.Name "shapefile") (eq $format.Name "tsv") (eq $format.Name "geojson") (eq $format.Name "geopackage") (eq $format.Name "json") (eq $format.Name "xls") (eq $format.Name "txt") (eq $format.Name "html") (eq $format.Name "image") (eq $format.Name "filegdb")}}
+            <a href="/format/{{$format.Name}}" style="text-decoration:none;color:inherit">{{$format.Name}} ({{$format.Count}})</a>{{if not (eq $format.Name "filegdb")}},{{end}}
+          {{end}}
+        {{end}}
+      </div>
+    </div>
+
+    <!-- AWS Infrastructure -->
+    <div style="margin-bottom:32px">
+      <h3 style="font-size:16px;font-weight:600;color:#1e40af;margin:0 0 12px 0">
+        AWS Infrastructure
+      </h3>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;font-size:13px;color:#64748b">
+        {{range $format := .Stats.Formats}}
+          {{if or (eq $format.Name "lambda") (eq $format.Name "ecs") (eq $format.Name "lambda_service") (eq $format.Name "ecs_task") (eq $format.Name "aws_resource") (eq $format.Name "step") (eq $format.Name "step_function") (eq $format.Name "aws_vpc") (eq $format.Name "aws_lambda") (eq $format.Name "kinesis_stream") (eq $format.Name "cloudformation") (eq $format.Name "s3_bucket") (eq $format.Name "aws_apigateway") (eq $format.Name "rds_postgres")}}
+            <a href="/format/{{$format.Name}}" style="text-decoration:none;color:inherit">{{$format.Name}} ({{$format.Count}})</a>,
+          {{end}}
+        {{end}}
+      </div>
+    </div>
+
+    <!-- Code & Scripts -->
+    <div style="margin-bottom:32px">
+      <h3 style="font-size:16px;font-weight:600;color:#7c3aed;margin:0 0 12px 0">
+        Code & Scripts
+      </h3>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;font-size:13px;color:#64748b">
+        {{range $format := .Stats.Formats}}
+          {{if or (eq $format.Name "python_script") (eq $format.Name "shell") (eq $format.Name "python_batch") (eq $format.Name "shell_exec") (eq $format.Name "llm_prompt") (eq $format.Name "llm_agent")}}
+            <a href="/format/{{$format.Name}}" style="text-decoration:none;color:inherit">{{$format.Name}} ({{$format.Count}})</a>,
+          {{end}}
+        {{end}}
+      </div>
     </div>
   </section>
 

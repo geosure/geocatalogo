@@ -499,6 +499,84 @@ func (a *App) HandleGeography(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func (a *App) HandleFormat(w http.ResponseWriter, r *http.Request) {
+	// Parse URL: /format/{format_name}
+	// Example: /format/csv, /format/api
+	formatName := strings.TrimPrefix(r.URL.Path, "/format/")
+
+	if formatName == "" {
+		http.Error(w, "No format specified", http.StatusBadRequest)
+		return
+	}
+
+	// Load all records and filter by format
+	catalogPath := os.Getenv("CATALOG_JSON_PATH")
+	if catalogPath == "" {
+		catalogPath = "/Users/jjohnson/projects/geosure/catalog/data/geocatalogo_records.json"
+	}
+
+	data, err := os.ReadFile(catalogPath)
+	if err != nil {
+		http.Error(w, "Failed to load catalog", http.StatusInternalServerError)
+		log.Printf("Error loading catalog: %v", err)
+		return
+	}
+
+	var records []Record
+	if err := json.Unmarshal(data, &records); err != nil {
+		http.Error(w, "Failed to parse catalog", http.StatusInternalServerError)
+		log.Printf("Error parsing catalog: %v", err)
+		return
+	}
+
+	// Filter records by format
+	var matchingRecords []Record
+	var counts CollectionCounts
+
+	for _, rec := range records {
+		if rec.Properties.GROMetadata.DataFormat == formatName {
+			matchingRecords = append(matchingRecords, rec)
+
+			// Count by collection type
+			switch rec.Properties.Collection {
+			case "potential_v6":
+				counts.V6Jobs++
+			case "existing_db":
+				counts.Database++
+			case "existing_local":
+				counts.Files++
+			case "external_api":
+				counts.APIs++
+			case "external_news":
+				counts.News++
+			case "external_government":
+				counts.Government++
+			case "ai_agent":
+				counts.AIAgents++
+			case "data_inspection_bot":
+				counts.DataInspectionBots++
+			case "scraper_bot":
+				counts.ScraperBots++
+			case "automation_bot":
+				counts.AutoBots++
+			}
+		}
+	}
+
+	pageData := GeographyPageData{
+		Level:            "format",
+		Name:             formatName,
+		Jobs:             matchingRecords,
+		JobCount:         len(matchingRecords),
+		CollectionCounts: counts,
+	}
+
+	if err := a.tc.Render(w, "layout_geography", pageData); err != nil {
+		http.Error(w, "Template error", http.StatusInternalServerError)
+		log.Printf("Template error: %v", err)
+	}
+}
+
 func (a *App) HandleStats(w http.ResponseWriter, r *http.Request) {
 	// Load all records from JSON
 	catalogPath := os.Getenv("CATALOG_JSON_PATH")
