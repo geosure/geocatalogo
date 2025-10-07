@@ -15,20 +15,20 @@
   </p>
 
   <!-- Interactive Query Builder -->
-  <section class="card" style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);border:none;color:white">
-    <h2 style="margin:0 0 16px;color:white">🎯 Interactive Query Builder</h2>
-    <p style="margin:0 0 24px;opacity:0.95">
+  <section class="card" style="background:#f8fafc;border:1px solid #cbd5e1">
+    <h2 style="margin:0 0 16px;color:#1e293b">🎯 Interactive Query Builder</h2>
+    <p style="margin:0 0 24px;color:#475569">
       Build and test queries directly in your browser. Click "Run Query" to see live results.
     </p>
 
-    <div style="background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border-radius:8px;padding:20px">
+    <div style="background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;padding:20px">
       <!-- Query Type Selection -->
       <div style="margin-bottom:20px">
-        <label style="display:block;margin-bottom:8px;font-weight:600">Query Type:</label>
+        <label style="display:block;margin-bottom:8px;font-weight:600;color:#1e293b">Query Type:</label>
         <div style="display:flex;gap:12px;flex-wrap:wrap">
-          <button class="query-type-btn active" data-type="property" style="background:rgba(255,255,255,0.3);border:2px solid rgba(255,255,255,0.5);color:white;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600">Property Filters</button>
-          <button class="query-type-btn" data-type="text" style="background:rgba(255,255,255,0.1);border:2px solid rgba(255,255,255,0.3);color:white;padding:8px 16px;border-radius:6px;cursor:pointer">Text Search</button>
-          <button class="query-type-btn" data-type="recordid" style="background:rgba(255,255,255,0.1);border:2px solid rgba(255,255,255,0.3);color:white;padding:8px 16px;border-radius:6px;cursor:pointer">Record ID</button>
+          <button class="query-type-btn active" data-type="property" style="background:#e0e7ff;border:2px solid #818cf8;color:#3730a3;padding:8px 16px;border-radius:6px;cursor:pointer;font-weight:600">Property Filters</button>
+          <button class="query-type-btn" data-type="text" style="background:#f3f4f6;border:2px solid #d1d5db;color:#374151;padding:8px 16px;border-radius:6px;cursor:pointer">Text Search</button>
+          <button class="query-type-btn" data-type="recordid" style="background:#f3f4f6;border:2px solid #d1d5db;color:#374151;padding:8px 16px;border-radius:6px;cursor:pointer">Record ID</button>
         </div>
       </div>
 
@@ -37,8 +37,8 @@
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-bottom:16px">
           <!-- Geographic Filters -->
           <div>
-            <label style="display:block;margin-bottom:6px;font-size:13px;opacity:0.9">Continent</label>
-            <select id="filter-continent" class="filter-input" style="width:100%;padding:8px;border-radius:4px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:white;font-size:14px">
+            <label style="display:block;margin-bottom:6px;font-size:13px;color:#475569;font-weight:500">Continent</label>
+            <select id="filter-continent" class="filter-input" style="width:100%;padding:8px;border-radius:4px;border:1px solid #d1d5db;background:#ffffff;color:#1f2937;font-size:14px">
               <option value="">Any</option>
               <option value="clankr">🤖 Clankr (Operations)</option>
               <option value="north_america">🌎 North America</option>
@@ -51,14 +51,14 @@
           </div>
 
           <div>
-            <label style="display:block;margin-bottom:6px;font-size:13px;opacity:0.9">Country</label>
-            <input type="text" id="filter-country" class="filter-input" placeholder="e.g., colombia, united_states" style="width:100%;padding:8px;border-radius:4px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:white;font-size:14px">
+            <label style="display:block;margin-bottom:6px;font-size:13px;color:#475569;font-weight:500">Country</label>
+            <input type="text" id="filter-country" class="filter-input" placeholder="e.g., colombia, united_states" style="width:100%;padding:8px;border-radius:4px;border:1px solid #d1d5db;background:#ffffff;color:#1f2937;font-size:14px">
           </div>
 
           <!-- Metadata Filters -->
           <div>
-            <label style="display:block;margin-bottom:6px;font-size:13px;opacity:0.9">Collection</label>
-            <select id="filter-collection" class="filter-input" style="width:100%;padding:8px;border-radius:4px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:white;font-size:14px">
+            <label style="display:block;margin-bottom:6px;font-size:13px;color:#475569;font-weight:500">Collection</label>
+            <select id="filter-collection" class="filter-input" style="width:100%;padding:8px;border-radius:4px;border:1px solid #d1d5db;background:#ffffff;color:#1f2937;font-size:14px">
               <option value="">Any</option>
               <option value="ai_agent">🤖 AI Agents</option>
               <option value="existing_db">🗄️ Database Tables</option>
@@ -71,8 +71,8 @@
           </div>
 
           <div>
-            <label style="display:block;margin-bottom:6px;font-size:13px;opacity:0.9">Status</label>
-            <select id="filter-status" class="filter-input" style="width:100%;padding:8px;border-radius:4px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:white;font-size:14px">
+            <label style="display:block;margin-bottom:6px;font-size:13px;color:#475569;font-weight:500">Status</label>
+            <select id="filter-status" class="filter-input" style="width:100%;padding:8px;border-radius:4px;border:1px solid #d1d5db;background:#ffffff;color:#1f2937;font-size:14px">
               <option value="">Any</option>
               <option value="active">✅ Active</option>
               <option value="implemented">✅ Implemented</option>
@@ -82,8 +82,8 @@
           </div>
 
           <div>
-            <label style="display:block;margin-bottom:6px;font-size:13px;opacity:0.9">Data Format</label>
-            <select id="filter-data-format" class="filter-input" style="width:100%;padding:8px;border-radius:4px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:white;font-size:14px">
+            <label style="display:block;margin-bottom:6px;font-size:13px;color:#475569;font-weight:500">Data Format</label>
+            <select id="filter-data-format" class="filter-input" style="width:100%;padding:8px;border-radius:4px;border:1px solid #d1d5db;background:#ffffff;color:#1f2937;font-size:14px">
               <option value="">Any</option>
               <option value="database">🗄️ Database</option>
               <option value="python_script">🐍 Python Script</option>
@@ -96,14 +96,14 @@
           </div>
 
           <div>
-            <label style="display:block;margin-bottom:6px;font-size:13px;opacity:0.9">Owner</label>
-            <input type="text" id="filter-owner" class="filter-input" placeholder="e.g., @clankr, @data-platform" style="width:100%;padding:8px;border-radius:4px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:white;font-size:14px">
+            <label style="display:block;margin-bottom:6px;font-size:13px;color:#475569;font-weight:500">Owner</label>
+            <input type="text" id="filter-owner" class="filter-input" placeholder="e.g., @clankr, @data-platform" style="width:100%;padding:8px;border-radius:4px;border:1px solid #d1d5db;background:#ffffff;color:#1f2937;font-size:14px">
           </div>
         </div>
 
         <!-- Advanced Filters (Collapsible) -->
         <div style="margin-bottom:16px">
-          <button id="toggle-advanced" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);color:white;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:13px">
+          <button id="toggle-advanced" style="background:#f3f4f6;border:1px solid #d1d5db;color:#374151;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:13px">
             + Show Advanced Filters
           </button>
         </div>
@@ -111,13 +111,13 @@
         <div id="advanced-filters" style="display:none;margin-bottom:16px">
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px">
             <div>
-              <label style="display:block;margin-bottom:6px;font-size:13px;opacity:0.9">Database Table</label>
-              <input type="text" id="filter-database-table" class="filter-input" placeholder="e.g., raw_articles" style="width:100%;padding:8px;border-radius:4px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:white;font-size:14px">
+              <label style="display:block;margin-bottom:6px;font-size:13px;color:#475569;font-weight:500">Database Table</label>
+              <input type="text" id="filter-database-table" class="filter-input" placeholder="e.g., raw_articles" style="width:100%;padding:8px;border-radius:4px;border:1px solid #d1d5db;background:#ffffff;color:#1f2937;font-size:14px">
             </div>
 
             <div>
-              <label style="display:block;margin-bottom:6px;font-size:13px;opacity:0.9">v6 Job Type</label>
-              <select id="filter-v6-job-type" class="filter-input" style="width:100%;padding:8px;border-radius:4px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:white;font-size:14px">
+              <label style="display:block;margin-bottom:6px;font-size:13px;color:#475569;font-weight:500">v6 Job Type</label>
+              <select id="filter-v6-job-type" class="filter-input" style="width:100%;padding:8px;border-radius:4px;border:1px solid #d1d5db;background:#ffffff;color:#1f2937;font-size:14px">
                 <option value="">Any</option>
                 <option value="bootstrap">Bootstrap</option>
                 <option value="collector">Collector</option>
@@ -127,13 +127,13 @@
             </div>
 
             <div>
-              <label style="display:block;margin-bottom:6px;font-size:13px;opacity:0.9">City</label>
-              <input type="text" id="filter-city" class="filter-input" placeholder="e.g., los_angeles" style="width:100%;padding:8px;border-radius:4px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:white;font-size:14px">
+              <label style="display:block;margin-bottom:6px;font-size:13px;color:#475569;font-weight:500">City</label>
+              <input type="text" id="filter-city" class="filter-input" placeholder="e.g., los_angeles" style="width:100%;padding:8px;border-radius:4px;border:1px solid #d1d5db;background:#ffffff;color:#1f2937;font-size:14px">
             </div>
 
             <div>
-              <label style="display:block;margin-bottom:6px;font-size:13px;opacity:0.9">Geographic Scope</label>
-              <select id="filter-geographic-scope" class="filter-input" style="width:100%;padding:8px;border-radius:4px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:white;font-size:14px">
+              <label style="display:block;margin-bottom:6px;font-size:13px;color:#475569;font-weight:500">Geographic Scope</label>
+              <select id="filter-geographic-scope" class="filter-input" style="width:100%;padding:8px;border-radius:4px;border:1px solid #d1d5db;background:#ffffff;color:#1f2937;font-size:14px">
                 <option value="">Any</option>
                 <option value="global">🌍 Global</option>
                 <option value="regional">🗺️ Regional</option>
@@ -148,40 +148,40 @@
       <!-- Text Search Builder -->
       <div id="text-builder" style="display:none;margin-bottom:16px">
         <label style="display:block;margin-bottom:8px;font-weight:600">Search Query:</label>
-        <input type="text" id="text-query" placeholder="e.g., database, Lambda deployment, news articles" style="width:100%;padding:12px;border-radius:6px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:white;font-size:16px">
+        <input type="text" id="text-query" placeholder="e.g., database, Lambda deployment, news articles" style="width:100%;padding:12px;border-radius:6px;border:1px solid #d1d5db;background:#ffffff;color:#1f2937;font-size:16px">
       </div>
 
       <!-- Record ID Builder -->
       <div id="recordid-builder" style="display:none;margin-bottom:16px">
         <label style="display:block;margin-bottom:8px;font-weight:600">Record ID(s):</label>
-        <input type="text" id="recordid-query" placeholder="e.g., clankr_catalog_agent or clankr_agent,clankr_infra_agent" style="width:100%;padding:12px;border-radius:6px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:white;font-size:16px">
+        <input type="text" id="recordid-query" placeholder="e.g., clankr_catalog_agent or clankr_agent,clankr_infra_agent" style="width:100%;padding:12px;border-radius:6px;border:1px solid #d1d5db;background:#ffffff;color:#1f2937;font-size:16px">
         <p style="margin:8px 0 0;font-size:12px;opacity:0.8">Comma-separated for multiple records</p>
       </div>
 
       <!-- Result Limit -->
       <div style="margin-bottom:20px">
         <label style="display:block;margin-bottom:8px;font-weight:600">Max Results:</label>
-        <input type="number" id="max-records" value="10" min="1" max="1000" style="width:120px;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.2);color:white;font-size:14px">
+        <input type="number" id="max-records" value="10" min="1" max="1000" style="width:120px;padding:8px;border-radius:6px;border:1px solid #d1d5db;background:#ffffff;color:#1f2937;font-size:14px">
       </div>
 
       <!-- Generated URL -->
-      <div style="background:rgba(0,0,0,0.2);border-radius:6px;padding:16px;margin-bottom:16px">
-        <label style="display:block;margin-bottom:8px;font-weight:600;font-size:13px">Generated API URL:</label>
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:16px;margin-bottom:16px">
+        <label style="display:block;margin-bottom:8px;font-weight:600;font-size:13px;color:#1e293b">Generated API URL:</label>
         <div style="display:flex;gap:8px;align-items:center">
-          <input type="text" id="generated-url" readonly style="flex:1;padding:10px;border-radius:4px;border:1px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.1);color:white;font-family:monospace;font-size:12px">
-          <button id="copy-url-btn" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);color:white;padding:10px 16px;border-radius:4px;cursor:pointer;white-space:nowrap">Copy</button>
+          <input type="text" id="generated-url" readonly style="flex:1;padding:10px;border-radius:4px;border:1px solid #cbd5e1;background:#ffffff;color:#1f2937;font-family:monospace;font-size:12px">
+          <button id="copy-url-btn" style="background:#e0e7ff;border:1px solid #818cf8;color:#3730a3;padding:10px 16px;border-radius:4px;cursor:pointer;white-space:nowrap;font-weight:500">Copy</button>
         </div>
       </div>
 
       <!-- Action Buttons -->
       <div style="display:flex;gap:12px;flex-wrap:wrap">
-        <button id="run-query-btn" style="background:#10b981;border:none;color:white;padding:12px 24px;border-radius:6px;cursor:pointer;font-weight:600;font-size:16px;box-shadow:0 4px 6px rgba(0,0,0,0.2)">
+        <button id="run-query-btn" style="background:#10b981;border:none;color:white;padding:12px 24px;border-radius:6px;cursor:pointer;font-weight:600;font-size:16px;box-shadow:0 2px 4px rgba(0,0,0,0.1)">
           ▶️ Run Query
         </button>
-        <button id="clear-filters-btn" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);color:white;padding:12px 24px;border-radius:6px;cursor:pointer;font-weight:600">
+        <button id="clear-filters-btn" style="background:#f3f4f6;border:1px solid #d1d5db;color:#374151;padding:12px 24px;border-radius:6px;cursor:pointer;font-weight:600">
           🗑️ Clear All
         </button>
-        <button id="example-btn" style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);color:white;padding:12px 24px;border-radius:6px;cursor:pointer;font-weight:600">
+        <button id="example-btn" style="background:#e0e7ff;border:1px solid #818cf8;color:#3730a3;padding:12px 24px;border-radius:6px;cursor:pointer;font-weight:600">
           💡 Load Example
         </button>
       </div>
@@ -469,12 +469,13 @@
   transform:translateY(-2px);
 }
 .query-type-btn.active {
-  background:rgba(255,255,255,0.3) !important;
-  border:2px solid rgba(255,255,255,0.7) !important;
+  background:#e0e7ff !important;
+  border:2px solid #818cf8 !important;
+  color:#3730a3 !important;
   font-weight:700;
 }
 .filter-input::placeholder {
-  color:rgba(255,255,255,0.5);
+  color:#9ca3af;
 }
 .result-card {
   background:#f8fafc;
