@@ -10,7 +10,41 @@
   </div>
 
   <h1>📊 GRO Catalog Statistics</h1>
-  <p class="muted" style="margin-bottom:32px">Complete overview of the GRO data universe - as understood by our agents</p>
+  <p class="muted" style="margin-bottom:24px">Complete overview of the GRO data universe - as understood by our agents</p>
+
+  <div style="font-size:13px;color:#94a3b8;margin-bottom:24px">
+    7 AI agents • 47 database tables • 474 local files • 627 v6 jobs • 541 external sources
+  </div>
+
+  <!-- 5 Dimensions Navigation -->
+  <section style="margin-bottom:32px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px">
+    <div style="font-size:12px;font-weight:600;color:#64748b;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px">Browse by Dimension</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a href="/query" style="text-decoration:none;background:#fff;border:1px solid #cbd5e1;color:#475569;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:500;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px"
+         onmouseover="this.style.borderColor='#3b82f6';this.style.background='#eff6ff'"
+         onmouseout="this.style.borderColor='#cbd5e1';this.style.background='#fff'">
+        🔍 Unified Search
+      </a>
+      <a href="/collections" style="text-decoration:none;background:#fff;border:1px solid #cbd5e1;color:#475569;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:500;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px"
+         onmouseover="this.style.borderColor='#3b82f6';this.style.background='#eff6ff'"
+         onmouseout="this.style.borderColor='#cbd5e1';this.style.background='#fff'">
+        📚 Collections
+      </a>
+      <a href="/stats#formats" style="text-decoration:none;background:#fff;border:1px solid #3b82f6;color:#334155;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:500;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px">
+        📦 Formats
+      </a>
+      <a href="/owners" style="text-decoration:none;background:#fff;border:1px solid #cbd5e1;color:#475569;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:500;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px"
+         onmouseover="this.style.borderColor='#3b82f6';this.style.background='#eff6ff'"
+         onmouseout="this.style.borderColor='#cbd5e1';this.style.background='#fff'">
+        👥 Ownership
+      </a>
+      <a href="/geography/continents" style="text-decoration:none;background:#fff;border:1px solid #cbd5e1;color:#475569;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:500;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px"
+         onmouseover="this.style.borderColor='#3b82f6';this.style.background='#eff6ff'"
+         onmouseout="this.style.borderColor='#cbd5e1';this.style.background='#fff'">
+        🌍 Geography
+      </a>
+    </div>
+  </section>
 
   <!-- Total Records -->
   <section class="card">

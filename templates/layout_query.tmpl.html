@@ -14,30 +14,53 @@
     Build and test queries using the GRO RESTful API (port 9000). Navigate through 5 dimensions: Collections, Formats, Status, Ownership, and Geography.
   </p>
 
-  <!-- API Notice -->
-  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:12px;margin-bottom:20px">
-    <div style="display:flex;align-items:center;gap:10px">
-      <div style="font-size:20px">ℹ️</div>
-      <div style="flex:1">
-        <strong style="color:#475569;font-size:14px">Using GRO RESTful API (port 9000)</strong>
-        <span style="margin-left:8px;color:#64748b;font-size:12px">5-dimensional navigation</span>
-      </div>
-    </div>
+  <div style="font-size:13px;color:#94a3b8;margin-bottom:24px">
+    7 AI agents • 47 database tables • 474 local files • 627 v6 jobs • 541 external sources
   </div>
+
+  <!-- 5 Dimensions Navigation -->
+  <section style="margin-bottom:24px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px">
+    <div style="font-size:12px;font-weight:600;color:#64748b;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px">Browse by Dimension</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a href="/query" style="text-decoration:none;background:#fff;border:1px solid #3b82f6;color:#334155;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:500;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px">
+        🔍 Unified Search
+      </a>
+      <a href="/collections" style="text-decoration:none;background:#fff;border:1px solid #cbd5e1;color:#475569;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:500;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px"
+         onmouseover="this.style.borderColor='#3b82f6';this.style.background='#eff6ff'"
+         onmouseout="this.style.borderColor='#cbd5e1';this.style.background='#fff'">
+        📚 Collections
+      </a>
+      <a href="/stats#formats" style="text-decoration:none;background:#fff;border:1px solid #cbd5e1;color:#475569;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:500;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px"
+         onmouseover="this.style.borderColor='#3b82f6';this.style.background='#eff6ff'"
+         onmouseout="this.style.borderColor='#cbd5e1';this.style.background='#fff'">
+        📦 Formats
+      </a>
+      <a href="/owners" style="text-decoration:none;background:#fff;border:1px solid #cbd5e1;color:#475569;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:500;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px"
+         onmouseover="this.style.borderColor='#3b82f6';this.style.background='#eff6ff'"
+         onmouseout="this.style.borderColor='#cbd5e1';this.style.background='#fff'">
+        👥 Ownership
+      </a>
+      <a href="/geography/continents" style="text-decoration:none;background:#fff;border:1px solid #cbd5e1;color:#475569;padding:8px 16px;border-radius:6px;font-size:14px;font-weight:500;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px"
+         onmouseover="this.style.borderColor='#3b82f6';this.style.background='#eff6ff'"
+         onmouseout="this.style.borderColor='#cbd5e1';this.style.background='#fff'">
+        🌍 Geography
+      </a>
+    </div>
+  </section>
 
   <!-- Interactive Query Builder -->
   <section class="card" style="background:#f8fafc;border:1px solid #cbd5e1">
     <div style="background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;padding:20px">
-      <!-- Query Dimension Selection -->
-      <div style="margin-bottom:16px">
-        <label style="display:block;margin-bottom:6px;font-weight:500;color:#475569;font-size:13px">Dimension:</label>
-        <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <button class="query-type-btn active" data-type="unified" style="background:#f1f5f9;border:1px solid #94a3b8;color:#334155;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:13px">🔍 Unified</button>
-          <button class="query-type-btn" data-type="collection" style="background:#fff;border:1px solid #d1d5db;color:#64748b;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:13px">Collections</button>
-          <button class="query-type-btn" data-type="format" style="background:#fff;border:1px solid #d1d5db;color:#64748b;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:13px">Formats</button>
-          <button class="query-type-btn" data-type="status" style="background:#fff;border:1px solid #d1d5db;color:#64748b;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:13px">Status</button>
-          <button class="query-type-btn" data-type="owner" style="background:#fff;border:1px solid #d1d5db;color:#64748b;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:13px">Owner</button>
-          <button class="query-type-btn" data-type="geography" style="background:#fff;border:1px solid #d1d5db;color:#64748b;padding:6px 12px;border-radius:4px;cursor:pointer;font-size:13px">Geography</button>
+      <!-- 5 Dimensions Selection -->
+      <div style="margin-bottom:20px">
+        <div style="font-size:12px;font-weight:600;color:#64748b;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px">Select Dimension</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="query-type-btn active" data-type="unified" style="background:#fff;border:1px solid #3b82f6;color:#334155;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:500;transition:all 0.2s">🔍 Unified Search</button>
+          <button class="query-type-btn" data-type="collection" style="background:#fff;border:1px solid #cbd5e1;color:#475569;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:500;transition:all 0.2s">📚 Collections</button>
+          <button class="query-type-btn" data-type="format" style="background:#fff;border:1px solid #cbd5e1;color:#475569;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:500;transition:all 0.2s">📦 Formats</button>
+          <button class="query-type-btn" data-type="status" style="background:#fff;border:1px solid #cbd5e1;color:#475569;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:500;transition:all 0.2s">🚦 Status</button>
+          <button class="query-type-btn" data-type="owner" style="background:#fff;border:1px solid #cbd5e1;color:#475569;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:500;transition:all 0.2s">👥 Ownership</button>
+          <button class="query-type-btn" data-type="geography" style="background:#fff;border:1px solid #cbd5e1;color:#475569;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:500;transition:all 0.2s">🌍 Geography</button>
         </div>
       </div>
 
@@ -289,9 +312,14 @@
 }
 
 .query-type-btn.active {
-  background: #f1f5f9 !important;
-  border-color: #94a3b8 !important;
+  background: #fff !important;
+  border-color: #3b82f6 !important;
   color: #334155 !important;
+}
+
+.query-type-btn:hover {
+  border-color: #3b82f6 !important;
+  background: #eff6ff !important;
 }
 </style>
 
@@ -310,11 +338,14 @@ document.querySelectorAll('.query-type-btn').forEach(btn => {
     // Update button states
     document.querySelectorAll('.query-type-btn').forEach(b => {
       b.classList.remove('active');
-      b.style.background = '#f3f4f6';
-      b.style.borderColor = '#d1d5db';
-      b.style.color = '#374151';
+      b.style.background = '#fff';
+      b.style.borderColor = '#cbd5e1';
+      b.style.color = '#475569';
     });
     btn.classList.add('active');
+    btn.style.background = '#fff';
+    btn.style.borderColor = '#3b82f6';
+    btn.style.color = '#334155';
 
     // All dimension types use the same property builder interface
     document.getElementById('property-builder').style.display = 'block';
