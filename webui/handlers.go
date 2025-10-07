@@ -206,57 +206,67 @@ func (a *App) HandleDataset(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) HandleGeography(w http.ResponseWriter, r *http.Request) {
-	// Parse URL: /geography/{level}/{name}
-	// Example: /geography/city/dallas
+	// Parse URL: /geography/{level}/{code}
+	// Examples: /geography/country/mx, /geography/continent/north_america
 	path := r.URL.Path[len("/geography/"):]
-	parts := []string{}
+
+	var level, name string
+	var city, county, state, country, continent string
+
+	// Try to parse path-based format first: /geography/country/mx
 	if path != "" {
-		// Split by / but preserve URL encoding
-		for _, p := range r.URL.Query()["city"] {
-			parts = append(parts, p)
-		}
-		for _, p := range r.URL.Query()["county"] {
-			parts = append(parts, p)
-		}
-		for _, p := range r.URL.Query()["state"] {
-			parts = append(parts, p)
-		}
-		for _, p := range r.URL.Query()["country"] {
-			parts = append(parts, p)
-		}
-		for _, p := range r.URL.Query()["continent"] {
-			parts = append(parts, p)
+		parts := strings.Split(path, "/")
+		if len(parts) >= 2 {
+			level = parts[0]
+			name = parts[1]
+
+			// Set the appropriate variable based on level
+			switch level {
+			case "city":
+				city = name
+			case "county":
+				county = name
+			case "state":
+				state = name
+			case "country":
+				country = name
+			case "continent":
+				continent = name
+			default:
+				http.Error(w, "Invalid geography level", http.StatusBadRequest)
+				return
+			}
 		}
 	}
 
-	// Extract geography params from query string
-	city := r.URL.Query().Get("city")
-	county := r.URL.Query().Get("county")
-	state := r.URL.Query().Get("state")
-	country := r.URL.Query().Get("country")
-	continent := r.URL.Query().Get("continent")
+	// Fall back to query string format for backward compatibility: ?country=mx
+	if level == "" {
+		city = r.URL.Query().Get("city")
+		county = r.URL.Query().Get("county")
+		state = r.URL.Query().Get("state")
+		country = r.URL.Query().Get("country")
+		continent = r.URL.Query().Get("continent")
 
-	// Determine level and name
-	level := ""
-	name := ""
-	if city != "" {
-		level = "city"
-		name = city
-	} else if county != "" {
-		level = "county"
-		name = county
-	} else if state != "" {
-		level = "state"
-		name = state
-	} else if country != "" {
-		level = "country"
-		name = country
-	} else if continent != "" {
-		level = "continent"
-		name = continent
-	} else {
-		http.Error(w, "No geography specified", http.StatusBadRequest)
-		return
+		// Determine level and name from query params
+		if city != "" {
+			level = "city"
+			name = city
+		} else if county != "" {
+			level = "county"
+			name = county
+		} else if state != "" {
+			level = "state"
+			name = state
+		} else if country != "" {
+			level = "country"
+			name = country
+		} else if continent != "" {
+			level = "continent"
+			name = continent
+		} else {
+			http.Error(w, "No geography specified", http.StatusBadRequest)
+			return
+		}
 	}
 
 	// Find matching README

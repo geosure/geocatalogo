@@ -316,7 +316,7 @@
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
       {{range .Stats.Continents}}
       {{if or (eq .Code "africa") (eq .Code "asia") (eq .Code "europe") (eq .Code "north_america") (eq .Code "south_america") (eq .Code "oceania") (eq .Code "global")}}
-      <a href="/geography/?continent={{.Code}}" style="text-decoration:none">
+      <a href="/geography/continent/{{.Code}}" style="text-decoration:none">
         <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s;cursor:pointer"
              onmouseover="this.style.borderColor='#64748b';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
              onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
@@ -345,7 +345,7 @@
 
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px">
       {{range $country := .Stats.Countries}}
-        <a href="/geography/?country={{$country.Code}}" style="text-decoration:none">
+        <a href="/geography/country/{{$country.Code}}" style="text-decoration:none">
           <div style="background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:16px;transition:all 0.2s"
                onmouseover="this.style.borderColor='#3b82f6';this.style.transform='translateY(-2px)'"
                onmouseout="this.style.borderColor='#e5e7eb';this.style.transform='translateY(0)'">
