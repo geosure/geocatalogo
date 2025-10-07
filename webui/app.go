@@ -141,20 +141,33 @@ type IntrospectionStats struct {
 }
 
 type DatasetPageData struct {
-	Record         Record
-	RecordJSON     string
-	DatabaseTable  *metadata.DatabaseTable
-	CSVFile        *metadata.CSVFile
-	ParquetFile    *metadata.ParquetFile
-	ShapefileFile  *metadata.ShapefileFile
-	GeoPackageFile *metadata.GeoPackageFile
-	ExcelFile      *metadata.ExcelFile
-	JSONFile       *metadata.JSONFile
-	FileGDBFile    *metadata.FileGDBFile
-	PNGFile        *metadata.PNGFile
-	PDFFile        *metadata.PDFFile
-	V6Job          *metadata.V6Job
-	Agent          *metadata.Agent
+	Record             Record
+	RecordJSON         string
+	DatabaseTable      *metadata.DatabaseTable
+	CSVFile            *metadata.CSVFile
+	ParquetFile        *metadata.ParquetFile
+	ShapefileFile      *metadata.ShapefileFile
+	GeoPackageFile     *metadata.GeoPackageFile
+	ExcelFile          *metadata.ExcelFile
+	JSONFile           *metadata.JSONFile
+	FileGDBFile        *metadata.FileGDBFile
+	PNGFile            *metadata.PNGFile
+	PDFFile            *metadata.PDFFile
+	V6Job              *metadata.V6Job
+	Agent              *metadata.Agent
+	NewsSourceMetadata *NewsSourceMetadata
+}
+
+type NewsSourceMetadata struct {
+	SourceName          string `json:"source_name"`
+	Language            string `json:"language"`
+	CountryName         string `json:"country_name"`
+	SourceType          string `json:"source_type"`
+	ArticleCountAllTime int    `json:"article_count_all_time"`
+	FirstSeen           string `json:"first_seen"`
+	LastSeen            string `json:"last_seen"`
+	CollectionMethod    string `json:"collection_method"`
+	Verified            bool   `json:"verified"`
 }
 
 type CollectionCounts struct {

@@ -3,7 +3,6 @@
 {{define "page_title"}}{{.Record.Properties.Title}} • GRO Catalog{{end}}
 
 {{define "page_content"}}
-  <div style="background:orange;padding:20px;margin:20px 0;color:white;font-weight:bold">DEBUG: PAGE_CONTENT BLOCK IS RENDERING!</div>
   <!-- Breadcrumbs -->
   <div class="muted" style="margin-bottom:16px;font-size:13px">
     <a href="/" style="color:var(--link)">Catalog</a>
@@ -78,15 +77,96 @@
       {{end}}
     </div>
 
-    <!-- Description (hide if it's just metadata for database tables) -->
+    <!-- Description (hide for news sources and database tables - they have dedicated sections) -->
     {{if .Record.Properties.Abstract}}
-      {{if not .DatabaseTable}}
+      {{if and (not .DatabaseTable) (ne .Record.Properties.Collection "external_news_active")}}
         <p style="margin:0;color:#374151;line-height:1.6">
           {{.Record.Properties.Abstract}}
         </p>
       {{end}}
     {{end}}
   </section>
+
+  <!-- News Source Details (for external_news_active collection) -->
+  {{if eq .Record.Properties.Collection "external_news_active"}}
+    {{if .NewsSourceMetadata}}
+    <section class="card card-compact" style="background:#f8fafc;border:1px solid #cbd5e1">
+      <div style="font-size:14px;font-weight:700;color:#334155;margin-bottom:16px;display:flex;align-items:center;gap:8px">
+        <span style="font-size:24px">📡</span>
+        <span>News Source Details</span>
+      </div>
+
+      <!-- Source Stats Grid -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:16px">
+        <!-- Article Count -->
+        {{if .NewsSourceMetadata.ArticleCountAllTime}}
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:12px">
+          <div style="font-size:10px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:4px">📊 Total Articles</div>
+          <div style="font-size:20px;font-weight:700;color:#0f172a">{{.NewsSourceMetadata.ArticleCountAllTime}}</div>
+        </div>
+        {{end}}
+
+        <!-- Country -->
+        {{if .NewsSourceMetadata.CountryName}}
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:12px">
+          <div style="font-size:10px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:4px">🌍 Country</div>
+          <div style="font-size:16px;font-weight:600;color:#334155">{{.NewsSourceMetadata.CountryName}}</div>
+        </div>
+        {{end}}
+
+        <!-- Language -->
+        {{if .NewsSourceMetadata.Language}}
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:12px">
+          <div style="font-size:10px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:4px">🗣️ Language</div>
+          <div style="font-size:16px;font-weight:600;color:#334155;text-transform:uppercase">{{.NewsSourceMetadata.Language}}</div>
+        </div>
+        {{end}}
+
+        <!-- Source Type -->
+        {{if .NewsSourceMetadata.SourceType}}
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:12px">
+          <div style="font-size:10px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:4px">📰 Type</div>
+          <div style="font-size:14px;font-weight:600;color:#334155">{{.NewsSourceMetadata.SourceType}}</div>
+        </div>
+        {{end}}
+      </div>
+
+      <!-- Collection Timeline -->
+      <div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:12px">
+        <div style="font-size:11px;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.3px;margin-bottom:8px">⏱️ Collection Timeline</div>
+        <div style="display:flex;gap:24px;flex-wrap:wrap">
+          {{if .NewsSourceMetadata.FirstSeen}}
+          <div>
+            <div style="font-size:11px;color:#64748b;margin-bottom:2px">First Seen</div>
+            <div style="font-size:14px;font-weight:600;color:#334155;font-family:monospace">{{slice .NewsSourceMetadata.FirstSeen 0 10}}</div>
+          </div>
+          {{end}}
+          {{if .NewsSourceMetadata.LastSeen}}
+          <div>
+            <div style="font-size:11px;color:#64748b;margin-bottom:2px">Last Seen</div>
+            <div style="font-size:14px;font-weight:600;color:#334155;font-family:monospace">{{slice .NewsSourceMetadata.LastSeen 0 10}}</div>
+          </div>
+          {{end}}
+        </div>
+      </div>
+
+      <!-- Collection Method Badge -->
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <span style="display:inline-block;padding:6px 12px;background:#dcfce7;color:#15803d;border:1px solid:#bbf7d0;border-radius:6px;font-size:12px;font-weight:600">
+          ✓ Verified • GNews API
+        </span>
+        <a href="https://www.google.com/search?q={{.NewsSourceMetadata.SourceName}}+news" target="_blank" rel="noopener" style="display:inline-block;padding:6px 12px;background:#eff6ff;color:#1e40af;border:1px solid:#bfdbfe;border-radius:6px;font-size:12px;font-weight:600;text-decoration:none;transition:all 0.2s" onmouseover="this.style.background='#dbeafe'" onmouseout="this.style.background='#eff6ff'">
+          🔗 Search for Source
+        </a>
+      </div>
+
+      <!-- Data Source Note -->
+      <div style="margin-top:12px;padding:10px;background:#fef3c7;border:1px solid #fde68a;border-radius:6px;font-size:12px;color:#78350f">
+        <strong>Note:</strong> Articles from this source are collected automatically via GNews API and stored in the <code style="background:#fff;padding:2px 4px;border-radius:3px">raw_articles</code> table. Source URL not tracked in catalog.
+      </div>
+    </section>
+    {{end}}
+  {{end}}
 
   <!-- V6 Job Details (for potential_v6 collection) -->
   {{if eq .Record.Properties.Collection "potential_v6"}}

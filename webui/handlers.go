@@ -222,6 +222,28 @@ func (a *App) HandleDataset(w http.ResponseWriter, r *http.Request) {
 		pageData.RecordJSON = string(recordJSON)
 	}
 
+	// Parse news source metadata from abstract field for external_news_active collection
+	if record.Properties.Collection == "external_news_active" {
+		// Extract JSON from abstract (it's appended as "Notes: {json}")
+		abstract := record.Properties.Abstract
+		notesPrefix := "Notes: {"
+		if idx := strings.Index(abstract, notesPrefix); idx >= 0 {
+			jsonStr := abstract[idx+len("Notes: "):]
+			// Find the end of the JSON object
+			if endIdx := strings.LastIndex(jsonStr, "}"); endIdx >= 0 {
+				jsonStr = jsonStr[:endIdx+1]
+				var newsMetadata NewsSourceMetadata
+				if err := json.Unmarshal([]byte(jsonStr), &newsMetadata); err == nil {
+					// Format source_type: regional_daily -> Regional Daily
+					newsMetadata.SourceType = strings.Title(strings.ReplaceAll(newsMetadata.SourceType, "_", " "))
+					pageData.NewsSourceMetadata = &newsMetadata
+				} else {
+					log.Printf("Warning: Could not parse news source metadata for %s: %v", record.ID, err)
+				}
+			}
+		}
+	}
+
 	// Lookup introspection data based on type
 	if a.meta != nil {
 		meta := a.meta.Lookup(
