@@ -90,7 +90,7 @@ func main() {
 
 	serveCommand := flag.NewFlagSet("serve", flag.ExitOnError)
 	portFlag := serveCommand.Int("port", 8000, "port")
-	apiFlag := serveCommand.String("api", "default", "API to serve (default, stac)")
+	apiFlag := serveCommand.String("api", "default", "API to serve (default, stac, gro)")
 
 	versionCommand := flag.NewFlagSet("version", flag.ExitOnError)
 
@@ -226,9 +226,11 @@ func main() {
 			fmt.Printf("    %s - %s\n", result.Identifier, result.Properties.Title)
 		}
 	} else if serveCommand.Parsed() {
-		fmt.Printf("Serving on port %d\n", *portFlag)
+		fmt.Printf("Serving %s API on port %d\n", *apiFlag, *portFlag)
 		if *apiFlag == "stac" {
 			router = web.STACRouter(cat)
+		} else if *apiFlag == "gro" {
+			router = web.GRORouter(cat)
 		} else { // csw3-opensearch is the default
 			router = web.CSW3OpenSearchRouter(cat)
 		}
