@@ -38,74 +38,85 @@ import (
 )
 
 // GRORouter provides RESTful GRO API Routing
-// This router provides a RESTful interface matching the human UI structure
-// with 5-dimensional navigation: Geography, Collections, Formats, Status, Ownership
+// This router provides a RESTful interface with nested, grouped endpoints
+// API v1 with 5-dimensional navigation: Geography, Collections, Formats, Status, Ownership
 func GRORouter(cat *geocatalogo.GeoCatalogue) *mux.Router {
 	router := mux.NewRouter()
 
-	// Root endpoint - catalog info
+	// API v1 routes - all endpoints nested under /api/v1/
+	api := router.PathPrefix("/api/v1").Subrouter()
+
+	// Root endpoint - API info
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		GRORoot(w, r, cat)
 	}).Methods("GET")
 
-	// Search endpoint (backward compatible with CSW3)
-	router.HandleFunc("/search", func(w http.ResponseWriter, r *http.Request) {
+	// Search endpoint
+	api.HandleFunc("/search", func(w http.ResponseWriter, r *http.Request) {
 		GROSearch(w, r, cat)
 	}).Methods("GET")
 
-	// 5D Navigation Routes
-	router.HandleFunc("/geography/{continent}", func(w http.ResponseWriter, r *http.Request) {
-		GROGeography(w, r, cat)
-	}).Methods("GET")
-
-	router.HandleFunc("/geography/{continent}/{country}", func(w http.ResponseWriter, r *http.Request) {
-		GROGeography(w, r, cat)
-	}).Methods("GET")
-
-	router.HandleFunc("/geography/{continent}/{country}/{state}", func(w http.ResponseWriter, r *http.Request) {
-		GROGeography(w, r, cat)
-	}).Methods("GET")
-
-	router.HandleFunc("/geography/{continent}/{country}/{state}/{city}", func(w http.ResponseWriter, r *http.Request) {
-		GROGeography(w, r, cat)
-	}).Methods("GET")
-
-	router.HandleFunc("/format/{format}", func(w http.ResponseWriter, r *http.Request) {
-		GROFormat(w, r, cat)
-	}).Methods("GET")
-
-	router.HandleFunc("/status/{status}", func(w http.ResponseWriter, r *http.Request) {
-		GROStatus(w, r, cat)
-	}).Methods("GET")
-
-	router.HandleFunc("/owner/{owner}", func(w http.ResponseWriter, r *http.Request) {
-		GROOwner(w, r, cat)
-	}).Methods("GET")
-
-	router.HandleFunc("/collection/{collection}", func(w http.ResponseWriter, r *http.Request) {
-		GROCollection(w, r, cat)
-	}).Methods("GET")
-
-	// Record lookup by ID
-	router.HandleFunc("/record/{id}", func(w http.ResponseWriter, r *http.Request) {
-		GRORecord(w, r, cat)
-	}).Methods("GET")
-
-	// List endpoints
-	router.HandleFunc("/collections", func(w http.ResponseWriter, r *http.Request) {
+	// Collections - grouped resource
+	api.HandleFunc("/collections", func(w http.ResponseWriter, r *http.Request) {
 		GROListCollections(w, r, cat)
 	}).Methods("GET")
 
-	router.HandleFunc("/formats", func(w http.ResponseWriter, r *http.Request) {
+	api.HandleFunc("/collections/{collection}", func(w http.ResponseWriter, r *http.Request) {
+		GROCollection(w, r, cat)
+	}).Methods("GET")
+
+	// Formats - grouped resource
+	api.HandleFunc("/formats", func(w http.ResponseWriter, r *http.Request) {
 		GROListFormats(w, r, cat)
 	}).Methods("GET")
 
-	router.HandleFunc("/statuses", func(w http.ResponseWriter, r *http.Request) {
+	api.HandleFunc("/formats/{format}", func(w http.ResponseWriter, r *http.Request) {
+		GROFormat(w, r, cat)
+	}).Methods("GET")
+
+	// Statuses - grouped resource
+	api.HandleFunc("/statuses", func(w http.ResponseWriter, r *http.Request) {
 		GROListStatuses(w, r, cat)
 	}).Methods("GET")
 
-	router.HandleFunc("/owners", func(w http.ResponseWriter, r *http.Request) {
+	api.HandleFunc("/statuses/{status}", func(w http.ResponseWriter, r *http.Request) {
+		GROStatus(w, r, cat)
+	}).Methods("GET")
+
+	// Owners - grouped resource
+	api.HandleFunc("/owners", func(w http.ResponseWriter, r *http.Request) {
 		GROListOwners(w, r, cat)
+	}).Methods("GET")
+
+	api.HandleFunc("/owners/{owner}", func(w http.ResponseWriter, r *http.Request) {
+		GROOwner(w, r, cat)
+	}).Methods("GET")
+
+	// Geography - grouped resource with hierarchy
+	api.HandleFunc("/geography/{continent}", func(w http.ResponseWriter, r *http.Request) {
+		GROGeography(w, r, cat)
+	}).Methods("GET")
+
+	api.HandleFunc("/geography/{continent}/{country}", func(w http.ResponseWriter, r *http.Request) {
+		GROGeography(w, r, cat)
+	}).Methods("GET")
+
+	api.HandleFunc("/geography/{continent}/{country}/{state}", func(w http.ResponseWriter, r *http.Request) {
+		GROGeography(w, r, cat)
+	}).Methods("GET")
+
+	api.HandleFunc("/geography/{continent}/{country}/{state}/{city}", func(w http.ResponseWriter, r *http.Request) {
+		GROGeography(w, r, cat)
+	}).Methods("GET")
+
+	// Records - primary resource endpoint
+	api.HandleFunc("/records/{id}", func(w http.ResponseWriter, r *http.Request) {
+		GRORecord(w, r, cat)
+	}).Methods("GET")
+
+	// Resources - unified query endpoint with filters
+	api.HandleFunc("/resources", func(w http.ResponseWriter, r *http.Request) {
+		GROResources(w, r, cat)
 	}).Methods("GET")
 
 	return router
@@ -117,10 +128,11 @@ func GRORoot(w http.ResponseWriter, r *http.Request, cat *geocatalogo.GeoCatalog
 	results := cat.Search([]string{}, "", []float64{}, []time.Time{}, 0, 1, map[string]string{})
 
 	response := map[string]interface{}{
-		"api":         "gro",
-		"version":     "1.0.0",
-		"description": "GRO RESTful Catalog API - 5-Dimensional Navigation",
+		"api":           "gro",
+		"version":       "1.0.0",
+		"description":   "GRO RESTful Catalog API - Nested & Grouped 5D Navigation",
 		"total_records": results.Matches,
+		"base_path":     "/api/v1",
 		"dimensions": []string{
 			"geography",
 			"collections",
@@ -128,18 +140,42 @@ func GRORoot(w http.ResponseWriter, r *http.Request, cat *geocatalogo.GeoCatalog
 			"statuses",
 			"owners",
 		},
-		"endpoints": map[string]string{
-			"search":      "/search?q=term",
-			"geography":   "/geography/{continent}/{country}/{state}/{city}",
-			"format":      "/format/{format}",
-			"status":      "/status/{status}",
-			"owner":       "/owner/{owner}",
-			"collection":  "/collection/{collection}",
-			"record":      "/record/{id}",
-			"collections": "/collections",
-			"formats":     "/formats",
-			"statuses":    "/statuses",
-			"owners":      "/owners",
+		"endpoints": map[string]interface{}{
+			"search": map[string]string{
+				"path":        "/api/v1/search",
+				"description": "Search with text query and filters",
+				"example":     "/api/v1/search?q=wildfire&size=10",
+			},
+			"resources": map[string]string{
+				"path":        "/api/v1/resources",
+				"description": "Unified resource query with filters",
+				"example":     "/api/v1/resources?collection=ai_agent&format=csv",
+			},
+			"collections": map[string]string{
+				"list":   "/api/v1/collections",
+				"detail": "/api/v1/collections/{name}",
+			},
+			"formats": map[string]string{
+				"list":   "/api/v1/formats",
+				"detail": "/api/v1/formats/{name}",
+			},
+			"statuses": map[string]string{
+				"list":   "/api/v1/statuses",
+				"detail": "/api/v1/statuses/{name}",
+			},
+			"owners": map[string]string{
+				"list":   "/api/v1/owners",
+				"detail": "/api/v1/owners/{name}",
+			},
+			"geography": map[string]string{
+				"continent": "/api/v1/geography/{continent}",
+				"country":   "/api/v1/geography/{continent}/{country}",
+				"state":     "/api/v1/geography/{continent}/{country}/{state}",
+				"city":      "/api/v1/geography/{continent}/{country}/{state}/{city}",
+			},
+			"records": map[string]string{
+				"detail": "/api/v1/records/{id}",
+			},
 		},
 	}
 
@@ -417,5 +453,54 @@ func GROListOwners(w http.ResponseWriter, r *http.Request, cat *geocatalogo.GeoC
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"total":  len(ownerCounts),
 		"owners": ownerCounts,
+	})
+}
+
+// GROResources provides unified resource querying with multiple filters
+// This endpoint allows combining filters: ?collection=ai_agent&format=csv&status=implemented
+func GROResources(w http.ResponseWriter, r *http.Request, cat *geocatalogo.GeoCatalogue) {
+	query := r.URL.Query()
+	propertyFilters := make(map[string]string)
+
+	// Extract all supported property filters
+	propertyKeys := []string{
+		"continent", "country", "state", "city", "admin2",
+		"collection", "type", "owner", "data_format", "status",
+		"geographic_scope", "database_table", "v6_job_file",
+		"v6_job_type", "s3_path", "title", "implementation_status",
+	}
+
+	for _, key := range propertyKeys {
+		if val := query.Get(key); val != "" {
+			propertyFilters[key] = val
+		}
+	}
+
+	// Parse pagination
+	var from, size int
+	if fromVal := query.Get("from"); fromVal != "" {
+		from, _ = strconv.Atoi(fromVal)
+	}
+	if sizeVal := query.Get("size"); sizeVal != "" {
+		size, _ = strconv.Atoi(sizeVal)
+	} else {
+		size = 100 // default
+	}
+
+	// Optional text search
+	q := query.Get("q")
+
+	// Perform search
+	results := cat.Search([]string{}, q, []float64{}, []time.Time{}, from, size, propertyFilters)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"filters":  propertyFilters,
+		"query":    q,
+		"matched":  results.Matches,
+		"returned": len(results.Records),
+		"from":     from,
+		"size":     size,
+		"records":  results.Records,
 	})
 }
