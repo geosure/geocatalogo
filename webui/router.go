@@ -43,9 +43,9 @@ func NewMux(app *App) *http.ServeMux {
 	mux.HandleFunc("/external_download/", app.HandleDataset)
 	mux.HandleFunc("/external_other/", app.HandleDataset)
 
-	// Redirect /api to existing GeoCatalogo STAC API
+	// Redirect /api to API documentation page
 	mux.HandleFunc("/api", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "http://localhost:8000/api", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/api-docs", http.StatusTemporaryRedirect)
 	})
 
 	// Register "/" last as it's a catch-all

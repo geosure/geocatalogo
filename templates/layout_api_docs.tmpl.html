@@ -9,19 +9,298 @@
     <span>API Docs</span>
   </div>
 
-  <h1>🔌 GeoCatalogo API Documentation</h1>
+  <h1>🔌 GRO RESTful API Documentation</h1>
   <p class="muted" style="margin-bottom:24px">
-    Complete guide to querying the GRO data universe - for humans and AI agents
+    Complete guide to the GRO RESTful API (v1.0) - Nested, grouped 5D navigation for agents and humans
   </p>
+
+  <!-- API Version Notice -->
+  <section class="card" style="background:#eff6ff;border:1px solid #93c5fd">
+    <div style="display:flex;align-items:start;gap:16px">
+      <div style="font-size:40px">ℹ️</div>
+      <div style="flex:1">
+        <h3 style="margin:0 0 8px;color:#1e40af;font-size:18px">Two API Endpoints Available</h3>
+        <p style="margin:0 0 12px;color:#1e40af;font-size:14px;line-height:1.6">
+          <strong>🆕 GRO RESTful API (port 9000):</strong> New nested, grouped structure with explicit 5D navigation. <em>This is the recommended API for all new integrations.</em><br>
+          <strong>Legacy STAC API (port 8000):</strong> Original flat query interface with property filters. Still supported but will eventually be deprecated.
+        </p>
+        <div style="background:white;border-radius:6px;padding:12px;font-family:monospace;font-size:13px;margin-top:12px">
+          <div style="color:#1e40af;margin-bottom:4px"># GRO RESTful API (recommended)</div>
+          <div style="margin-bottom:12px">http://localhost:9000</div>
+
+          <div style="color:#64748b;margin-bottom:4px"># Legacy STAC API (supported)</div>
+          <div>http://localhost:8000</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GRO RESTful API Structure -->
+  <section class="card">
+    <h2 style="margin:0 0 24px">🚀 GRO RESTful API (v1.0) - Port 9000</h2>
+    <p class="muted" style="margin:0 0 24px">
+      The GRO API provides nested, grouped endpoints organized by 5 dimensions. All endpoints are under <code style="background:#e2e8f0;padding:2px 6px;border-radius:3px">/api/v1/</code> and return JSON.
+    </p>
+
+    <!-- Quick Start -->
+    <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:20px;margin-bottom:24px">
+      <h3 style="margin:0 0 12px;color:#15803d">Quick Start</h3>
+      <div style="background:white;border-radius:6px;padding:16px;font-family:monospace;font-size:13px">
+        <div style="color:#64748b;margin-bottom:4px"># Get API overview</div>
+        <div style="margin-bottom:16px">curl http://localhost:9000/</div>
+
+        <div style="color:#64748b;margin-bottom:4px"># List all collections</div>
+        <div style="margin-bottom:16px">curl http://localhost:9000/api/v1/collections</div>
+
+        <div style="color:#64748b;margin-bottom:4px"># Get all AI agents</div>
+        <div style="margin-bottom:16px">curl http://localhost:9000/api/v1/collections/ai_agent</div>
+
+        <div style="color:#64748b;margin-bottom:4px"># List all continents</div>
+        <div>curl http://localhost:9000/api/v1/geography/continents</div>
+      </div>
+    </div>
+
+    <!-- 5 Dimensions -->
+    <h3 style="margin:0 0 16px;color:#334155">Five Dimensions of Navigation</h3>
+
+    <!-- 1. Collections -->
+    <div style="margin-bottom:32px">
+      <h4 style="margin:0 0 12px;color:#7c2d12;font-size:16px">📚 1. Collections</h4>
+      <p style="margin:0 0 12px;color:#64748b;font-size:14px">Browse by resource type (21 collections)</p>
+      <table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:12px">
+        <tr style="background:#f8fafc;border-bottom:2px solid #e2e8f0">
+          <th style="text-align:left;padding:12px;font-weight:600">Endpoint</th>
+          <th style="text-align:left;padding:12px;font-weight:600">Description</th>
+        </tr>
+        <tr style="border-bottom:1px solid #e5e7eb">
+          <td style="padding:12px;font-family:monospace;color:#0b63ce">GET /api/v1/collections</td>
+          <td style="padding:12px">List all 21 collections with counts</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e5e7eb">
+          <td style="padding:12px;font-family:monospace;color:#0b63ce">GET /api/v1/collections/{name}</td>
+          <td style="padding:12px">Get all resources in a collection</td>
+        </tr>
+      </table>
+      <div style="background:#f8fafc;border-radius:6px;padding:12px;font-family:monospace;font-size:12px">
+        <div style="color:#64748b">Examples:</div>
+        <div>curl http://localhost:9000/api/v1/collections/ai_agent</div>
+        <div>curl http://localhost:9000/api/v1/collections/existing_db</div>
+      </div>
+    </div>
+
+    <!-- 2. Formats -->
+    <div style="margin-bottom:32px">
+      <h4 style="margin:0 0 12px;color:#7c2d12;font-size:16px">📦 2. Data Formats</h4>
+      <p style="margin:0 0 12px;color:#64748b;font-size:14px">Browse by data format (56 formats)</p>
+      <table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:12px">
+        <tr style="background:#f8fafc;border-bottom:2px solid #e2e8f0">
+          <th style="text-align:left;padding:12px;font-weight:600">Endpoint</th>
+          <th style="text-align:left;padding:12px;font-weight:600">Description</th>
+        </tr>
+        <tr style="border-bottom:1px solid #e5e7eb">
+          <td style="padding:12px;font-family:monospace;color:#0b63ce">GET /api/v1/formats</td>
+          <td style="padding:12px">List all 56 formats with counts</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e5e7eb">
+          <td style="padding:12px;font-family:monospace;color:#0b63ce">GET /api/v1/formats/{name}</td>
+          <td style="padding:12px">Get all resources with this format</td>
+        </tr>
+      </table>
+      <div style="background:#f8fafc;border-radius:6px;padding:12px;font-family:monospace;font-size:12px">
+        <div style="color:#64748b">Examples:</div>
+        <div>curl http://localhost:9000/api/v1/formats/csv</div>
+        <div>curl http://localhost:9000/api/v1/formats/lambda</div>
+      </div>
+    </div>
+
+    <!-- 3. Implementation Status -->
+    <div style="margin-bottom:32px">
+      <h4 style="margin:0 0 12px;color:#7c2d12;font-size:16px">🚦 3. Implementation Status</h4>
+      <p style="margin:0 0 12px;color:#64748b;font-size:14px">Browse by deployment state (12 statuses)</p>
+      <table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:12px">
+        <tr style="background:#f8fafc;border-bottom:2px solid #e2e8f0">
+          <th style="text-align:left;padding:12px;font-weight:600">Endpoint</th>
+          <th style="text-align:left;padding:12px;font-weight:600">Description</th>
+        </tr>
+        <tr style="border-bottom:1px solid #e5e7eb">
+          <td style="padding:12px;font-family:monospace;color:#0b63ce">GET /api/v1/statuses</td>
+          <td style="padding:12px">List all 12 statuses with counts</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e5e7eb">
+          <td style="padding:12px;font-family:monospace;color:#0b63ce">GET /api/v1/statuses/{name}</td>
+          <td style="padding:12px">Get all resources with this status</td>
+        </tr>
+      </table>
+      <div style="background:#f8fafc;border-radius:6px;padding:12px;font-family:monospace;font-size:12px">
+        <div style="color:#64748b">Examples:</div>
+        <div>curl http://localhost:9000/api/v1/statuses/implemented</div>
+        <div>curl http://localhost:9000/api/v1/statuses/active</div>
+      </div>
+    </div>
+
+    <!-- 4. Ownership -->
+    <div style="margin-bottom:32px">
+      <h4 style="margin:0 0 12px;color:#7c2d12;font-size:16px">👥 4. Ownership</h4>
+      <p style="margin:0 0 12px;color:#64748b;font-size:14px">Browse by owner (32 owners)</p>
+      <table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:12px">
+        <tr style="background:#f8fafc;border-bottom:2px solid #e2e8f0">
+          <th style="text-align:left;padding:12px;font-weight:600">Endpoint</th>
+          <th style="text-align:left;padding:12px;font-weight:600">Description</th>
+        </tr>
+        <tr style="border-bottom:1px solid #e5e7eb">
+          <td style="padding:12px;font-family:monospace;color:#0b63ce">GET /api/v1/owners</td>
+          <td style="padding:12px">List all 32 owners with counts</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e5e7eb">
+          <td style="padding:12px;font-family:monospace;color:#0b63ce">GET /api/v1/owners/{name}</td>
+          <td style="padding:12px">Get all resources owned by this team/person</td>
+        </tr>
+      </table>
+      <div style="background:#f8fafc;border-radius:6px;padding:12px;font-family:monospace;font-size:12px">
+        <div style="color:#64748b">Examples:</div>
+        <div>curl http://localhost:9000/api/v1/owners/@data-platform</div>
+        <div>curl http://localhost:9000/api/v1/owners/@clankr</div>
+      </div>
+    </div>
+
+    <!-- 5. Geography (Nested Hierarchy) -->
+    <div style="margin-bottom:32px">
+      <h4 style="margin:0 0 12px;color:#7c2d12;font-size:16px">🌍 5. Geography (4-Level Hierarchy)</h4>
+      <p style="margin:0 0 12px;color:#64748b;font-size:14px">Explicit nested navigation with list endpoints at each level</p>
+
+      <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:16px;margin-bottom:16px">
+        <div style="font-weight:600;margin-bottom:8px;color:#15803d">✨ Key Pattern: Lists vs. Resources</div>
+        <div style="font-size:13px;color:#15803d;line-height:1.6">
+          <strong>PLURAL</strong> endpoints (continents, countries, states, cities) return <strong>LISTS with counts</strong><br>
+          <strong>SINGULAR</strong> endpoints (continent name, country name) return <strong>FILTERED RESOURCES</strong>
+        </div>
+      </div>
+
+      <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:12px">
+        <tr style="background:#f8fafc;border-bottom:2px solid #e2e8f0">
+          <th style="text-align:left;padding:10px;font-weight:600">Level</th>
+          <th style="text-align:left;padding:10px;font-weight:600">Endpoint</th>
+          <th style="text-align:left;padding:10px;font-weight:600">Returns</th>
+        </tr>
+        <tr style="border-bottom:1px solid #e5e7eb">
+          <td style="padding:10px;font-weight:600">0</td>
+          <td style="padding:10px;font-family:monospace;color:#0b63ce">GET /api/v1/geography/continents</td>
+          <td style="padding:10px">List all 7 continents</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e5e7eb">
+          <td style="padding:10px;font-weight:600">0</td>
+          <td style="padding:10px;font-family:monospace;color:#0b63ce">GET /api/v1/geography/countries</td>
+          <td style="padding:10px">List all 54 countries</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e5e7eb">
+          <td style="padding:10px;font-weight:600">1</td>
+          <td style="padding:10px;font-family:monospace;color:#0b63ce">GET /api/v1/geography/continents/{continent}</td>
+          <td style="padding:10px">Resources in continent</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e5e7eb">
+          <td style="padding:10px;font-weight:600">1</td>
+          <td style="padding:10px;font-family:monospace;color:#0b63ce">GET /api/v1/geography/continents/{continent}/countries</td>
+          <td style="padding:10px">List countries in continent</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e5e7eb">
+          <td style="padding:10px;font-weight:600">2</td>
+          <td style="padding:10px;font-family:monospace;color:#0b63ce">GET .../countries/{country}</td>
+          <td style="padding:10px">Resources in country</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e5e7eb">
+          <td style="padding:10px;font-weight:600">2</td>
+          <td style="padding:10px;font-family:monospace;color:#0b63ce">GET .../countries/{country}/states</td>
+          <td style="padding:10px">List states in country</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e5e7eb">
+          <td style="padding:10px;font-weight:600">3</td>
+          <td style="padding:10px;font-family:monospace;color:#0b63ce">GET .../states/{state}</td>
+          <td style="padding:10px">Resources in state</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e5e7eb">
+          <td style="padding:10px;font-weight:600">3</td>
+          <td style="padding:10px;font-family:monospace;color:#0b63ce">GET .../states/{state}/cities</td>
+          <td style="padding:10px">List cities in state</td>
+        </tr>
+        <tr style="border-bottom:1px solid #e5e7eb">
+          <td style="padding:10px;font-weight:600">4</td>
+          <td style="padding:10px;font-family:monospace;color:#0b63ce">GET .../cities/{city}</td>
+          <td style="padding:10px">Resources in city</td>
+        </tr>
+      </table>
+
+      <div style="background:#f8fafc;border-radius:6px;padding:12px;font-family:monospace;font-size:12px">
+        <div style="color:#64748b">Examples:</div>
+        <div>curl http://localhost:9000/api/v1/geography/continents/north-america</div>
+        <div>curl http://localhost:9000/api/v1/geography/continents/north-america/countries</div>
+        <div>curl http://localhost:9000/api/v1/geography/continents/north-america/countries/us</div>
+        <div>curl http://localhost:9000/api/v1/geography/continents/north-america/countries/us/states/california/cities/los_angeles</div>
+      </div>
+    </div>
+
+    <!-- Additional Endpoints -->
+    <h3 style="margin:0 0 16px;color:#334155">Additional Endpoints</h3>
+
+    <table style="width:100%;border-collapse:collapse;font-size:14px;margin-bottom:12px">
+      <tr style="background:#f8fafc;border-bottom:2px solid #e2e8f0">
+        <th style="text-align:left;padding:12px;font-weight:600">Endpoint</th>
+        <th style="text-align:left;padding:12px;font-weight:600">Description</th>
+      </tr>
+      <tr style="border-bottom:1px solid #e5e7eb">
+        <td style="padding:12px;font-family:monospace;color:#0b63ce">GET /api/v1/search?q={query}</td>
+        <td style="padding:12px">Text search with filters and pagination</td>
+      </tr>
+      <tr style="border-bottom:1px solid #e5e7eb">
+        <td style="padding:12px;font-family:monospace;color:#0b63ce">GET /api/v1/records/{id}</td>
+        <td style="padding:12px">Get specific record by ID</td>
+      </tr>
+      <tr style="border-bottom:1px solid #e5e7eb">
+        <td style="padding:12px;font-family:monospace;color:#0b63ce">GET /api/v1/resources?...</td>
+        <td style="padding:12px">Unified query with multi-filter support (17 filters available)</td>
+      </tr>
+    </table>
+
+    <div style="background:#f8fafc;border-radius:6px;padding:12px;font-family:monospace;font-size:12px;margin-bottom:24px">
+      <div style="color:#64748b"># Unified resource query</div>
+      <div>curl 'http://localhost:9000/api/v1/resources?collection=ai_agent&format=csv&status=implemented'</div>
+    </div>
+
+    <!-- Response Format -->
+    <h3 style="margin:0 0 16px;color:#334155">Response Format</h3>
+    <p style="margin:0 0 12px;color:#64748b;font-size:14px">All responses are JSON. Lists include counts, resource endpoints include matched count and records array.</p>
+
+    <div style="background:#1e293b;color:#e2e8f0;border-radius:6px;padding:16px;font-family:monospace;font-size:12px;overflow-x:auto">
+<pre style="margin:0">{
+  "matched": 7,
+  "returned": 7,
+  "records": [
+    {
+      "id": "clankr_catalog_agent",
+      "type": "Feature",
+      "properties": {
+        "title": "Catalog Management Agent",
+        "collection": "ai_agent",
+        "gro_metadata": {
+          "continent": "clankr",
+          "implementation_status": "active",
+          "data_format": "lambda_service",
+          "owner": "@clankr"
+        }
+      }
+    }
+  ]
+}</pre>
+    </div>
+  </section>
 
   <!-- Link to Query Builder -->
   <section class="card" style="background:#f8fafc;border:1px solid #cbd5e1">
     <div style="display:flex;align-items:center;gap:16px">
       <div style="font-size:48px">🎯</div>
       <div style="flex:1">
-        <h3 style="margin:0 0 8px;color:#334155;font-size:18px">Try the Interactive Query Builder!</h3>
+        <h3 style="margin:0 0 8px;color:#334155;font-size:18px">Try the Interactive Query Builder (Legacy STAC API)</h3>
         <p style="margin:0 0 12px;color:#64748b;font-size:14px">
-          Build and test queries visually with live results. Perfect for learning the API or quickly exploring the catalog.
+          Build and test queries visually with live results. Note: Currently uses the legacy STAC API on port 8000. GRO API query builder coming soon.
         </p>
         <a href="/query" style="display:inline-block;background:#475569;color:white;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:600;font-size:14px">
           Open Query Builder →
@@ -32,9 +311,9 @@
 
   <!-- Property Filters Reference -->
   <section class="card">
-    <h2 style="margin:0 0 24px">🎯 Property Filters Reference</h2>
+    <h2 style="margin:0 0 24px">🎯 Legacy STAC API - Property Filters Reference (Port 8000)</h2>
     <p class="muted" style="margin:0 0 24px">
-      Property filters enable precise, structured querying of catalog metadata. <strong>All filters query gro_metadata fields.</strong> Combine multiple filters for powerful queries.
+      The legacy STAC API on port 8000 supports property filters for precise querying. <strong>All filters query gro_metadata fields.</strong> Combine multiple filters for powerful queries. Note: This API will eventually be deprecated in favor of the GRO RESTful API above.
     </p>
 
     <div style="display:grid;gap:24px">
@@ -276,7 +555,7 @@
 
   <!-- Traditional Endpoints -->
   <section class="card">
-    <h2 style="margin:0 0 24px">📋 Traditional Query Methods</h2>
+    <h2 style="margin:0 0 24px">📋 Legacy STAC API - Traditional Query Methods (Port 8000)</h2>
 
     <div style="margin-bottom:32px">
       <h3 style="margin:0 0 12px;color:#334155;font-size:18px">GET /?recordids={id}</h3>
