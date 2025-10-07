@@ -193,6 +193,38 @@
     <div id="results-container"></div>
   </section>
 
+  <!-- How to Query the Catalog -->
+  <section class="card" style="background:#f8fafc;border:1px solid #cbd5e1">
+    <h2 style="margin:0 0 16px;color:#334155">🎯 How to Query the Catalog (For Humans & Agents)</h2>
+    <p style="margin:0 0 20px;color:#475569;font-size:15px;line-height:1.7">
+      The GeoCatalogo API provides a <strong>discovery layer</strong> for the entire GRO data universe.
+      All catalog metadata lives in <code style="background:#e2e8f0;padding:2px 6px;border-radius:3px">gro_metadata</code> properties.
+    </p>
+
+    <div style="background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;padding:20px">
+      <h3 style="margin:0 0 16px;color:#334155">🔌 API Endpoint</h3>
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:12px;font-family:monospace;color:#475569;font-size:14px;margin-bottom:16px">
+        http://localhost:8000
+      </div>
+
+      <h3 style="margin:20px 0 12px;color:#334155">📚 What You Can Query</h3>
+      <ul style="margin:0;padding-left:24px;color:#475569;line-height:2">
+        <li><strong>1,803 catalog entries</strong> across 21 collections</li>
+        <li><strong>7 AI agents</strong>, 47 database tables, 474 local files, 627 v6 jobs</li>
+        <li><strong>11 geographic regions</strong> (6 continents + 5 organizational)</li>
+        <li><strong>56 data formats</strong> (APIs, databases, files, AWS resources)</li>
+        <li><strong>12 implementation statuses</strong> (active, draft, implemented, etc.)</li>
+        <li><strong>32 owners</strong> (teams, platforms, systems)</li>
+      </ul>
+
+      <h3 style="margin:20px 0 12px;color:#334155">💡 Key Concept: gro_metadata</h3>
+      <p style="margin:0;color:#475569;line-height:1.7">
+        All queryable properties are stored in <code style="background:#e2e8f0;padding:2px 6px;border-radius:3px">properties.gro_metadata.*</code>
+        in the GeoJSON response. Use the property filters above to query by continent, collection, owner, data_format, implementation_status, etc.
+      </p>
+    </div>
+  </section>
+
   <!-- Quick Tips -->
   <section class="card" style="background:#f0fdf4;border:1px solid #bbf7d0">
     <h3 style="margin:0 0 12px;color:#15803d">💡 Quick Tips</h3>
