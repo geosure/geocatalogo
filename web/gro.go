@@ -94,9 +94,13 @@ func GRORouter(cat *geocatalogo.GeoCatalogue) *mux.Router {
 
 	// Geography - explicit hierarchy with list endpoints at each level
 
-	// Level 0: All continents
+	// Level 0: All continents and all countries
 	api.HandleFunc("/geography/continents", func(w http.ResponseWriter, r *http.Request) {
 		GROListContinents(w, r, cat)
+	}).Methods("GET")
+
+	api.HandleFunc("/geography/countries", func(w http.ResponseWriter, r *http.Request) {
+		GROListAllCountries(w, r, cat)
 	}).Methods("GET")
 
 	// Level 1: Continent resources + countries list
@@ -190,14 +194,19 @@ func GRORoot(w http.ResponseWriter, r *http.Request, cat *geocatalogo.GeoCatalog
 				"detail": "/api/v1/owners/{name}",
 			},
 			"geography": map[string]interface{}{
+				"overview": map[string]string{
+					"continents": "/api/v1/geography/continents",
+					"countries":  "/api/v1/geography/countries",
+				},
 				"continents": map[string]string{
 					"list":      "/api/v1/geography/continents",
 					"detail":    "/api/v1/geography/continents/{continent}",
 					"countries": "/api/v1/geography/continents/{continent}/countries",
 				},
 				"countries": map[string]string{
-					"detail": "/api/v1/geography/continents/{continent}/countries/{country}",
-					"states": "/api/v1/geography/continents/{continent}/countries/{country}/states",
+					"list_all": "/api/v1/geography/countries",
+					"detail":   "/api/v1/geography/continents/{continent}/countries/{country}",
+					"states":   "/api/v1/geography/continents/{continent}/countries/{country}/states",
 				},
 				"states": map[string]string{
 					"detail": "/api/v1/geography/continents/{continent}/countries/{country}/states/{state}",
@@ -288,6 +297,39 @@ func GROListContinents(w http.ResponseWriter, r *http.Request, cat *geocatalogo.
 	json.NewEncoder(w).Encode(map[string]interface{}{
 		"total":      len(continentCounts),
 		"continents": continentCounts,
+	})
+}
+
+// GROListAllCountries lists all unique countries across all continents with counts
+func GROListAllCountries(w http.ResponseWriter, r *http.Request, cat *geocatalogo.GeoCatalogue) {
+	results := cat.Search([]string{}, "", []float64{}, []time.Time{}, 0, 10000, map[string]string{})
+
+	// Store countries with continent context
+	type CountryInfo struct {
+		Count     int    `json:"count"`
+		Continent string `json:"continent"`
+	}
+	countriesMap := make(map[string]*CountryInfo)
+
+	for _, rec := range results.Records {
+		if rec.Properties.GROMetadata != nil && rec.Properties.GROMetadata.Country != "" {
+			country := rec.Properties.GROMetadata.Country
+			continent := rec.Properties.GROMetadata.Continent
+
+			if _, exists := countriesMap[country]; !exists {
+				countriesMap[country] = &CountryInfo{
+					Count:     0,
+					Continent: continent,
+				}
+			}
+			countriesMap[country].Count++
+		}
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"total":     len(countriesMap),
+		"countries": countriesMap,
 	})
 }
 
