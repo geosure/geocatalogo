@@ -190,6 +190,13 @@
         {{if .CollectionCounts.TeamMembers}}• {{.CollectionCounts.TeamMembers}} 👥 team{{end}}
       </div>
     </div>
+    {{if eq .Continent "global"}}
+    <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:12px 16px;margin-top:16px">
+      <div style="font-size:13px;color:#1e40af;line-height:1.6">
+        <strong>🌐 Global Resources:</strong> Database tables and local files with worldwide coverage. These assets contain data spanning multiple countries or provide foundational global datasets (e.g., Natural Earth shapefiles, worldwide H3 indexes, multi-country databases).
+      </div>
+    </div>
+    {{end}}
   </div>
 
   <!-- Sub-Geography Filters (Countries, States, or Cities) -->
