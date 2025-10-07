@@ -85,6 +85,7 @@ type CatalogStats struct {
 	Continents    []ContinentStat
 	Countries     []CountryStat
 	Formats       []FormatStat
+	StatusCounts  map[string]int // Implementation status breakdown
 }
 
 type FormatStat struct {

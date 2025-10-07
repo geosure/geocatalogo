@@ -41,7 +41,10 @@ func (a *App) HandleCatalog(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Calculate stats
-	stats := CatalogStats{Total: len(records)}
+	stats := CatalogStats{
+		Total:        len(records),
+		StatusCounts: make(map[string]int),
+	}
 	continentCounts := make(map[string]int)
 	countryCounts := make(map[string]int)
 	formatCounts := make(map[string]int)
@@ -75,6 +78,11 @@ func (a *App) HandleCatalog(w http.ResponseWriter, r *http.Request) {
 		// Count data formats
 		if rec.Properties.GROMetadata.DataFormat != "" {
 			formatCounts[rec.Properties.GROMetadata.DataFormat]++
+		}
+
+		// Count implementation statuses
+		if rec.Properties.GROMetadata.ImplementationStatus != "" {
+			stats.StatusCounts[rec.Properties.GROMetadata.ImplementationStatus]++
 		}
 	}
 
