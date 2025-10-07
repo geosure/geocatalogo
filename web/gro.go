@@ -92,21 +92,43 @@ func GRORouter(cat *geocatalogo.GeoCatalogue) *mux.Router {
 		GROOwner(w, r, cat)
 	}).Methods("GET")
 
-	// Geography - grouped resource with hierarchy
-	api.HandleFunc("/geography/{continent}", func(w http.ResponseWriter, r *http.Request) {
-		GROGeography(w, r, cat)
+	// Geography - explicit hierarchy with list endpoints at each level
+
+	// Level 0: All continents
+	api.HandleFunc("/geography/continents", func(w http.ResponseWriter, r *http.Request) {
+		GROListContinents(w, r, cat)
 	}).Methods("GET")
 
-	api.HandleFunc("/geography/{continent}/{country}", func(w http.ResponseWriter, r *http.Request) {
-		GROGeography(w, r, cat)
+	// Level 1: Continent resources + countries list
+	api.HandleFunc("/geography/continents/{continent}", func(w http.ResponseWriter, r *http.Request) {
+		GROGeographyContinent(w, r, cat)
 	}).Methods("GET")
 
-	api.HandleFunc("/geography/{continent}/{country}/{state}", func(w http.ResponseWriter, r *http.Request) {
-		GROGeography(w, r, cat)
+	api.HandleFunc("/geography/continents/{continent}/countries", func(w http.ResponseWriter, r *http.Request) {
+		GROListCountries(w, r, cat)
 	}).Methods("GET")
 
-	api.HandleFunc("/geography/{continent}/{country}/{state}/{city}", func(w http.ResponseWriter, r *http.Request) {
-		GROGeography(w, r, cat)
+	// Level 2: Country resources + states list
+	api.HandleFunc("/geography/continents/{continent}/countries/{country}", func(w http.ResponseWriter, r *http.Request) {
+		GROGeographyCountry(w, r, cat)
+	}).Methods("GET")
+
+	api.HandleFunc("/geography/continents/{continent}/countries/{country}/states", func(w http.ResponseWriter, r *http.Request) {
+		GROListStates(w, r, cat)
+	}).Methods("GET")
+
+	// Level 3: State resources + cities list
+	api.HandleFunc("/geography/continents/{continent}/countries/{country}/states/{state}", func(w http.ResponseWriter, r *http.Request) {
+		GROGeographyState(w, r, cat)
+	}).Methods("GET")
+
+	api.HandleFunc("/geography/continents/{continent}/countries/{country}/states/{state}/cities", func(w http.ResponseWriter, r *http.Request) {
+		GROListCities(w, r, cat)
+	}).Methods("GET")
+
+	// Level 4: City resources
+	api.HandleFunc("/geography/continents/{continent}/countries/{country}/states/{state}/cities/{city}", func(w http.ResponseWriter, r *http.Request) {
+		GROGeographyCity(w, r, cat)
 	}).Methods("GET")
 
 	// Records - primary resource endpoint
@@ -167,11 +189,23 @@ func GRORoot(w http.ResponseWriter, r *http.Request, cat *geocatalogo.GeoCatalog
 				"list":   "/api/v1/owners",
 				"detail": "/api/v1/owners/{name}",
 			},
-			"geography": map[string]string{
-				"continent": "/api/v1/geography/{continent}",
-				"country":   "/api/v1/geography/{continent}/{country}",
-				"state":     "/api/v1/geography/{continent}/{country}/{state}",
-				"city":      "/api/v1/geography/{continent}/{country}/{state}/{city}",
+			"geography": map[string]interface{}{
+				"continents": map[string]string{
+					"list":      "/api/v1/geography/continents",
+					"detail":    "/api/v1/geography/continents/{continent}",
+					"countries": "/api/v1/geography/continents/{continent}/countries",
+				},
+				"countries": map[string]string{
+					"detail": "/api/v1/geography/continents/{continent}/countries/{country}",
+					"states": "/api/v1/geography/continents/{continent}/countries/{country}/states",
+				},
+				"states": map[string]string{
+					"detail": "/api/v1/geography/continents/{continent}/countries/{country}/states/{state}",
+					"cities": "/api/v1/geography/continents/{continent}/countries/{country}/states/{state}/cities",
+				},
+				"cities": map[string]string{
+					"detail": "/api/v1/geography/continents/{continent}/countries/{country}/states/{state}/cities/{city}",
+				},
 			},
 			"records": map[string]string{
 				"detail": "/api/v1/records/{id}",
@@ -239,38 +273,215 @@ func GROSearch(w http.ResponseWriter, r *http.Request, cat *geocatalogo.GeoCatal
 	})
 }
 
-// GROGeography handles geography-based filtering
-func GROGeography(w http.ResponseWriter, r *http.Request, cat *geocatalogo.GeoCatalogue) {
+// GROListContinents lists all unique continents with counts
+func GROListContinents(w http.ResponseWriter, r *http.Request, cat *geocatalogo.GeoCatalogue) {
+	results := cat.Search([]string{}, "", []float64{}, []time.Time{}, 0, 10000, map[string]string{})
+
+	continentCounts := make(map[string]int)
+	for _, rec := range results.Records {
+		if rec.Properties.GROMetadata != nil && rec.Properties.GROMetadata.Continent != "" {
+			continentCounts[rec.Properties.GROMetadata.Continent]++
+		}
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"total":      len(continentCounts),
+		"continents": continentCounts,
+	})
+}
+
+// GROGeographyContinent returns resources for a specific continent
+func GROGeographyContinent(w http.ResponseWriter, r *http.Request, cat *geocatalogo.GeoCatalogue) {
 	vars := mux.Vars(r)
-	propertyFilters := make(map[string]string)
+	continent := vars["continent"]
 
-	if continent := vars["continent"]; continent != "" {
-		propertyFilters["continent"] = continent
-	}
-	if country := vars["country"]; country != "" {
-		propertyFilters["country"] = country
-	}
-	if state := vars["state"]; state != "" {
-		propertyFilters["state"] = state
-	}
-	if city := vars["city"]; city != "" {
-		propertyFilters["city"] = city
-	}
-
-	// Get size from query param (default 100)
 	size := 100
 	if sizeVal := r.URL.Query().Get("size"); sizeVal != "" {
 		size, _ = strconv.Atoi(sizeVal)
 	}
 
+	propertyFilters := map[string]string{"continent": continent}
 	results := cat.Search([]string{}, "", []float64{}, []time.Time{}, 0, size, propertyFilters)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]interface{}{
-		"filters":  propertyFilters,
-		"matched":  results.Matches,
-		"returned": len(results.Records),
-		"records":  results.Records,
+		"continent": continent,
+		"matched":   results.Matches,
+		"returned":  len(results.Records),
+		"records":   results.Records,
+	})
+}
+
+// GROListCountries lists all countries for a specific continent
+func GROListCountries(w http.ResponseWriter, r *http.Request, cat *geocatalogo.GeoCatalogue) {
+	vars := mux.Vars(r)
+	continent := vars["continent"]
+
+	propertyFilters := map[string]string{"continent": continent}
+	results := cat.Search([]string{}, "", []float64{}, []time.Time{}, 0, 10000, propertyFilters)
+
+	countryCounts := make(map[string]int)
+	for _, rec := range results.Records {
+		if rec.Properties.GROMetadata != nil && rec.Properties.GROMetadata.Country != "" {
+			countryCounts[rec.Properties.GROMetadata.Country]++
+		}
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"continent": continent,
+		"total":     len(countryCounts),
+		"countries": countryCounts,
+	})
+}
+
+// GROGeographyCountry returns resources for a specific country
+func GROGeographyCountry(w http.ResponseWriter, r *http.Request, cat *geocatalogo.GeoCatalogue) {
+	vars := mux.Vars(r)
+	continent := vars["continent"]
+	country := vars["country"]
+
+	size := 100
+	if sizeVal := r.URL.Query().Get("size"); sizeVal != "" {
+		size, _ = strconv.Atoi(sizeVal)
+	}
+
+	propertyFilters := map[string]string{
+		"continent": continent,
+		"country":   country,
+	}
+	results := cat.Search([]string{}, "", []float64{}, []time.Time{}, 0, size, propertyFilters)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"continent": continent,
+		"country":   country,
+		"matched":   results.Matches,
+		"returned":  len(results.Records),
+		"records":   results.Records,
+	})
+}
+
+// GROListStates lists all states for a specific country
+func GROListStates(w http.ResponseWriter, r *http.Request, cat *geocatalogo.GeoCatalogue) {
+	vars := mux.Vars(r)
+	continent := vars["continent"]
+	country := vars["country"]
+
+	propertyFilters := map[string]string{
+		"continent": continent,
+		"country":   country,
+	}
+	results := cat.Search([]string{}, "", []float64{}, []time.Time{}, 0, 10000, propertyFilters)
+
+	stateCounts := make(map[string]int)
+	for _, rec := range results.Records {
+		if rec.Properties.GROMetadata != nil && rec.Properties.GROMetadata.StateProvince != "" {
+			stateCounts[rec.Properties.GROMetadata.StateProvince]++
+		}
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"continent": continent,
+		"country":   country,
+		"total":     len(stateCounts),
+		"states":    stateCounts,
+	})
+}
+
+// GROGeographyState returns resources for a specific state
+func GROGeographyState(w http.ResponseWriter, r *http.Request, cat *geocatalogo.GeoCatalogue) {
+	vars := mux.Vars(r)
+	continent := vars["continent"]
+	country := vars["country"]
+	state := vars["state"]
+
+	size := 100
+	if sizeVal := r.URL.Query().Get("size"); sizeVal != "" {
+		size, _ = strconv.Atoi(sizeVal)
+	}
+
+	propertyFilters := map[string]string{
+		"continent": continent,
+		"country":   country,
+		"state":     state,
+	}
+	results := cat.Search([]string{}, "", []float64{}, []time.Time{}, 0, size, propertyFilters)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"continent": continent,
+		"country":   country,
+		"state":     state,
+		"matched":   results.Matches,
+		"returned":  len(results.Records),
+		"records":   results.Records,
+	})
+}
+
+// GROListCities lists all cities for a specific state
+func GROListCities(w http.ResponseWriter, r *http.Request, cat *geocatalogo.GeoCatalogue) {
+	vars := mux.Vars(r)
+	continent := vars["continent"]
+	country := vars["country"]
+	state := vars["state"]
+
+	propertyFilters := map[string]string{
+		"continent": continent,
+		"country":   country,
+		"state":     state,
+	}
+	results := cat.Search([]string{}, "", []float64{}, []time.Time{}, 0, 10000, propertyFilters)
+
+	cityCounts := make(map[string]int)
+	for _, rec := range results.Records {
+		if rec.Properties.GROMetadata != nil && rec.Properties.GROMetadata.City != "" {
+			cityCounts[rec.Properties.GROMetadata.City]++
+		}
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"continent": continent,
+		"country":   country,
+		"state":     state,
+		"total":     len(cityCounts),
+		"cities":    cityCounts,
+	})
+}
+
+// GROGeographyCity returns resources for a specific city
+func GROGeographyCity(w http.ResponseWriter, r *http.Request, cat *geocatalogo.GeoCatalogue) {
+	vars := mux.Vars(r)
+	continent := vars["continent"]
+	country := vars["country"]
+	state := vars["state"]
+	city := vars["city"]
+
+	size := 100
+	if sizeVal := r.URL.Query().Get("size"); sizeVal != "" {
+		size, _ = strconv.Atoi(sizeVal)
+	}
+
+	propertyFilters := map[string]string{
+		"continent": continent,
+		"country":   country,
+		"state":     state,
+		"city":      city,
+	}
+	results := cat.Search([]string{}, "", []float64{}, []time.Time{}, 0, size, propertyFilters)
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"continent": continent,
+		"country":   country,
+		"state":     state,
+		"city":      city,
+		"matched":   results.Matches,
+		"returned":  len(results.Records),
+		"records":   results.Records,
 	})
 }
 
