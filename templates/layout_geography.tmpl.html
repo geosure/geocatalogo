@@ -225,6 +225,85 @@
   </div>
   {{end}}
 
+  <!-- Collection Type Filters -->
+  <div style="margin-bottom:24px;padding:20px;background:#fefce8;border-radius:8px;border:1px solid #fde047">
+    <h3 style="font-size:14px;font-weight:600;color:#0f172a;margin:0 0 12px 0">
+      🎯 Filter by Collection Type
+    </h3>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      {{if .CollectionCounts.V6Jobs}}
+      <a href="#v6-jobs" class="geo-filter-pill">
+        <span style="font-size:18px">⚙️</span>
+        <span>v6 Jobs</span>
+        <span style="background:#dbeafe;color:#1e40af;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:600">{{.CollectionCounts.V6Jobs}}</span>
+      </a>
+      {{end}}
+      {{if .CollectionCounts.Database}}
+      <a href="#database" class="geo-filter-pill">
+        <span style="font-size:18px">🗄️</span>
+        <span>Database Tables</span>
+        <span style="background:#dbeafe;color:#1e40af;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:600">{{.CollectionCounts.Database}}</span>
+      </a>
+      {{end}}
+      {{if .CollectionCounts.Files}}
+      <a href="#files" class="geo-filter-pill">
+        <span style="font-size:18px">📁</span>
+        <span>Local Files</span>
+        <span style="background:#dbeafe;color:#1e40af;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:600">{{.CollectionCounts.Files}}</span>
+      </a>
+      {{end}}
+      {{if .CollectionCounts.APIs}}
+      <a href="#apis" class="geo-filter-pill">
+        <span style="font-size:18px">🔌</span>
+        <span>External APIs</span>
+        <span style="background:#dbeafe;color:#1e40af;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:600">{{.CollectionCounts.APIs}}</span>
+      </a>
+      {{end}}
+      {{if .CollectionCounts.News}}
+      <a href="#news" class="geo-filter-pill">
+        <span style="font-size:18px">📰</span>
+        <span>News Sources</span>
+        <span style="background:#dbeafe;color:#1e40af;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:600">{{.CollectionCounts.News}}</span>
+      </a>
+      {{end}}
+      {{if .CollectionCounts.Government}}
+      <a href="#government" class="geo-filter-pill">
+        <span style="font-size:18px">🏛️</span>
+        <span>Government Sources</span>
+        <span style="background:#dbeafe;color:#1e40af;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:600">{{.CollectionCounts.Government}}</span>
+      </a>
+      {{end}}
+      {{if .CollectionCounts.AIAgents}}
+      <a href="#ai-agents" class="geo-filter-pill">
+        <span style="font-size:18px">🤖</span>
+        <span>AI Assistants</span>
+        <span style="background:#dbeafe;color:#1e40af;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:600">{{.CollectionCounts.AIAgents}}</span>
+      </a>
+      {{end}}
+      {{if .CollectionCounts.DataBots}}
+      <a href="#data-bots" class="geo-filter-pill">
+        <span style="font-size:18px">📊</span>
+        <span>Data Bots</span>
+        <span style="background:#dbeafe;color:#1e40af;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:600">{{.CollectionCounts.DataBots}}</span>
+      </a>
+      {{end}}
+      {{if .CollectionCounts.ScraperBots}}
+      <a href="#scraper-bots" class="geo-filter-pill">
+        <span style="font-size:18px">🕷️</span>
+        <span>Scraper Bots</span>
+        <span style="background:#dbeafe;color:#1e40af;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:600">{{.CollectionCounts.ScraperBots}}</span>
+      </a>
+      {{end}}
+      {{if .CollectionCounts.AutoBots}}
+      <a href="#automation-bots" class="geo-filter-pill">
+        <span style="font-size:18px">⚡</span>
+        <span>Automation Bots</span>
+        <span style="background:#dbeafe;color:#1e40af;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:600">{{.CollectionCounts.AutoBots}}</span>
+      </a>
+      {{end}}
+    </div>
+  </div>
+
   <!-- Layout: Full width if no README, otherwise two columns -->
   <div style="display:grid;{{if .README}}grid-template-columns:1fr 500px{{else}}grid-template-columns:1fr{{end}};gap:32px;align-items:start">
 
@@ -234,7 +313,7 @@
 
         <!-- Database Section (FIRST - especially important for global datasets) -->
         {{if .CollectionCounts.Database}}
-        <section style="margin-bottom:24px">
+        <section id="database" style="margin-bottom:24px">
           <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #059669;padding-bottom:6px">
             🗄️ Database Tables <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.Database}})</span>
           </h2>
@@ -250,7 +329,7 @@
 
         <!-- AI Agents Section (for Clankr continent!) -->
         {{if .CollectionCounts.AIAgents}}
-        <section style="margin-bottom:24px">
+        <section id="ai-agents" style="margin-bottom:24px">
           <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #8b5cf6;padding-bottom:6px">
             🤖 AI Assistants <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.AIAgents}})</span>
           </h2>
@@ -330,7 +409,7 @@
 
         <!-- Scraper/Harvester Bots Section (for Clankr continent!) -->
         {{if .CollectionCounts.ScraperBots}}
-        <section style="margin-bottom:24px">
+        <section id="scraper-bots" style="margin-bottom:24px">
           <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #84cc16;padding-bottom:6px">
             🕷️ Scraper & Collector Bots <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.ScraperBots}})</span>
           </h2>
@@ -346,7 +425,7 @@
 
         <!-- Automation Bots Section (for Clankr continent!) -->
         {{if .CollectionCounts.AutoBots}}
-        <section style="margin-bottom:24px">
+        <section id="automation-bots" style="margin-bottom:24px">
           <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #f59e0b;padding-bottom:6px">
             ⚡ Automation & Orchestration Bots <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.AutoBots}})</span>
           </h2>
@@ -442,7 +521,7 @@
 
         <!-- APIs Section -->
         {{if .CollectionCounts.APIs}}
-        <section style="margin-bottom:24px">
+        <section id="apis" style="margin-bottom:24px">
           <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #7c3aed;padding-bottom:6px">
             🔌 External APIs <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.APIs}})</span>
           </h2>
@@ -458,7 +537,7 @@
 
         <!-- Government Section -->
         {{if .CollectionCounts.Government}}
-        <section style="margin-bottom:24px">
+        <section id="government" style="margin-bottom:24px">
           <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #2563eb;padding-bottom:6px">
             🏛️ Government Sources <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.Government}})</span>
           </h2>
@@ -474,7 +553,7 @@
 
         <!-- News Section -->
         {{if .CollectionCounts.News}}
-        <section style="margin-bottom:24px">
+        <section id="news" style="margin-bottom:24px">
           <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #dc2626;padding-bottom:6px">
             📰 News Sources <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.News}})</span>
           </h2>
@@ -490,7 +569,7 @@
 
         <!-- v6 Jobs Section -->
         {{if .CollectionCounts.V6Jobs}}
-        <section style="margin-bottom:24px">
+        <section id="v6-jobs" style="margin-bottom:24px">
           <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #3b82f6;padding-bottom:6px">
             ⚙️ v6 Jobs <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.V6Jobs}})</span>
           </h2>
@@ -506,7 +585,7 @@
 
         <!-- Files Section -->
         {{if .CollectionCounts.Files}}
-        <section style="margin-bottom:24px">
+        <section id="files" style="margin-bottom:24px">
           <h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:0 0 12px 0;display:flex;align-items:center;gap:8px;border-bottom:2px solid #d97706;padding-bottom:6px">
             📁 Local Files <span style="font-size:13px;color:#64748b;font-weight:400">({{.CollectionCounts.Files}})</span>
           </h2>
