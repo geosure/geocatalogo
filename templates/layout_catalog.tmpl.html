@@ -5,61 +5,167 @@
 {{define "page_content"}}
 <div style="max-width:1400px;margin:0 auto;padding:20px">
   <!-- Header -->
-  <div style="text-align:center;margin-bottom:48px">
+  <div style="text-align:center;margin-bottom:32px">
     <h1 style="font-size:42px;font-weight:700;color:#0f172a;margin:0 0 12px 0">
-      🌍 GRO Data Catalog
+      🌍 GRO Catalog
     </h1>
-    <p style="font-size:18px;color:#64748b;margin:0 0 12px 0">
-      Explore datasets by geography
+    <p style="font-size:18px;color:#64748b;margin:0 0 16px 0">
+      Complete system inventory - 1,803 resources across 21 collections
     </p>
-    <div style="font-size:14px;color:#94a3b8">
-      <span style="font-weight:600;color:#3b82f6">{{.Stats.Total}}</span> datasets •
-      <span>{{.Stats.PotentialV6}} ⚙️ jobs</span> •
-      <span>{{.Stats.DataRecords}} 📊 data sources</span>
+
+    <!-- Quick Links for Agents -->
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:16px">
+      <a href="/stats" style="text-decoration:none;background:#f8fafc;border:1px solid #e2e8f0;padding:8px 16px;border-radius:6px;font-size:13px;color:#475569;font-weight:500">
+        📊 Statistics
+      </a>
+      <a href="/api" style="text-decoration:none;background:#f8fafc;border:1px solid #e2e8f0;padding:8px 16px;border-radius:6px;font-size:13px;color:#475569;font-weight:500">
+        🔌 API Docs
+      </a>
+      <a href="http://localhost:8000/?collection=ai_agent" target="_blank" style="text-decoration:none;background:#f8fafc;border:1px solid #e2e8f0;padding:8px 16px;border-radius:6px;font-size:13px;color:#475569;font-weight:500">
+        🤖 API Query
+      </a>
+    </div>
+
+    <div style="font-size:13px;color:#94a3b8">
+      7 AI agents • 47 database tables • 474 local files • 627 v6 jobs • 541 external sources
     </div>
   </div>
 
   <!-- Search Bar -->
-  <section style="margin-bottom:48px">
+  <section style="margin-bottom:40px">
     <input id="search" type="search"
-           placeholder="🔍 Search datasets by name, location, or type..."
+           placeholder="🔍 Search by name, collection, location, or type..."
            aria-label="Search catalog"
            style="width:100%;max-width:700px;margin:0 auto;display:block;padding:18px 24px;font-size:16px;border:2px solid #e5e7eb;border-radius:12px;transition:all 0.2s"
            onfocus="this.style.borderColor='#3b82f6';this.style.boxShadow='0 0 0 3px rgba(59,130,246,0.1)'"
            onblur="this.style.borderColor='#e5e7eb';this.style.boxShadow='none'">
   </section>
 
-  <!-- Geographic Navigation -->
-  <section style="margin-bottom:32px">
-    <h2 style="font-size:24px;font-weight:600;color:#0f172a;margin:0 0 24px 0;text-align:center">
-      Browse by Region
+  <!-- Browse by Collection (New!) -->
+  <section style="margin-bottom:48px">
+    <h2 style="font-size:24px;font-weight:600;color:#0f172a;margin:0 0 20px 0;text-align:center">
+      Browse by Collection
     </h2>
 
-    <!-- Continents Grid -->
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px">
-      {{range .Stats.Continents}}
-      <a href="/geography/?continent={{.Code}}" style="text-decoration:none">
-        <div style="background:#fff;border:2px solid #e5e7eb;border-radius:12px;padding:24px;transition:all 0.2s;cursor:pointer"
-             onmouseover="this.style.borderColor='#3b82f6';this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'"
-             onmouseout="this.style.borderColor='#e5e7eb';this.style.boxShadow='none'">
-
-          <!-- Continent Emoji & Name -->
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-            <div style="display:flex;align-items:center;gap:12px">
-              <span style="font-size:36px">{{.Emoji}}</span>
-              <h3 style="font-size:20px;font-weight:600;color:#0f172a;margin:0">{{.Name}}</h3>
-            </div>
-            <span style="font-size:14px;color:#94a3b8">→</span>
-          </div>
-
-          <!-- Count -->
-          <div style="display:flex;align-items:baseline;gap:8px">
-            <span style="font-size:32px;font-weight:700;color:#3b82f6">{{.Count}}</span>
-            <span style="font-size:14px;color:#64748b">{{if eq .Count 1}}dataset{{else}}datasets{{end}}</span>
-          </div>
-
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px">
+      <a href="http://localhost:8000/?collection=ai_agent" target="_blank" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:16px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
+          <div style="font-size:24px;margin-bottom:8px">🤖</div>
+          <div style="font-size:16px;font-weight:600;color:#0f172a;margin-bottom:4px">AI Agents</div>
+          <div style="font-size:13px;color:#64748b">7 agents</div>
         </div>
       </a>
+
+      <a href="http://localhost:8000/?collection=existing_db" target="_blank" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:16px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
+          <div style="font-size:24px;margin-bottom:8px">🗄️</div>
+          <div style="font-size:16px;font-weight:600;color:#0f172a;margin-bottom:4px">Database Tables</div>
+          <div style="font-size:13px;color:#64748b">47 tables</div>
+        </div>
+      </a>
+
+      <a href="http://localhost:8000/?collection=existing_local" target="_blank" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:16px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
+          <div style="font-size:24px;margin-bottom:8px">📁</div>
+          <div style="font-size:16px;font-weight:600;color:#0f172a;margin-bottom:4px">Local Files</div>
+          <div style="font-size:13px;color:#64748b">474 files</div>
+        </div>
+      </a>
+
+      <a href="http://localhost:8000/?collection=potential_v6" target="_blank" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:16px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
+          <div style="font-size:24px;margin-bottom:8px">⚙️</div>
+          <div style="font-size:16px;font-weight:600;color:#0f172a;margin-bottom:4px">v6 Jobs</div>
+          <div style="font-size:13px;color:#64748b">627 jobs</div>
+        </div>
+      </a>
+
+      <a href="http://localhost:8000/?collection=external_api" target="_blank" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:16px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
+          <div style="font-size:24px;margin-bottom:8px">🔌</div>
+          <div style="font-size:16px;font-weight:600;color:#0f172a;margin-bottom:4px">External APIs</div>
+          <div style="font-size:13px;color:#64748b">View collection</div>
+        </div>
+      </a>
+
+      <a href="http://localhost:8000/?collection=external_government" target="_blank" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:16px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b';this.style.transform='translateY(-2px)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.transform='translateY(0)'">
+          <div style="font-size:24px;margin-bottom:8px">🏛️</div>
+          <div style="font-size:16px;font-weight:600;color:#0f172a;margin-bottom:4px">Government Data</div>
+          <div style="font-size:13px;color:#64748b">View collection</div>
+        </div>
+      </a>
+    </div>
+
+    <div style="text-align:center;margin-top:16px">
+      <a href="/stats" style="font-size:13px;color:#475569;text-decoration:none;font-weight:500">
+        View all 21 collections →
+      </a>
+    </div>
+  </section>
+
+  <!-- Geographic Continents -->
+  <section style="margin-bottom:32px">
+    <h2 style="font-size:24px;font-weight:600;color:#0f172a;margin:0 0 20px 0;text-align:center">
+      Browse by Geographic Region
+    </h2>
+
+    <!-- Actual Continents Only -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+      {{range .Stats.Continents}}
+      {{if or (eq .Code "africa") (eq .Code "asia") (eq .Code "europe") (eq .Code "north-america") (eq .Code "south-america") (eq .Code "oceania")}}
+      <a href="/geography/?continent={{.Code}}" style="text-decoration:none">
+        <div style="background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:20px;transition:all 0.2s;cursor:pointer"
+             onmouseover="this.style.borderColor='#64748b';this.style.boxShadow='0 2px 8px rgba(0,0,0,0.08)'"
+             onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
+
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+            <span style="font-size:32px">{{.Emoji}}</span>
+            <h3 style="font-size:18px;font-weight:600;color:#0f172a;margin:0">{{.Name}}</h3>
+          </div>
+
+          <div style="display:flex;align-items:baseline;gap:6px">
+            <span style="font-size:24px;font-weight:700;color:#475569">{{.Count}}</span>
+            <span style="font-size:13px;color:#64748b">resources</span>
+          </div>
+        </div>
+      </a>
+      {{end}}
+      {{end}}
+    </div>
+  </section>
+
+  <!-- Organizational Regions -->
+  <section style="margin-bottom:32px">
+    <h2 style="font-size:20px;font-weight:600;color:#0f172a;margin:0 0 16px 0;text-align:center">
+      System & Organizational
+    </h2>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;max-width:900px;margin:0 auto">
+      {{range .Stats.Continents}}
+      {{if or (eq .Code "clankr") (eq .Code "global") (eq .Code "infra") (eq .Code "team") (eq .Code "verbs")}}
+      <a href="/geography/?continent={{.Code}}" style="text-decoration:none">
+        <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:14px;transition:all 0.2s"
+             onmouseover="this.style.borderColor='#64748b'"
+             onmouseout="this.style.borderColor='#e2e8f0'">
+          <div style="font-size:20px;margin-bottom:6px">{{.Emoji}}</div>
+          <div style="font-size:14px;font-weight:600;color:#0f172a;margin-bottom:2px">{{.Name}}</div>
+          <div style="font-size:12px;color:#64748b">{{.Count}} resources</div>
+        </div>
+      </a>
+      {{end}}
       {{end}}
     </div>
   </section>
@@ -93,44 +199,6 @@
     </div>
   </section>
 
-  <!-- Quick Stats -->
-  <section style="margin-top:64px;padding:32px;background:#f8fafc;border-radius:12px;border:1px solid #e5e7eb">
-    <h2 style="font-size:20px;font-weight:600;color:#0f172a;margin:0 0 20px 0;text-align:center">
-      Dataset Types
-    </h2>
-
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px">
-      <div style="text-align:center;padding:16px">
-        <div style="font-size:28px;font-weight:700;color:#3b82f6;margin-bottom:4px">{{.Stats.PotentialV6}}</div>
-        <div style="font-size:13px;color:#64748b">⚙️ v6 Jobs</div>
-      </div>
-
-      <div style="text-align:center;padding:16px">
-        <div style="font-size:28px;font-weight:700;color:#059669;margin-bottom:4px">{{.Stats.ExistingDB}}</div>
-        <div style="font-size:13px;color:#64748b">🗄️ Database Tables</div>
-      </div>
-
-      <div style="text-align:center;padding:16px">
-        <div style="font-size:28px;font-weight:700;color:#d97706;margin-bottom:4px">{{.Stats.ExistingLocal}}</div>
-        <div style="font-size:13px;color:#64748b">📁 Local Files</div>
-      </div>
-
-      <div style="text-align:center;padding:16px">
-        <div style="font-size:28px;font-weight:700;color:#7c3aed;margin-bottom:4px">{{.Stats.ExternalAPI}}</div>
-        <div style="font-size:13px;color:#64748b">🔌 External APIs</div>
-      </div>
-
-      <div style="text-align:center;padding:16px">
-        <div style="font-size:28px;font-weight:700;color:#dc2626;margin-bottom:4px">{{.Stats.ExternalNews}}</div>
-        <div style="font-size:13px;color:#64748b">📰 News Sources</div>
-      </div>
-
-      <div style="text-align:center;padding:16px">
-        <div style="font-size:28px;font-weight:700;color:#2563eb;margin-bottom:4px">{{.Stats.ExternalGov}}</div>
-        <div style="font-size:13px;color:#64748b">🏛️ Government</div>
-      </div>
-    </div>
-  </section>
 
   <!-- Search Results (hidden by default, shown when searching) -->
   <div id="searchResults" style="display:none;margin-top:48px">

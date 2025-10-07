@@ -198,34 +198,74 @@
     <div id="results-container"></div>
   </section>
 
+  <!-- How to Query -->
+  <section class="card" style="background:#f8fafc;border:1px solid #cbd5e1">
+    <h2 style="margin:0 0 16px;color:#334155">🎯 How to Query the Catalog (For Humans & Agents)</h2>
+    <p style="margin:0 0 20px;color:#475569;font-size:15px;line-height:1.7">
+      The GeoCatalogo API provides a <strong>discovery layer</strong> for the entire GRO data universe.
+      All catalog metadata lives in <code style="background:#e2e8f0;padding:2px 6px;border-radius:3px">gro_metadata</code> properties.
+    </p>
+
+    <div style="background:#ffffff;border:1px solid #e2e8f0;border-radius:8px;padding:20px">
+      <h3 style="margin:0 0 16px;color:#334155">🔌 API Endpoint</h3>
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:12px;font-family:monospace;color:#475569;font-size:14px;margin-bottom:16px">
+        http://localhost:8000
+      </div>
+
+      <h3 style="margin:20px 0 12px;color:#334155">📚 What You Can Query</h3>
+      <ul style="margin:0;padding-left:24px;color:#475569;line-height:2">
+        <li><strong>1,803 catalog entries</strong> across 21 collections</li>
+        <li><strong>7 AI agents</strong>, 47 database tables, 474 local files, 627 v6 jobs</li>
+        <li><strong>11 geographic regions</strong> (6 continents + 5 organizational)</li>
+        <li><strong>56 data formats</strong> (APIs, databases, files, AWS resources)</li>
+        <li><strong>12 implementation statuses</strong> (active, draft, implemented, etc.)</li>
+        <li><strong>32 owners</strong> (teams, platforms, systems)</li>
+      </ul>
+
+      <h3 style="margin:20px 0 12px;color:#334155">💡 Key Concept: gro_metadata</h3>
+      <p style="margin:0;color:#475569;line-height:1.7">
+        All queryable properties are stored in <code style="background:#e2e8f0;padding:2px 6px;border-radius:3px">properties.gro_metadata.*</code>
+        in the GeoJSON response. Use property filters below to query by continent, collection, owner, data_format, implementation_status, etc.
+      </p>
+    </div>
+  </section>
+
   <!-- Property Filters Reference -->
   <section class="card">
     <h2 style="margin:0 0 24px">🎯 Property Filters Reference</h2>
     <p class="muted" style="margin:0 0 24px">
-      Property filters enable precise, structured querying of catalog metadata. Combine multiple filters for powerful queries.
+      Property filters enable precise, structured querying of catalog metadata. <strong>All filters query gro_metadata fields.</strong> Combine multiple filters for powerful queries.
     </p>
 
     <div style="display:grid;gap:24px">
       <!-- Geographic Filters -->
       <div>
         <h3 style="margin:0 0 16px;color:#0f766e;font-size:18px;border-bottom:2px solid #99f6e4;padding-bottom:8px">
-          🌍 Geographic Filters
+          🌍 Geographic Filters (gro_metadata.continent, etc.)
         </h3>
         <table style="width:100%;border-collapse:collapse;font-size:14px">
           <tr style="border-bottom:1px solid #e5e7eb">
             <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce;width:200px">continent</td>
-            <td style="padding:12px 0">Filter by continent (exact match)</td>
+            <td style="padding:12px 0">
+              Filter by region (exact match)<br>
+              <span style="font-size:12px;color:#64748b">
+                Values: africa, asia, clankr, europe, global, infra, north-america, oceania, south-america, team, verbs (11 total)
+              </span>
+            </td>
             <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?continent=clankr</td>
           </tr>
           <tr style="border-bottom:1px solid #e5e7eb">
             <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">country</td>
-            <td style="padding:12px 0">Filter by country (exact match)</td>
+            <td style="padding:12px 0">
+              Filter by country (exact match)<br>
+              <span style="font-size:12px;color:#64748b">Example: colombia, united_states, etc.</span>
+            </td>
             <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?country=colombia</td>
           </tr>
           <tr style="border-bottom:1px solid #e5e7eb">
-            <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">state</td>
+            <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">state_province</td>
             <td style="padding:12px 0">Filter by state/province (exact match)</td>
-            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?state=california</td>
+            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?state_province=california</td>
           </tr>
           <tr style="border-bottom:1px solid #e5e7eb">
             <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">city</td>
@@ -233,9 +273,12 @@
             <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?city=los_angeles</td>
           </tr>
           <tr>
-            <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">admin2</td>
-            <td style="padding:12px 0">Filter by county/admin2 (exact match)</td>
-            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?admin2=orange</td>
+            <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">geographic_scope</td>
+            <td style="padding:12px 0">
+              Filter by scope (exact match)<br>
+              <span style="font-size:12px;color:#64748b">Values: global, regional, national, local</span>
+            </td>
+            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?geographic_scope=global</td>
           </tr>
         </table>
       </div>
@@ -243,38 +286,65 @@
       <!-- Metadata Filters -->
       <div>
         <h3 style="margin:0 0 16px;color:#7c2d12;font-size:18px;border-bottom:2px solid #fed7aa;padding-bottom:8px">
-          📋 Metadata Filters
+          📋 Metadata Filters (gro_metadata.*)
         </h3>
         <table style="width:100%;border-collapse:collapse;font-size:14px">
           <tr style="border-bottom:1px solid #e5e7eb">
             <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce;width:200px">collection</td>
-            <td style="padding:12px 0">Filter by collection type (exact match)</td>
+            <td style="padding:12px 0">
+              Filter by collection type (exact match)<br>
+              <details style="margin-top:4px">
+                <summary style="font-size:12px;color:#64748b;cursor:pointer">21 collections (click to expand)</summary>
+                <div style="font-size:11px;color:#64748b;margin-top:4px;line-height:1.6">
+                  ai_agent, api_service, automation_bot, catalog_management_bot, claude_projects, data_inspection_bot, existing_db, existing_local, external_academic, external_api, external_download, external_government, external_news, external_other, historical_agent, infrastructure, internal_tool, operational_service, potential_v6, team_member, verb_app
+                </div>
+              </details>
+            </td>
             <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?collection=ai_agent</td>
           </tr>
           <tr style="border-bottom:1px solid #e5e7eb">
             <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">type</td>
-            <td style="padding:12px 0">Filter by resource type (exact match)</td>
+            <td style="padding:12px 0">
+              Filter by resource type (exact match)<br>
+              <span style="font-size:12px;color:#64748b">Value: dataset (all 1,803 records)</span>
+            </td>
             <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?type=dataset</td>
           </tr>
           <tr style="border-bottom:1px solid #e5e7eb">
             <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">owner</td>
-            <td style="padding:12px 0">Filter by owner (exact match)</td>
+            <td style="padding:12px 0">
+              Filter by owner (exact match)<br>
+              <details style="margin-top:4px">
+                <summary style="font-size:12px;color:#64748b;cursor:pointer">32 owners (click to expand)</summary>
+                <div style="font-size:11px;color:#64748b;margin-top:4px;line-height:1.6">
+                  Top: @data-platform (1199), @team-data-eng (227), @clankr (90), @geosure-data-team (53), @team-handle (45), @GeoSure (33), @team-safety-insights (24), @geosure/data-team (23), @team-geosure (17), @infrastructure (16), @geosure (13), @gro-platform (12), @way-barrios (11), and 19 others
+                </div>
+              </details>
+            </td>
             <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?owner=@clankr</td>
           </tr>
           <tr style="border-bottom:1px solid #e5e7eb">
             <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">data_format</td>
-            <td style="padding:12px 0">Filter by data format (exact match)</td>
-            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?data_format=database</td>
-          </tr>
-          <tr style="border-bottom:1px solid #e5e7eb">
-            <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">status</td>
-            <td style="padding:12px 0">Filter by implementation status (exact match)</td>
-            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?status=active</td>
+            <td style="padding:12px 0">
+              Filter by data format (exact match)<br>
+              <details style="margin-top:4px">
+                <summary style="font-size:12px;color:#64748b;cursor:pointer">56 formats (click to expand)</summary>
+                <div style="font-size:11px;color:#64748b;margin-top:4px;line-height:1.6">
+                  Top: api (319), csv (218), db (173), duckdb (145), parquet (96), news (78), ecs (70), lambda (67), government (62), db_sql (55), python_script (50), shell (35), pdf (32), xlsx (30), other (30), and 41 more
+                </div>
+              </details>
+            </td>
+            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?data_format=api</td>
           </tr>
           <tr>
-            <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">geographic_scope</td>
-            <td style="padding:12px 0">Filter by geographic scope (exact match)</td>
-            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?geographic_scope=global</td>
+            <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">implementation_status</td>
+            <td style="padding:12px 0">
+              Filter by implementation status (exact match)<br>
+              <span style="font-size:12px;color:#64748b">
+                Values: draft (617), implemented (526), potential (541), active (88), deployed (10), archived (11), and 6 others (advisor, conditional, foundation, maintenance, planned, research)
+              </span>
+            </td>
+            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?implementation_status=active</td>
           </tr>
         </table>
       </div>
@@ -282,13 +352,21 @@
       <!-- System Filters -->
       <div>
         <h3 style="margin:0 0 16px;color:#1e40af;font-size:18px;border-bottom:2px solid #bfdbfe;padding-bottom:8px">
-          ⚙️ System Filters
+          ⚙️ System Filters (gro_metadata.*)
         </h3>
         <table style="width:100%;border-collapse:collapse;font-size:14px">
           <tr style="border-bottom:1px solid #e5e7eb">
             <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce;width:200px">database_table</td>
-            <td style="padding:12px 0">Filter by database table (partial match)</td>
-            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?database_table=article</td>
+            <td style="padding:12px 0">
+              Filter by database table (exact match)<br>
+              <details style="margin-top:4px">
+                <summary style="font-size:12px;color:#64748b;cursor:pointer">47 tables (click to expand)</summary>
+                <div style="font-size:11px;color:#64748b;margin-top:4px;line-height:1.6;font-family:monospace">
+                  raw_articles, filtered_news, geosure_news, geosure_news_geocoded, city_recent_articles, safety_articles, gdelt_safety_articles, article_geocoding_process, article_location_associations, gdelt_events, acled_events, gdelt_processing_status, georeference_status, processing_status, location_processing_status, adm_0, adm_1, adm_2, admin_bboxes, divisions_area, divisions_point, geonames_cities, world_urban_areas, h3_l8_union_cities_urban, and 23 more
+                </div>
+              </details>
+            </td>
+            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?database_table=raw_articles</td>
           </tr>
           <tr style="border-bottom:1px solid #e5e7eb">
             <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">v6_job_file</td>
@@ -297,13 +375,29 @@
           </tr>
           <tr style="border-bottom:1px solid #e5e7eb">
             <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">v6_job_type</td>
-            <td style="padding:12px 0">Filter by v6 job type (partial match)</td>
-            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?v6_job_type=collector</td>
+            <td style="padding:12px 0">
+              Filter by v6 job type (exact match)<br>
+              <span style="font-size:12px;color:#64748b">
+                Values: bootstrap (441), collectors (158), run (18)
+              </span>
+            </td>
+            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?v6_job_type=collectors</td>
+          </tr>
+          <tr style="border-bottom:1px solid #e5e7eb">
+            <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">update_frequency</td>
+            <td style="padding:12px 0">
+              Filter by update frequency<br>
+              <span style="font-size:12px;color:#64748b">Example: daily, hourly, weekly, etc.</span>
+            </td>
+            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?update_frequency=daily</td>
           </tr>
           <tr>
-            <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">s3_path</td>
-            <td style="padding:12px 0">Filter by S3 path (partial match)</td>
-            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">?s3_path=geosure-data</td>
+            <td style="padding:12px 12px 12px 0;font-family:monospace;color:#0b63ce">file_size_mb</td>
+            <td style="padding:12px 0">
+              Filter by file size (for data files)<br>
+              <span style="font-size:12px;color:#64748b">Stored in gro_metadata.file_size_mb</span>
+            </td>
+            <td style="padding:12px 0;font-family:monospace;color:#64748b;font-size:12px">N/A</td>
           </tr>
         </table>
       </div>
@@ -324,25 +418,59 @@
     </div>
 
     <!-- Combination Examples -->
-    <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:20px;margin-top:24px">
-      <h3 style="margin:0 0 16px;color:#075985">💪 Combining Multiple Filters</h3>
-      <p style="margin:0 0 16px;color:#0c4a6e">
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:20px;margin-top:24px">
+      <h3 style="margin:0 0 16px;color:#334155">💪 Combining Multiple Filters</h3>
+      <p style="margin:0 0 16px;color:#475569">
         Combine multiple property filters using AND logic (all must match). Mix property filters with text search for powerful queries.
       </p>
 
       <div style="background:white;border-radius:6px;padding:16px;font-family:monospace;font-size:13px">
         <div style="color:#64748b;margin-bottom:4px"># All active AI agents in clankr ecosystem</div>
-        <div style="margin-bottom:16px">?continent=clankr&collection=ai_agent&status=active</div>
+        <div style="margin-bottom:16px">curl 'http://localhost:8000/?continent=clankr&collection=ai_agent&implementation_status=active'</div>
 
         <div style="color:#64748b;margin-bottom:4px"># All database tables containing "article"</div>
-        <div style="margin-bottom:16px">?collection=existing_db&database_table=article</div>
+        <div style="margin-bottom:16px">curl 'http://localhost:8000/?collection=existing_db&database_table=raw_articles'</div>
 
-        <div style="color:#64748b;margin-bottom:4px"># All v6 collector jobs with text search</div>
-        <div style="margin-bottom:16px">?collection=potential_v6&v6_job_type=collector&q=news</div>
+        <div style="color:#64748b;margin-bottom:4px"># All v6 collector jobs</div>
+        <div style="margin-bottom:16px">curl 'http://localhost:8000/?collection=potential_v6&v6_job_type=collectors&maxrecords=50'</div>
 
         <div style="color:#64748b;margin-bottom:4px"># All Python scripts owned by @clankr</div>
-        <div>?data_format=python_script&owner=@clankr</div>
+        <div style="margin-bottom:16px">curl 'http://localhost:8000/?data_format=python_script&owner=@clankr'</div>
+
+        <div style="color:#64748b;margin-bottom:4px"># All API data formats managed by data-platform</div>
+        <div style="margin-bottom:16px">curl 'http://localhost:8000/?data_format=api&owner=@data-platform&maxrecords=100'</div>
+
+        <div style="color:#64748b;margin-bottom:4px"># All implemented resources in North America</div>
+        <div>curl 'http://localhost:8000/?continent=north-america&implementation_status=implemented'</div>
       </div>
+    </div>
+
+    <!-- Complete gro_metadata Schema -->
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:20px;margin-top:24px">
+      <h3 style="margin:0 0 16px;color:#334155">📖 Complete gro_metadata Schema</h3>
+      <p style="margin:0 0 16px;color:#475569">
+        All catalog entries have these fields available in <code style="background:#e2e8f0;padding:2px 6px;border-radius:3px">properties.gro_metadata</code>:
+      </p>
+
+      <div style="background:white;border:1px solid #e2e8f0;border-radius:6px;padding:16px;font-family:monospace;font-size:12px;line-height:2">
+        <div><strong>continent</strong> - Geographic region (11 values)</div>
+        <div><strong>country</strong> - Country code or name</div>
+        <div><strong>state_province</strong> - State/province</div>
+        <div><strong>city</strong> - City name</div>
+        <div><strong>geographic_scope</strong> - global, regional, national, local</div>
+        <div><strong>owner</strong> - Team/platform (32 unique owners)</div>
+        <div><strong>data_format</strong> - Format type (56 unique formats)</div>
+        <div><strong>implementation_status</strong> - Status (12 states)</div>
+        <div><strong>database_table</strong> - Table name (47 tables)</div>
+        <div><strong>v6_job_type</strong> - Job type (3 types)</div>
+        <div><strong>update_frequency</strong> - Update schedule</div>
+        <div><strong>file_size_mb</strong> - File size in MB</div>
+      </div>
+
+      <p style="margin:16px 0 0;color:#475569;font-size:13px">
+        ✅ <strong>Agents:</strong> Query these fields programmatically to discover capabilities, find data, and coordinate autonomously.<br>
+        ✅ <strong>Humans:</strong> Use the interactive query builder above or curl commands to explore the catalog.
+      </p>
     </div>
   </section>
 
