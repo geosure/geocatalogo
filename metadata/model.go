@@ -72,6 +72,7 @@ type Link struct {
 	Description string `json:"description,omitempty"`
 	Protocol    string `json:"protocol,omitempty"`
 	URL         string `json:"url,omitempty"`
+	Rel         string `json:"rel,omitempty"`
 }
 
 type Geometry struct {
@@ -133,6 +134,7 @@ type Properties struct {
 	FileMetadata           map[string]interface{} `json:"file_metadata,omitempty"`
 	JobMetadata            map[string]interface{} `json:"job_metadata,omitempty"`
 	Owner                  string               `json:"owner,omitempty"`
+	Relationships          map[string]interface{} `json:"relationships,omitempty"`
 }
 
 // Record describes a generic metadata record
