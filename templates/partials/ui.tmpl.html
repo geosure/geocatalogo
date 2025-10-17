@@ -671,17 +671,76 @@
   .header-inner {
     max-width:1200px; margin:0 auto;
     display:flex; align-items:center; gap:16px; padding:10px 16px;
+    position: relative;
   }
-  .brand { display:flex; align-items:center; gap:10px; }
-  .brand img { height:28px; width:auto; display:block; }
-  .brand a { color:inherit; font-weight:700; font-size:18px; text-decoration:none; }
-  nav { margin-left:auto; }
-  .nav { display:flex; gap:14px; flex-wrap:wrap; }
-  .nav a {
-    color:#374151; padding:6px 10px; border-radius:8px; text-decoration:none;
+
+  /* GRO Unified Header Branding */
+  .geosure-logo {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
   }
-  .nav a:hover { background:#f2f4f7; }
-  .nav a.active { background:#eef2f7; font-weight:600; }
+  .brand-name {
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 16px;
+    font-family: 'korolev', sans-serif;
+  }
+
+  /* Verb Navigation (centered) */
+  .verb-nav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .verb-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 16px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+  .verb-link:hover {
+    background: var(--chip);
+    color: var(--accent);
+  }
+  .verb-link.active {
+    background: #3b82f6;
+    color: white;
+  }
+  .verb-link span:first-child {
+    font-size: 14px;
+  }
+
+  /* Header Stats / Right Side */
+  .header-stats {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+  }
+  .selection-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: var(--chip);
+    border: 1px solid var(--ring);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+    transition: all 0.2s;
+  }
+  .selection-badge:hover {
+    background: var(--ring);
+    border-color: var(--ring-strong);
+  }
 
   /* User nav */
   .user-nav { display:flex; align-items:center; gap:8px; margin-left:16px; }
