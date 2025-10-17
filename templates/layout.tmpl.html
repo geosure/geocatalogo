@@ -43,10 +43,30 @@
           <span>🗺️</span>
           <span>Chart</span>
         </a>
+        <a href="http://localhost:3000" class="verb-link">
+          <span>🌍</span>
+          <span>Catalog</span>
+        </a>
       </nav>
 
-      <!-- Right: Auth + Theme -->
+      <!-- Right: Connected Status + Chat + Login + Theme -->
       <div class="header-stats">
+        <!-- Agent Runtime Status -->
+        <div class="selection-badge agent-status connected" id="agent-status" style="background: rgba(34, 197, 94, 0.2); color: rgb(74, 222, 128);">
+          <span style="display: inline-block; width: 6px; height: 6px; background: rgb(74, 222, 128); border-radius: 50%; margin-right: 4px;"></span>
+          <span>Connected</span>
+        </div>
+
+        <a href="http://localhost:8083" class="selection-badge" title="Chat" style="text-decoration: none;">
+          <span>💬</span>
+          <span>Chat</span>
+        </a>
+
+        <a href="/login" class="selection-badge" title="Login" style="text-decoration: none;">
+          <span>🔐</span>
+          <span>Login</span>
+        </a>
+
         <div class="selection-badge" id="themeBadge" title="Toggle theme" style="cursor:pointer">
           <span id="themeIcon">☀</span>
         </div>
@@ -76,6 +96,19 @@
       <a href="/query">Query</a>
       <a href="/stats">Statistics</a>
       <a href="/api-docs">API Docs</a>
+    </div>
+    <!-- Secondary Navigation (Page-level) - Centered -->
+    <div class="desktop-only" style="border-top:1px solid var(--ring);background:var(--card);padding:4px 0;">
+      <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:center;gap:2px;padding:0 16px;">
+        <a href="/" style="padding:8px 14px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:500;color:var(--text);">Catalog</a>
+        <a href="/collections" style="padding:8px 14px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:500;color:var(--text);">Collections</a>
+        <a href="/statuses" style="padding:8px 14px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:500;color:var(--text);">Status</a>
+        <a href="/geographies" style="padding:8px 14px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:500;color:var(--text);">Geography</a>
+        <a href="/owners" style="padding:8px 14px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:500;color:var(--text);">Owners</a>
+        <a href="/query" style="padding:8px 14px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:500;color:var(--text);">Query</a>
+        <a href="/stats" style="padding:8px 14px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:500;color:var(--text);">Statistics</a>
+        <a href="/api-docs" style="padding:8px 14px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:500;color:var(--text);">API Docs</a>
+      </div>
     </div>
   </header>
 
