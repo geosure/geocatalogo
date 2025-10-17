@@ -12,105 +12,113 @@
   {{block "head_extra" .}}{{end}}
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-inner">
-      <!-- Left: GRO Brand with Official Geosure Logo + Catalog indicator -->
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <div style="display: flex; align-items: center; gap: 8px;">
-          <img src="https://geosure.ai/assets/favicon/favicon-196x196.png" alt="Geosure" class="geosure-logo" />
-          <span class="brand-name">GRO</span>
+  <!-- GRO Unified Header v1.0 -->
+  <header class="gro-header">
+    <div class="gro-header__inner">
+
+      <!-- Left: Brand + App Indicator -->
+      <div class="gro-header__brand">
+        <div class="gro-header__logo-group">
+          <img src="https://geosure.ai/assets/favicon/favicon-196x196.png"
+               alt="Geosure"
+               class="gro-header__logo" />
+          <span class="gro-header__name">GRO</span>
         </div>
 
-        <div style="height: 20px; width: 1px; background: var(--ring);"></div>
+        <div class="gro-header__divider"></div>
 
-        <div style="display: flex; align-items: center; gap: 6px;">
-          <span style="font-size: 16px;">🌍</span>
-          <span style="color: var(--muted); font-weight: 500; font-size: 13px;">Catalog</span>
+        <div class="gro-header__app-indicator">
+          <span class="gro-header__app-icon">🌍</span>
+          <span class="gro-header__app-name">Catalog</span>
         </div>
       </div>
 
-      <!-- Center: Verb Navigation (absolute center positioning) -->
-      <nav class="verb-nav desktop-only" style="position:absolute;left:50%;transform:translateX(-50%);">
-        <a href="http://localhost:8080" class="verb-link">
-          <span>🔍</span>
-          <span>Explore</span>
+      <!-- Center: Verb Navigation -->
+      <nav class="gro-header__nav">
+        <a href="http://localhost:8080" class="gro-header__nav-link">
+          <span class="gro-header__nav-icon">🔍</span>
+          <span class="gro-header__nav-text">Explore</span>
         </a>
-        <a href="http://localhost:5173" class="verb-link">
-          <span>⏱️</span>
-          <span>Chronicle</span>
+        <a href="http://localhost:5173" class="gro-header__nav-link">
+          <span class="gro-header__nav-icon">⏱️</span>
+          <span class="gro-header__nav-text">Chronicle</span>
         </a>
-        <a href="http://localhost:8084" class="verb-link">
-          <span>🗺️</span>
-          <span>Chart</span>
+        <a href="http://localhost:8084" class="gro-header__nav-link">
+          <span class="gro-header__nav-icon">🗺️</span>
+          <span class="gro-header__nav-text">Chart</span>
         </a>
-        <a href="http://localhost:3000" class="verb-link">
-          <span>🌍</span>
-          <span>Catalog</span>
+        <a href="http://localhost:3000" class="gro-header__nav-link gro-header__nav-link--active">
+          <span class="gro-header__nav-icon">🌍</span>
+          <span class="gro-header__nav-text">Catalog</span>
         </a>
       </nav>
 
-      <!-- Right: Connected Status + Chat + Login + Theme -->
-      <div class="header-stats">
-        <!-- Agent Runtime Status -->
-        <div class="selection-badge agent-status connected" id="agent-status" style="background: rgba(34, 197, 94, 0.2); color: rgb(74, 222, 128);">
-          <span style="display: inline-block; width: 6px; height: 6px; background: rgb(74, 222, 128); border-radius: 50%; margin-right: 4px;"></span>
+      <!-- Right: Actions -->
+      <div class="gro-header__actions">
+        <!-- Connected Status -->
+        <div class="gro-header__badge gro-header__badge--connected" id="agent-status">
+          <span class="gro-header__badge-dot"></span>
           <span>Connected</span>
         </div>
 
-        <a href="http://localhost:8083" class="selection-badge" title="Chat" style="text-decoration: none;">
+        <!-- Chat Link -->
+        <a href="http://localhost:8083" class="gro-header__badge">
           <span>💬</span>
           <span>Chat</span>
         </a>
 
-        <a href="/login" class="selection-badge" title="Login" style="text-decoration: none;">
+        <!-- Login -->
+        <a href="/login" class="gro-header__badge">
           <span>🔐</span>
           <span>Login</span>
         </a>
 
-        <div class="selection-badge" id="themeBadge" title="Toggle theme" style="cursor:pointer">
+        <!-- Theme Toggle -->
+        <div class="gro-header__badge gro-header__theme-toggle" id="themeBadge">
           <span id="themeIcon">☀</span>
         </div>
       </div>
 
-      <button class="hamburger" id="hamburger">
-        <span class="hamburger-line"></span>
-        <span class="hamburger-line"></span>
-        <span class="hamburger-line"></span>
+      <!-- Mobile Hamburger -->
+      <button class="gro-header__hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span class="gro-header__hamburger-line"></span>
+        <span class="gro-header__hamburger-line"></span>
+        <span class="gro-header__hamburger-line"></span>
       </button>
-    </div>
 
-    <!-- Mobile menu -->
-    <div class="mobile-menu" id="mobile-menu">
-      <!-- Mobile GRO Branding with Official Logo -->
-      <div style="padding:14px 20px;border-bottom:1px solid var(--ring);display:flex;align-items:center;gap:12px;">
-        <img src="https://geosure.ai/assets/favicon/favicon-196x196.png" alt="Geosure" style="width:28px;height:28px;border-radius:6px;" />
-        <span style="color:var(--accent);font-weight:700;font-size:16px;font-family:'korolev',sans-serif;">GRO</span>
-        <span style="color:var(--muted);font-size:14px;">• Catalog</span>
-      </div>
-
-      <a href="/">Catalog</a>
-      <a href="/collections">Collections</a>
-      <a href="/statuses">Status</a>
-      <a href="/geographies">Geography</a>
-      <a href="/owners">Owners</a>
-      <a href="/query">Query</a>
-      <a href="/stats">Statistics</a>
-      <a href="/api-docs">API Docs</a>
-    </div>
-    <!-- Secondary Navigation (Page-level) - Centered -->
-    <div class="desktop-only" style="border-top:1px solid var(--ring);background:var(--card);padding:4px 0;">
-      <div style="max-width:1200px;margin:0 auto;display:flex;justify-content:center;gap:2px;padding:0 16px;">
-        <a href="/" style="padding:8px 14px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:500;color:var(--text);">Catalog</a>
-        <a href="/collections" style="padding:8px 14px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:500;color:var(--text);">Collections</a>
-        <a href="/statuses" style="padding:8px 14px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:500;color:var(--text);">Status</a>
-        <a href="/geographies" style="padding:8px 14px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:500;color:var(--text);">Geography</a>
-        <a href="/owners" style="padding:8px 14px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:500;color:var(--text);">Owners</a>
-        <a href="/query" style="padding:8px 14px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:500;color:var(--text);">Query</a>
-        <a href="/stats" style="padding:8px 14px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:500;color:var(--text);">Statistics</a>
-        <a href="/api-docs" style="padding:8px 14px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:500;color:var(--text);">API Docs</a>
-      </div>
     </div>
   </header>
+
+  <!-- Secondary Navigation -->
+  <div class="gro-header__secondary gro-desktop-only">
+    <div class="gro-header__secondary-inner">
+      <a href="/" class="gro-header__secondary-link">Catalog</a>
+      <a href="/collections" class="gro-header__secondary-link">Collections</a>
+      <a href="/statuses" class="gro-header__secondary-link">Status</a>
+      <a href="/geographies" class="gro-header__secondary-link">Geography</a>
+      <a href="/owners" class="gro-header__secondary-link">Owners</a>
+      <a href="/query" class="gro-header__secondary-link">Query</a>
+      <a href="/stats" class="gro-header__secondary-link">Statistics</a>
+      <a href="/api-docs" class="gro-header__secondary-link">API Docs</a>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="gro-header__mobile-menu" id="mobile-menu">
+    <a href="http://localhost:8080">🔍 Explore</a>
+    <a href="http://localhost:5173">⏱️ Chronicle</a>
+    <a href="http://localhost:8084">🗺️ Chart</a>
+    <a href="http://localhost:3000">🌍 Catalog</a>
+    <div style="border-top:1px solid var(--gro-border);margin:8px 0;"></div>
+    <a href="/">Catalog</a>
+    <a href="/collections">Collections</a>
+    <a href="/statuses">Status</a>
+    <a href="/geographies">Geography</a>
+    <a href="/owners">Owners</a>
+    <a href="/query">Query</a>
+    <a href="/stats">Statistics</a>
+    <a href="/api-docs">API Docs</a>
+  </div>
 
   <main id="main" class="container">
     {{block "page_content" .}}{{end}}

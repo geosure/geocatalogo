@@ -1,0 +1,571 @@
+/**
+ * GRO Unified Header System v1.0
+ *
+ * Pixel-perfect header design for all GRO applications
+ * Last updated: 2025-10-17
+ *
+ * Usage:
+ * <link rel="stylesheet" href="[path]/gro-header.css">
+ *
+ * Supports: Light/Dark themes, Mobile responsive, All frameworks
+ */
+
+/* ========================================
+   CSS CUSTOM PROPERTIES (Design Tokens)
+   ======================================== */
+
+:root {
+  /* === Layout === */
+  --gro-header-height: 56px;
+  --gro-header-padding-x: 16px;
+  --gro-header-padding-y: 6px;
+
+  /* === Logo === */
+  --gro-logo-size: 28px;
+  --gro-logo-radius: 6px;
+
+  /* === Brand === */
+  --gro-brand-size: 16px;
+  --gro-brand-weight: 700;
+  --gro-brand-color: #4aa9e8;
+  --gro-brand-font: 'korolev', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* === Divider === */
+  --gro-divider-height: 20px;
+  --gro-divider-width: 1px;
+
+  /* === Spacing === */
+  --gro-gap-xl: 16px;
+  --gro-gap-lg: 12px;
+  --gro-gap-md: 8px;
+  --gro-gap-sm: 6px;
+  --gro-gap-xs: 4px;
+
+  /* === Typography === */
+  --gro-app-indicator-size: 13px;
+  --gro-nav-font-size: 13px;
+  --gro-nav-font-weight: 500;
+  --gro-badge-font-size: 11px;
+  --gro-badge-font-weight: 500;
+
+  /* === Nav Links === */
+  --gro-nav-padding: 6px 12px;
+  --gro-nav-radius: 6px;
+  --gro-nav-gap: var(--gro-gap-md);
+
+  /* === Badges === */
+  --gro-badge-padding: 6px 12px;
+  --gro-badge-radius: 6px;
+  --gro-badge-gap: var(--gro-gap-xs);
+
+  /* === Emoji === */
+  --gro-emoji-size: 16px;
+
+  /* === Z-Index === */
+  --gro-header-z: 1000;
+  --gro-nav-z: 10;
+
+  /* === Transitions === */
+  --gro-transition: all 0.2s ease;
+
+  /* === Colors - Light Mode (Default) === */
+  --gro-bg: #ffffff;
+  --gro-text: #233548;
+  --gro-text-muted: #7f8c8d;
+  --gro-border: #ccc5ca;
+  --gro-surface: #f3f0f2;
+  --gro-ring: #ccc5ca;
+
+  /* Active states */
+  --gro-active-bg: rgba(37, 99, 235, 0.1);
+  --gro-active-color: rgb(37, 99, 235);
+  --gro-active-border: rgba(37, 99, 235, 0.3);
+
+  /* Hover states */
+  --gro-hover-bg: rgba(0, 0, 0, 0.05);
+  --gro-hover-color: var(--gro-text);
+
+  /* Status colors */
+  --gro-status-connected-bg: rgba(34, 197, 94, 0.2);
+  --gro-status-connected-color: rgb(34, 197, 94);
+  --gro-status-connected-dot: rgb(74, 222, 128);
+}
+
+/* === Dark Mode === */
+body.dark,
+body[data-theme="dark"],
+.dark {
+  --gro-bg: #0a0a0a;
+  --gro-text: #e8e8e8;
+  --gro-text-muted: #888888;
+  --gro-border: #2a2a2a;
+  --gro-surface: #1a1a1a;
+  --gro-ring: #2a2a2a;
+
+  /* Active states - brighter in dark mode */
+  --gro-active-bg: rgba(74, 169, 232, 0.2);
+  --gro-active-color: rgb(96, 165, 250);
+  --gro-active-border: rgba(74, 169, 232, 0.3);
+
+  /* Hover states */
+  --gro-hover-bg: rgba(255, 255, 255, 0.05);
+  --gro-hover-color: var(--gro-text);
+}
+
+
+/* ========================================
+   HEADER STRUCTURE
+   ======================================== */
+
+.gro-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--gro-header-height);
+  background: var(--gro-bg);
+  border-bottom: 1px solid var(--gro-border);
+  z-index: var(--gro-header-z);
+  display: flex;
+  align-items: center;
+}
+
+.gro-header__inner {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: var(--gro-header-padding-y) var(--gro-header-padding-x);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+
+/* ========================================
+   LEFT SECTION: BRAND
+   ======================================== */
+
+.gro-header__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--gro-gap-lg);
+  flex-shrink: 0;
+}
+
+.gro-header__logo-group {
+  display: flex;
+  align-items: center;
+  gap: var(--gro-gap-md);
+}
+
+.gro-header__logo {
+  width: var(--gro-logo-size);
+  height: var(--gro-logo-size);
+  border-radius: var(--gro-logo-radius);
+  object-fit: cover;
+}
+
+.gro-header__name {
+  font-family: var(--gro-brand-font);
+  font-size: var(--gro-brand-size);
+  font-weight: var(--gro-brand-weight);
+  color: var(--gro-brand-color);
+  letter-spacing: 0.02em;
+}
+
+.gro-header__divider {
+  height: var(--gro-divider-height);
+  width: var(--gro-divider-width);
+  background: var(--gro-ring);
+  flex-shrink: 0;
+}
+
+.gro-header__app-indicator {
+  display: flex;
+  align-items: center;
+  gap: var(--gro-gap-sm);
+  color: var(--gro-text-muted);
+  font-size: var(--gro-app-indicator-size);
+  font-weight: var(--gro-nav-font-weight);
+}
+
+.gro-header__app-icon {
+  font-size: var(--gro-emoji-size);
+  line-height: 1;
+}
+
+.gro-header__app-name {
+  font-size: var(--gro-app-indicator-size);
+}
+
+
+/* ========================================
+   CENTER SECTION: NAVIGATION
+   ======================================== */
+
+.gro-header__nav {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--gro-nav-gap);
+  z-index: var(--gro-nav-z);
+}
+
+.gro-header__nav-link {
+  display: flex;
+  align-items: center;
+  gap: var(--gro-gap-xs);
+  padding: var(--gro-nav-padding);
+  border-radius: var(--gro-nav-radius);
+  color: var(--gro-text-muted);
+  text-decoration: none;
+  font-size: var(--gro-nav-font-size);
+  font-weight: var(--gro-nav-font-weight);
+  transition: var(--gro-transition);
+  cursor: pointer;
+  background: transparent;
+  border: none;
+}
+
+.gro-header__nav-link:hover {
+  background: var(--gro-hover-bg);
+  color: var(--gro-hover-color);
+}
+
+.gro-header__nav-link--active,
+.gro-header__nav-link.active {
+  background: var(--gro-active-bg);
+  color: var(--gro-active-color);
+}
+
+.gro-header__nav-icon {
+  font-size: var(--gro-emoji-size);
+  line-height: 1;
+}
+
+.gro-header__nav-text {
+  font-size: var(--gro-nav-font-size);
+}
+
+
+/* ========================================
+   RIGHT SECTION: ACTIONS
+   ======================================== */
+
+.gro-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gro-gap-md);
+  flex-shrink: 0;
+}
+
+.gro-header__badge {
+  display: flex;
+  align-items: center;
+  gap: var(--gro-badge-gap);
+  padding: var(--gro-badge-padding);
+  border-radius: var(--gro-badge-radius);
+  background: transparent;
+  color: var(--gro-text);
+  font-size: var(--gro-badge-font-size);
+  font-weight: var(--gro-badge-font-weight);
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--gro-transition);
+  border: none;
+  white-space: nowrap;
+}
+
+.gro-header__badge:hover {
+  background: var(--gro-hover-bg);
+}
+
+/* Connected status badge */
+.gro-header__badge--connected {
+  background: var(--gro-status-connected-bg);
+  color: var(--gro-status-connected-color);
+}
+
+.gro-header__badge-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--gro-status-connected-dot);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Theme toggle */
+.gro-header__theme-toggle {
+  cursor: pointer;
+}
+
+
+/* ========================================
+   MOBILE HAMBURGER
+   ======================================== */
+
+.gro-header__hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  margin-left: var(--gro-gap-md);
+}
+
+.gro-header__hamburger-line {
+  width: 20px;
+  height: 2px;
+  background: var(--gro-text);
+  border-radius: 1px;
+  transition: var(--gro-transition);
+}
+
+.gro-header__hamburger[aria-expanded="true"] .gro-header__hamburger-line:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.gro-header__hamburger[aria-expanded="true"] .gro-header__hamburger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.gro-header__hamburger[aria-expanded="true"] .gro-header__hamburger-line:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+
+/* ========================================
+   MOBILE MENU
+   ======================================== */
+
+.gro-header__mobile-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--gro-bg);
+  border-bottom: 1px solid var(--gro-border);
+  padding: var(--gro-gap-md);
+  flex-direction: column;
+  gap: var(--gro-gap-sm);
+  z-index: 999;
+}
+
+.gro-header__mobile-menu.active {
+  display: flex;
+}
+
+.gro-header__mobile-menu a {
+  padding: var(--gro-gap-md);
+  color: var(--gro-text);
+  text-decoration: none;
+  border-radius: var(--gro-nav-radius);
+  transition: var(--gro-transition);
+}
+
+.gro-header__mobile-menu a:hover {
+  background: var(--gro-hover-bg);
+}
+
+
+/* ========================================
+   SECONDARY NAVIGATION (Optional)
+   ======================================== */
+
+.gro-header__secondary {
+  border-top: 1px solid var(--gro-ring);
+  background: var(--gro-surface);
+  padding: 4px 0;
+}
+
+.gro-header__secondary-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  padding: 0 var(--gro-header-padding-x);
+  flex-wrap: wrap;
+}
+
+.gro-header__secondary-link {
+  padding: 8px 14px;
+  border-radius: var(--gro-nav-radius);
+  text-decoration: none;
+  font-size: var(--gro-nav-font-size);
+  font-weight: var(--gro-nav-font-weight);
+  color: var(--gro-text);
+  transition: var(--gro-transition);
+}
+
+.gro-header__secondary-link:hover {
+  background: var(--gro-hover-bg);
+}
+
+
+/* ========================================
+   RESPONSIVE BREAKPOINTS
+   ======================================== */
+
+@media (max-width: 768px) {
+  /* Hide center nav on mobile */
+  .gro-header__nav {
+    display: none;
+  }
+
+  /* Show hamburger */
+  .gro-header__hamburger {
+    display: flex;
+  }
+
+  /* Hide text in badges, keep icons */
+  .gro-header__badge span:not(.gro-header__badge-dot) {
+    display: none;
+  }
+
+  /* Reduce gaps */
+  .gro-header__actions {
+    gap: var(--gro-gap-sm);
+  }
+
+  .gro-header__brand {
+    gap: var(--gro-gap-md);
+  }
+
+  /* Hide app name on very small screens */
+  .gro-header__app-name {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Even more compact on tiny screens */
+  .gro-header__logo-group {
+    gap: var(--gro-gap-sm);
+  }
+
+  .gro-header__divider {
+    display: none;
+  }
+
+  .gro-header__app-indicator {
+    display: none;
+  }
+}
+
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+.gro-desktop-only {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .gro-desktop-only {
+    display: none !important;
+  }
+}
+
+.gro-mobile-only {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .gro-mobile-only {
+    display: block;
+  }
+}
+
+
+/* ========================================
+   LEGACY CLASS SUPPORT
+   (For backwards compatibility during migration)
+   ======================================== */
+
+/* Map old class names to new ones */
+.site-header {
+  /* Legacy wrapper - just ensure it doesn't interfere */
+  all: unset;
+  display: block;
+  width: 100%;
+}
+
+.header-inner {
+  /* Alias for gro-header__inner */
+}
+
+.verb-nav {
+  /* Alias for gro-header__nav */
+}
+
+.verb-link {
+  /* Alias for gro-header__nav-link */
+}
+
+.selection-badge {
+  /* Alias for gro-header__badge */
+}
+
+.agent-status.connected {
+  /* Alias for gro-header__badge--connected */
+}
+
+
+/* ========================================
+   PRINT STYLES
+   ======================================== */
+
+@media print {
+  .gro-header {
+    position: static;
+    border-bottom: 1px solid #000;
+  }
+
+  .gro-header__nav,
+  .gro-header__actions {
+    display: none;
+  }
+}
+
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+
+/* Focus visible styles */
+.gro-header__nav-link:focus-visible,
+.gro-header__badge:focus-visible {
+  outline: 2px solid var(--gro-brand-color);
+  outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .gro-header *,
+  .gro-header *::before,
+  .gro-header *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .gro-header {
+    border-bottom-width: 2px;
+  }
+
+  .gro-header__nav-link--active {
+    border: 2px solid var(--gro-active-color);
+  }
+}

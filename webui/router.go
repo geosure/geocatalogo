@@ -5,6 +5,10 @@ import "net/http"
 func NewMux(app *App) *http.ServeMux {
 	mux := http.NewServeMux()
 
+	// Serve static files (CSS, JS, images)
+	staticFS := http.FileServer(http.Dir("static"))
+	mux.Handle("/static/", http.StripPrefix("/static/", staticFS))
+
 	// Register specific routes BEFORE catch-all "/" route
 	mux.HandleFunc("/dataset/", app.HandleDataset) // Legacy URL support
 	mux.HandleFunc("/geography/", app.HandleGeography)
