@@ -13,6 +13,17 @@
     --border:#e6e6e6; --chipfg:#444; --link:#0b63ce;
   }
 
+  /* Dark mode */
+  body.dark-mode {
+    --bg:#0f172a; --card:#1e293b; --text:#e2e8f0; --muted:#94a3b8;
+    --ring:#334155; --ring-strong:#475569; --chip:#1e293b; --accent:#f1f5f9;
+    --border:#334155; --chipfg:#cbd5e1; --link:#60a5fa;
+  }
+  body.dark-mode .site-header {
+    background: #1e293b;
+    border-bottom-color: #334155;
+  }
+
   /* Base Styles */
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--text);line-height:1.5;
@@ -980,8 +991,38 @@
 /* SHARED JAVASCRIPT FUNCTIONS - All common JS consolidated here */
 /* ===================================================================== */
 
+/* Theme toggle */
+function toggleTheme() {
+  const body = document.body;
+  const themeIcon = document.getElementById('themeIcon');
+
+  if (body.classList.contains('dark-mode')) {
+    body.classList.remove('dark-mode');
+    themeIcon.textContent = '☀';
+    localStorage.setItem('theme', 'light');
+  } else {
+    body.classList.add('dark-mode');
+    themeIcon.textContent = '🌙';
+    localStorage.setItem('theme', 'dark');
+  }
+}
+
 /* Number formatter hook (used by Pop chips) */
 document.addEventListener('DOMContentLoaded', () => {
+  // Load saved theme
+  const savedTheme = localStorage.getItem('theme');
+  const themeIcon = document.getElementById('themeIcon');
+  if (savedTheme === 'dark') {
+    document.body.classList.add('dark-mode');
+    if (themeIcon) themeIcon.textContent = '🌙';
+  }
+
+  // Attach theme toggle handler
+  const themeBadge = document.getElementById('themeBadge');
+  if (themeBadge) {
+    themeBadge.addEventListener('click', toggleTheme);
+  }
+
   const nf = new Intl.NumberFormat();
   document.querySelectorAll('[data-pop]').forEach(el => {
     const n = Number(el.getAttribute('data-pop'));
